@@ -23,8 +23,12 @@ import { AdvertisementAdGetRequestType } from "@/lib/network/types";
 
 import { useFilter } from "@/hooks/useFilter";
 import useDebounce from "@/hooks/useDebounce";
+import { useQuery } from "@tanstack/react-query";
+import { useAdvertisementAdDeleteMutation } from "@/lib/network/mutation";
 
 import { memberStatusType } from "@/const/enum";
+
+import { GET_ADVERTISEMENT_AD_REQUEST } from "@/lib/network/api";
 
 import {
   COMPLETE_DELETE_STRING,
@@ -33,7 +37,7 @@ import {
   INPUT_MAX_LENGTH,
 } from "@/const/const";
 
-const data = [
+const datas = [
   {
     id: 1,
     service: "1",
@@ -66,6 +70,8 @@ export default function ClientAdvertisementAd() {
   const [selectedRowIds, setSelectedRowIds] = useState<(string | number)[]>([]);
   const debouncedSearch = useDebounce({ value: searchInput, delay: 300 });
 
+  const { mutateAsync } = useAdvertisementAdDeleteMutation();
+
   const { filter, handleSubmit, handleReset, setFilter } =
     useFilter<AdvertisementAdGetRequestType>({
       dateType: "1",
@@ -78,6 +84,13 @@ export default function ClientAdvertisementAd() {
       searchKeyword: "",
     });
 
+  const { data } = useQuery({
+    queryKey: ["BOARD_NOTICE_REQUEST"],
+    queryFn: () => GET_ADVERTISEMENT_AD_REQUEST({ ...filter }),
+  });
+
+  console.log(data);
+
   useEffect(() => {
     setFilter((prev) => ({ ...prev, searchKeyword: debouncedSearch }));
   }, [debouncedSearch, setFilter]);
@@ -87,7 +100,9 @@ export default function ClientAdvertisementAd() {
 
     if (confirm(`광고를 ${CONFIRM_DELETE_SAVE_STRING}`)) {
       try {
-        console.log("삭제할 아이디", selectedRowIds);
+        await Promise.all(
+          selectedRowIds.map((id) => mutateAsync(id.toString()))
+        );
         alert(`광고 ${COMPLETE_DELETE_STRING}`);
       } catch (e) {
         alert(e);
@@ -266,7 +281,7 @@ export default function ClientAdvertisementAd() {
         />
       </div>
       <DataTable
-        data={data}
+        data={datas}
         columns={AdvertisementAdColumns}
         schema={AdvertisementAdSchema}
         btnArea={{

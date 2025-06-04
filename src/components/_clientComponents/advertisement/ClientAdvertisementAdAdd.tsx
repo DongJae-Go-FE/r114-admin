@@ -2,8 +2,6 @@
 
 import { useRouter } from "next/navigation";
 
-import { useTransition } from "react";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -15,6 +13,8 @@ import { Button } from "@/components/Button";
 import { Checkbox } from "@/components/Checkbox";
 import { FileUpload } from "@/components/FileUpload";
 import { CustomSelect } from "@/components/Select";
+
+import { useAdvertisementAdPostMutation } from "@/lib/network/mutation";
 
 import {
   Form,
@@ -38,7 +38,8 @@ import { serviceType, menuAccessType } from "@/const/enum";
 
 export default function ClientAdvertisementAdAdd() {
   const { push } = useRouter();
-  const [isPending, startTransition] = useTransition();
+
+  const { mutateAsync, isPending } = useAdvertisementAdPostMutation();
 
   const form = useForm<z.infer<typeof AdvertisementAdListAddAndEditSchema>>({
     resolver: zodResolver(AdvertisementAdListAddAndEditSchema),
@@ -60,11 +61,9 @@ export default function ClientAdvertisementAdAdd() {
   ) => {
     if (confirm(`광고를 ${CONFIRM_ADD_SAVE_STRING}`)) {
       try {
-        startTransition(() => {
-          console.log(values);
-          alert(`광고를 ${COMPLETE_ADD_STRING}`);
-          push("/advertisement/ad-list");
-        });
+        await mutateAsync(values);
+        alert(`광고를 ${COMPLETE_ADD_STRING}`);
+        push("/advertisement/ad-list");
       } catch (e) {
         alert(e);
       }

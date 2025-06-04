@@ -2,7 +2,10 @@ import HttpRequest from "./HttpRequest";
 
 import { z } from "zod";
 
-import { BoardNoticeAddEditSchema } from "@/schema/schema";
+import {
+  BoardNoticeAddEditSchema,
+  AdvertisementAdListAddAndEditSchema,
+} from "@/schema/schema";
 
 import {
   UserCorporationGetRequestType,
@@ -109,7 +112,7 @@ export async function POST_BOARD_NOTICE_REQUEST({
 }
 
 /** 공지사항 수정 */
-export async function EDIT_BOARD_NOTICE_REQUEST({
+export async function PUT_BOARD_NOTICE_REQUEST({
   values,
   postNo,
 }: {
@@ -146,7 +149,7 @@ export async function GET_BOARD_NOTICE_DETAIL_FILE_DOWNLOAD_REQUEST({
   return await HttpRequest.get(`/v1/api/board/download/${attachNo}`);
 }
 
-/** 공지사항 상세 조회 파일 업로드 수정헤야함 */
+/** 공지사항 상세 조회 파일 업로드 TODO.타입 수정헤야함 */
 export async function GET_BOARD_NOTICE_FILE_UPLOAD_REQUEST({
   attachNo,
 }: {
@@ -155,13 +158,87 @@ export async function GET_BOARD_NOTICE_FILE_UPLOAD_REQUEST({
   return await HttpRequest.get(`/v1/api/board/download/${attachNo}`);
 }
 
-/** 광고 목록 조회 및 총 건수 조회 */
+/** 광고 목록 조회 및 총 건수 조회 TODO.타입 수정헤야함 */
 export async function GET_ADVERTISEMENT_AD_REQUEST(
   queryString: AdvertisementAdGetRequestType
 ) {
   return await HttpRequest.get<unknown, AdvertisementAdGetRequestType>(
     "/v1/api/advertise/list",
     queryString
+  );
+}
+
+/** 광고 상세 조회 TODO.타입 수정헤야함 */
+export async function GET_ADVERTISEMENT_AD_DETAIL_REQUEST({
+  advtNo,
+}: {
+  advtNo: string;
+}) {
+  return await HttpRequest.get<unknown>(`/v1/api/advertise/${advtNo}`);
+}
+
+/** 현재 노출중인 광고 목록 조회 TODO.타입 수정헤야함 */
+export async function GET_ADVERTISEMENT_AD_ACTIVE_LIST_REQUEST({
+  comCd,
+}: {
+  comCd: string;
+}) {
+  return await HttpRequest.get<unknown>(`/v1/api/advertise/active/${comCd}`);
+}
+
+/** 광고 삭제 TODO.타입 수정헤야함 */
+export async function DELETE_ADVERTISEMENT_AD_REQUEST({
+  advtNo,
+}: {
+  advtNo: string;
+}) {
+  return await HttpRequest.set("DELETE", `/api/v1/advertise/${advtNo}`, {
+    "Content-Type": "application/json",
+  });
+}
+
+/** 광고 등록 TODO.타입 수정헤야함 */
+export async function POST_ADVERTISEMENT_AD_REQUEST({
+  values,
+}: {
+  values: z.infer<typeof AdvertisementAdListAddAndEditSchema>;
+}) {
+  return await HttpRequest.set<unknown>(
+    "POST",
+    `/api/v1/advertise`,
+    JSON.stringify(values),
+    {
+      "Content-Type": "application/json",
+    }
+  );
+}
+
+/** 공지사항 수정 TODO.타입 수정헤야함 */
+export async function PUT_ADVERTISEMENT_AD_REQUEST({
+  values,
+  advtNo,
+}: {
+  values: z.infer<typeof AdvertisementAdListAddAndEditSchema>;
+  advtNo: string;
+}) {
+  return await HttpRequest.set<unknown>(
+    "PUT",
+    `/api/v1/advertise/${advtNo}`,
+    JSON.stringify(values),
+    {
+      "Content-Type": "application/json",
+    }
+  );
+}
+
+/** 광고 순서 변경 TODO.타입 수정헤야함 */
+export async function PATCH_ADVERTISEMENT_AD_REQUEST() {
+  return await HttpRequest.set<unknown>(
+    "PATCH",
+    `/api/v1/advertise/changeDisOrdNo`,
+    {
+      "Content-Type": "application/json",
+    }
   );
 }
 

@@ -2,11 +2,18 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   DELETE_BOARD_NOTICE_REQUEST,
   POST_BOARD_NOTICE_REQUEST,
-  EDIT_BOARD_NOTICE_REQUEST,
+  PUT_BOARD_NOTICE_REQUEST,
+  DELETE_ADVERTISEMENT_AD_REQUEST,
+  POST_ADVERTISEMENT_AD_REQUEST,
+  PUT_ADVERTISEMENT_AD_REQUEST,
+  PATCH_ADVERTISEMENT_AD_REQUEST,
 } from "./api";
 import { z } from "zod";
 
-import { BoardNoticeAddEditSchema } from "@/schema/schema";
+import {
+  BoardNoticeAddEditSchema,
+  AdvertisementAdListAddAndEditSchema,
+} from "@/schema/schema";
 
 export function useBoardDeleteMutation() {
   const queryClient = useQueryClient();
@@ -47,11 +54,79 @@ export function useBoardEditMutation() {
     }: {
       values: z.infer<typeof BoardNoticeAddEditSchema>;
       postNo: string;
-    }) => EDIT_BOARD_NOTICE_REQUEST({ values, postNo }),
+    }) => PUT_BOARD_NOTICE_REQUEST({ values, postNo }),
     onSuccess: (_, variables) => {
       const { postNo } = variables;
       queryClient.invalidateQueries({
         queryKey: ["BOARD_NOTICE_REQUEST", postNo],
+      });
+    },
+    onError: (error: string) => {
+      console.error(error);
+    },
+  });
+}
+
+export function useAdvertisementAdDeleteMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (advtNo: string) => DELETE_ADVERTISEMENT_AD_REQUEST({ advtNo }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["ADVERTISEMENT_AD_REQUEST"] });
+    },
+    onError: (error: string) => {
+      console.error(error);
+    },
+  });
+}
+
+export function useAdvertisementAdPostMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (values: z.infer<typeof AdvertisementAdListAddAndEditSchema>) =>
+      POST_ADVERTISEMENT_AD_REQUEST({ values }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["ADVERTISEMENT_AD_REQUEST"] });
+    },
+    onError: (error: string) => {
+      console.error(error);
+    },
+  });
+}
+
+export function useAdvertisementAdEditMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      values,
+      advtNo,
+    }: {
+      values: z.infer<typeof AdvertisementAdListAddAndEditSchema>;
+      advtNo: string;
+    }) => PUT_ADVERTISEMENT_AD_REQUEST({ values, advtNo }),
+    onSuccess: (_, variables) => {
+      const { advtNo } = variables;
+      queryClient.invalidateQueries({
+        queryKey: ["BOARD_NOTICE_REQUEST", advtNo],
+      });
+    },
+    onError: (error: string) => {
+      console.error(error);
+    },
+  });
+}
+
+export function useAdvertisementAdPatchMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => PATCH_ADVERTISEMENT_AD_REQUEST(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["BOARD_NOTICE_REQUEST"],
       });
     },
     onError: (error: string) => {

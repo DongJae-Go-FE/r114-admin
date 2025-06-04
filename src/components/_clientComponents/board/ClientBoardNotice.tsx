@@ -92,7 +92,7 @@ export default function ClientBoardNotice() {
       pageOrder: "DESC",
     });
 
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ["BOARD_NOTICE_REQUEST"],
     queryFn: () => GET_BOARD_NOTICE_REQUEST({ ...filter }),
   });
@@ -180,7 +180,6 @@ export default function ClientBoardNotice() {
                     label: title,
                   }))
                 )}
-                disabled={isLoading}
                 className="w-full bg-white"
                 placeholder="전체"
                 onChange={(value) =>
@@ -207,7 +206,6 @@ export default function ClientBoardNotice() {
                 ]}
                 className="w-40 bg-white"
                 placeholder="전체"
-                disabled={isLoading}
                 onChange={(value) =>
                   setFilter((prev) => ({ ...prev, searchType: value }))
                 }
@@ -221,7 +219,6 @@ export default function ClientBoardNotice() {
                 value={searchInput}
                 placeholder="검색어를 입력해주세요."
                 maxLength={INPUT_MAX_LENGTH}
-                disabled={isLoading}
                 onChange={(e) => setSearchInput(e.target.value)}
               />
             ),
@@ -230,7 +227,7 @@ export default function ClientBoardNotice() {
         ratio: 3,
       },
     ],
-    [filter, searchInput, setFilter, isLoading]
+    [filter, searchInput, setFilter]
   );
 
   const transformedData = datas.map((item) => ({
@@ -254,7 +251,6 @@ export default function ClientBoardNotice() {
         data={transformedData}
         columns={BoardNoticeColumns}
         schema={BoardNoticeSchema}
-        isLoading={isLoading}
         btnArea={{
           primary: (
             <Button size="sm" color="red" onClick={handleDelete}>

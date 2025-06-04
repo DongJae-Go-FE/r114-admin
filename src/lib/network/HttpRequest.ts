@@ -59,7 +59,7 @@ export default class HttpRequest {
   }
 
   static async set<Res = unknown, Req = unknown>(
-    method: "POST" | "PUT" | "DELETE",
+    method: "POST" | "PUT" | "DELETE" | "PATCH",
     uri: string,
     bodyData?: Req,
     headerData?: Header

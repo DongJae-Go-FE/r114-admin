@@ -6,9 +6,9 @@ import ClientAdvertisementAdDetail from "@/components/_clientComponents/advertis
 export default async function Page({
   params,
 }: {
-  params: Promise<{ postNo: string }>;
+  params: Promise<{ advtNo: string }>;
 }) {
-  const { postNo } = await params;
+  const { advtNo } = await params;
 
   return (
     <Fragment>
@@ -25,11 +25,11 @@ export default async function Page({
           },
           {
             title: "광고 상세",
-            href: `/advertisement/ad-list/${postNo}`,
+            href: `/advertisement/ad-list/${advtNo}`,
           },
         ]}
       />
-      <ClientAdvertisementAdDetail postNo={postNo} />
+      <ClientAdvertisementAdDetail advtNo={advtNo} />
     </Fragment>
   );
 }

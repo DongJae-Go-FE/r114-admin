@@ -2,8 +2,6 @@
 
 import { useRouter } from "next/navigation";
 
-import { useTransition } from "react";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -15,6 +13,8 @@ import { Button } from "@/components/Button";
 import { Checkbox } from "@/components/Checkbox";
 import { FileUpload } from "@/components/FileUpload";
 import { CustomSelect } from "@/components/Select";
+
+import { useAdvertisementAdEditMutation } from "@/lib/network/mutation";
 
 import {
   Form,
@@ -37,12 +37,12 @@ import {
 import { serviceType } from "@/const/enum";
 
 export default function ClientAdvertisementAdDetail({
-  postNo,
+  advtNo,
 }: {
-  postNo: string;
+  advtNo: string;
 }) {
   const { push } = useRouter();
-  const [isPending, startTransition] = useTransition();
+  const { mutateAsync, isPending } = useAdvertisementAdEditMutation();
 
   const form = useForm<z.infer<typeof AdvertisementAdListAddAndEditSchema>>({
     resolver: zodResolver(AdvertisementAdListAddAndEditSchema),
@@ -64,10 +64,9 @@ export default function ClientAdvertisementAdDetail({
   ) => {
     if (confirm(`광고를 ${CONFIRM_SAVE_STRING}`)) {
       try {
-        startTransition(() => {
-          console.log(values, postNo);
-          alert(`광고 ${COMPLETE_SAVE_STRING}`);
-        });
+        await mutateAsync({ values, advtNo });
+        alert(`광고 ${COMPLETE_SAVE_STRING}`);
+        push(`/advertisement/ad-list/${advtNo}`);
       } catch (e) {
         alert(e);
       }
