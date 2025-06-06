@@ -36,7 +36,7 @@ export default function LoginForm({
     register: loginRegister,
     handleSubmit: handleHookFormLoginSubmit,
     formState: { errors: errorsLogin, isLoading: isLoginLoading },
-    reset: loginReset,
+    // reset: loginReset,
   } = useForm<LoginFormData>({
     resolver: zodResolver(LoginSchema),
   });
@@ -169,10 +169,10 @@ export default function LoginForm({
                 </div>
                 <div className="mt-5 text-center body02r text-gray-600">
                   아이디/비밀번호 찾기는 REPS관리자에게 문의 바랍니다. <br />{" "}
-                  REPS 관리자 문의 010.3249.3559
+                  {/* REPS 관리자 문의 010.3249.3559 */}
                 </div>
 
-                <button
+                {/* <button
                   type="button"
                   className="block body02b m-auto mt-2 underline underline-offset-4"
                   onClick={() => {
@@ -181,7 +181,7 @@ export default function LoginForm({
                   }}
                 >
                   계정 발급 신청
-                </button>
+                </button> */}
               </form>
             </CardContent>
           </Card>

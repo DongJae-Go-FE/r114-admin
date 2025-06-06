@@ -294,7 +294,7 @@ export default function ClientAdvertisementAd() {
               <Button
                 size="sm"
                 color="white"
-                onClick={() => push("/advertisement/ad-list/add")}
+                onClick={() => push("/advertisement/ad-add")}
               >
                 신규 등록
               </Button>

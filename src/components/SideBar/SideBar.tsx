@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 import { ReactNode, useContext, useState, createContext } from "react";
@@ -12,6 +11,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/Accordion";
+
+import { ChevronRight, ChevronLeft } from "lucide-react";
 
 type SideBarContextType = {
   isOpen: boolean;
@@ -96,7 +97,7 @@ const MenuAccordion = (props: { items: MenuItem[]; link?: string }) => {
 };
 
 function SideBar() {
-  const { isOpen } = useContext(SideBarContext);
+  const { isOpen, setIsOpen } = useContext(SideBarContext);
 
   const menu: MenuItem[] = [
     {
@@ -109,13 +110,13 @@ function SideBar() {
           children: [],
         },
         {
-          key: "power",
-          title: "권한 관리",
+          key: "contract",
+          title: "계약 관리",
           children: [],
         },
         {
-          key: "contract",
-          title: "계약 관리",
+          key: "power",
+          title: "권한 관리",
           children: [],
         },
       ],
@@ -140,17 +141,17 @@ function SideBar() {
           title: "광고 목록",
           children: [],
         },
+        {
+          key: "ad-add",
+          title: "광고 등록",
+          children: [],
+        },
       ],
     },
     {
       key: "setting",
       title: "설정",
       children: [
-        // {
-        //   key: "common",
-        //   title: "사이트 기본 설정",
-        //   children: [],
-        // },
         {
           key: "management",
           title: "관리자 계정/권한 관리",
@@ -173,21 +174,10 @@ function SideBar() {
 
   return (
     <div aria-expanded={isOpen ? true : false} className={sideBarStyle}>
-      <h1 className="w-full h-16 border-b border-gray-200">
-        <Link
-          className="flex justify-center items-center w-full h-full"
-          href="/"
-        >
-          <Image src="/logo.svg" alt="로고" width={117} height={24} />
-        </Link>
-      </h1>
       <div className="flex items-center justify-center h-[117px] border-b">
         <h4 className="heading04b">REPS 5.0 Admin</h4>
       </div>
-      <div className="h-[calc(100%-300px)] overflow-auto">
-        <MenuAccordion items={menu} />
-      </div>
-      <div className="w-full h-30 border-t border-gray-200">
+      <div className="w-full h-30 border-b border-gray-200">
         <div className="w-full h-full p-4 body03b">
           <h3>
             <p className="truncate">유저이름유저이름유저이름유저이름유저이름</p>
@@ -205,6 +195,16 @@ function SideBar() {
           </ul>
         </div>
       </div>
+      <div className="h-[calc(100%-364px)] overflow-auto">
+        <MenuAccordion items={menu} />
+      </div>
+      <button
+        type="button"
+        className="absolute -right-6 top-1/2 -translate-y-1/2 w-6 h-12 flex justify-center items-center bg-white z-30 rounded-r-sm border border-gray-200 shadow-xs"
+        onClick={setIsOpen}
+      >
+        {isOpen ? <ChevronLeft /> : <ChevronRight />}
+      </button>
     </div>
   );
 }

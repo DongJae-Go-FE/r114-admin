@@ -8,10 +8,8 @@ import Header from "@/components/Header";
 
 export default async function Layout({
   children,
-  modal,
 }: {
   children: React.ReactNode;
-  modal: React.ReactNode;
 }) {
   return (
     <SideBarContextProvider>
@@ -22,7 +20,6 @@ export default async function Layout({
           <main className="p-4 h-[calc(100dvh-64px)]">
             <div className="w-full h-full bg-white rounded-[8px] overflow-y-scroll p-4 max-h-[calc(100dvh-96px)]">
               {children}
-              {modal}
             </div>
           </main>
         </SideBarContent>
