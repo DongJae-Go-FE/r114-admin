@@ -6,7 +6,7 @@ import DescriptionTable from "@/components/DescriptionTable/DescriptionTable";
 import { Button } from "@/components/Button";
 import { DataTable } from "@/components/DataTable";
 
-import { SettingManagementDetailListSchema } from "@/schema/schema";
+import { GET_SETTING_MANAGEMENT_DETAIL_LIST_SCHEMA } from "@/schema/setting/management/schema";
 import SettingManagementDetailColumns from "./tableColumns/SettingManagementDetailColumns";
 
 const data = [
@@ -81,7 +81,7 @@ export default function ClientSettingManagementDetail({
         <h4 className="sub-title">업데이트 이력</h4>
         <DataTable
           data={data}
-          schema={SettingManagementDetailListSchema}
+          schema={GET_SETTING_MANAGEMENT_DETAIL_LIST_SCHEMA}
           columns={SettingManagementDetailColumns}
           isTableHeader={false}
         />

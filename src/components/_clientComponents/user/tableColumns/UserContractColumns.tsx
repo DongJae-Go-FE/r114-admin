@@ -4,10 +4,12 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { ArrowUpDown } from "lucide-react";
 
-import { UserContractSchema } from "@/schema/schema";
+import { GET_USER_CONTRACT_SCHEMA } from "@/schema/user/contract/schema";
 import Link from "next/link";
 
-const UserContractColumns: ColumnDef<z.infer<typeof UserContractSchema>>[] = [
+const UserContractColumns: ColumnDef<
+  z.infer<typeof GET_USER_CONTRACT_SCHEMA>
+>[] = [
   {
     accessorKey: "code",
     header: ({ column }) => (

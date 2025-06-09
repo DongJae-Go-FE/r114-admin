@@ -1,80 +1,137 @@
+import Link from "next/link";
+
 import { z } from "zod";
 
 import { ColumnDef } from "@tanstack/react-table";
 
-import { Button } from "@/components/Button";
+import { GET_USER_MEMBER_SCHEMA } from "@/schema/user/member/schema";
 
-import UserMemberModal from "../modal/UserMemberModal";
+import { ArrowUpDown } from "lucide-react";
 
-import { UserMemberSchema } from "@/schema/schema";
-
-import {
-  CONFIRM_DELETE_SAVE_STRING,
-  COMPLETE_DELETE_STRING,
-} from "@/const/const";
-
-const UserMemberColumns: ColumnDef<z.infer<typeof UserMemberSchema>>[] = [
+const UserMemberColumns: ColumnDef<z.infer<typeof GET_USER_MEMBER_SCHEMA>>[] = [
   {
-    accessorKey: "state",
-    header: () => <div className="text-center">상태</div>,
-    cell: ({ row }) => <div className="text-center">{row.original.state}</div>,
+    accessorKey: "idType",
+    header: ({ column }) => (
+      <button
+        type="button"
+        className="table-header-button"
+        onClick={() => column.toggleSorting()}
+      >
+        계정 구분
+        <ArrowUpDown />
+      </button>
+    ),
+    cell: ({ row }) => <div className="text-center">{row.original.idType}</div>,
+  },
+  {
+    accessorKey: "code",
+    header: ({ column }) => (
+      <button
+        type="button"
+        className="table-header-button"
+        onClick={() => column.toggleSorting()}
+      >
+        계약 코드
+        <ArrowUpDown />
+      </button>
+    ),
+    cell: ({ row }) => (
+      <Link
+        href={`/user/contract/${row.original.id}`}
+        className="w-full text-center block underline underline-offset-2"
+      >
+        {row.original.code}
+      </Link>
+    ),
+  },
+  {
+    accessorKey: "serviceDate",
+    header: ({ column }) => (
+      <button
+        type="button"
+        className="table-header-button"
+        onClick={() => column.toggleSorting()}
+      >
+        서비스 이용 기간
+        <ArrowUpDown />
+      </button>
+    ),
+    size: 200,
+    cell: ({ row }) => (
+      <div className="text-center">{row.original.serviceDate}</div>
+    ),
   },
   {
     accessorKey: "name",
-    header: () => <div className="text-center">아이디</div>,
+    header: () => <div className="text-center">회원 명</div>,
     cell: ({ row }) => <div className="text-center">{row.original.name}</div>,
   },
   {
-    accessorKey: "region",
-    header: () => <div className="text-center">지역</div>,
-    cell: ({ row }) => <div className="text-center">{row.original.region}</div>,
-  },
-  {
-    accessorKey: "ip",
-    header: () => <div className="text-center">IP</div>,
-    cell: ({ row }) => <div className="text-center">{row.original.ip}</div>,
-  },
-  {
-    accessorKey: "date",
-    header: () => <div className="text-center">등록일시</div>,
-    cell: ({ row }) => <div className="text-center">{row.original.date}</div>,
-  },
-
-  {
-    accessorKey: "id",
-    header: () => <div className="text-center">접속정보</div>,
+    accessorKey: "userId",
+    header: () => <div className="text-center">아이디</div>,
     cell: ({ row }) => (
-      <div className="w-full flex justify-center">
-        <UserMemberModal id={row.original.id} />
-      </div>
+      <Link
+        href={`/user/member/${row.original.id}`}
+        className="w-full text-center block underline underline-offset-2"
+      >
+        {row.original.userId}
+      </Link>
     ),
   },
 
   {
-    header: () => <div className="text-center">관리</div>,
-    accessorKey: "managing",
-    cell: ({ row }) => {
-      const handleDelete = async () => {
-        if (confirm(CONFIRM_DELETE_SAVE_STRING)) {
-          try {
-            console.log(row.original.id);
-            alert(COMPLETE_DELETE_STRING);
-          } catch (e) {
-            alert(e);
-          }
-        }
-      };
-
-      return row.original.managing ? (
-        <div className="flex justify-center">
-          <Button type="button" size="xs" color="red" onClick={handleDelete}>
-            삭제
-          </Button>
-        </div>
-      ) : (
-        ""
-      );
-    },
+    accessorKey: "ipCount",
+    header: () => <div className="text-center">IP개수(사용/전체)</div>,
+    cell: ({ row }) => (
+      <div className="text-center">{row.original.ipCount}/5</div>
+    ),
+  },
+  {
+    accessorKey: "memberType",
+    header: ({ column }) => (
+      <button
+        type="button"
+        className="table-header-button"
+        onClick={() => column.toggleSorting()}
+      >
+        회원 상태
+        <ArrowUpDown />
+      </button>
+    ),
+    cell: ({ row }) => (
+      <div className="text-center">{row.original.memberType}</div>
+    ),
+  },
+  {
+    accessorKey: "group",
+    header: ({ column }) => (
+      <button
+        type="button"
+        className="table-header-button"
+        onClick={() => column.toggleSorting()}
+      >
+        권한 그룹
+        <ArrowUpDown />
+      </button>
+    ),
+    cell: ({ row }) => <div className="text-center">{row.original.group}</div>,
+  },
+  {
+    accessorKey: "upDate",
+    header: ({ column }) => (
+      <button
+        type="button"
+        className="table-header-button"
+        onClick={() => column.toggleSorting()}
+      >
+        최근 업데이트 일시
+        <ArrowUpDown />
+      </button>
+    ),
+    size: 200,
+    cell: ({ row }) => (
+      <div className="text-center">{row.original.updateDate}</div>
+    ),
   },
 ];
 

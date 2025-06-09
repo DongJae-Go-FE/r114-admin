@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { BoardNoticeAddEditSchema } from "@/schema/schema";
+import { POST_BOARD_NOTICE_SCHEMA } from "@/schema/board/notice/schema";
 
 import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
@@ -49,8 +49,8 @@ export default function ClientBoardNoticeAdd() {
 
   const { mutateAsync, isPending } = useBoardPostMutation();
 
-  const form = useForm<z.infer<typeof BoardNoticeAddEditSchema>>({
-    resolver: zodResolver(BoardNoticeAddEditSchema),
+  const form = useForm<z.infer<typeof POST_BOARD_NOTICE_SCHEMA>>({
+    resolver: zodResolver(POST_BOARD_NOTICE_SCHEMA),
     defaultValues: {
       date: "",
       writer: "가동재",
@@ -64,7 +64,7 @@ export default function ClientBoardNoticeAdd() {
   });
 
   const handleSave = async (
-    values: z.infer<typeof BoardNoticeAddEditSchema>
+    values: z.infer<typeof POST_BOARD_NOTICE_SCHEMA>
   ) => {
     if (confirm(`공지사항${CONFIRM_ADD_SAVE_STRING}`)) {
       try {

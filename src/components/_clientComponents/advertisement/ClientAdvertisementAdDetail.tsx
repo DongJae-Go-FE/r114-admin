@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { AdvertisementAdListAddAndEditSchema } from "@/schema/schema";
+import { PUT_ADVERTISEMENT_AD_SCHEMA } from "@/schema/advertisement/ad/schema";
 
 import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
@@ -44,8 +44,8 @@ export default function ClientAdvertisementAdDetail({
   const { push } = useRouter();
   const { mutateAsync, isPending } = useAdvertisementAdEditMutation();
 
-  const form = useForm<z.infer<typeof AdvertisementAdListAddAndEditSchema>>({
-    resolver: zodResolver(AdvertisementAdListAddAndEditSchema),
+  const form = useForm<z.infer<typeof PUT_ADVERTISEMENT_AD_SCHEMA>>({
+    resolver: zodResolver(PUT_ADVERTISEMENT_AD_SCHEMA),
     defaultValues: {
       title: "",
       date: "123123123",
@@ -60,7 +60,7 @@ export default function ClientAdvertisementAdDetail({
   });
 
   const handleEdit = async (
-    values: z.infer<typeof AdvertisementAdListAddAndEditSchema>
+    values: z.infer<typeof PUT_ADVERTISEMENT_AD_SCHEMA>
   ) => {
     if (confirm(`광고를 ${CONFIRM_SAVE_STRING}`)) {
       try {

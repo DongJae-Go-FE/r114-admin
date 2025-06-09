@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { ZodError } from "zod";
 
-import { LoginSchema } from "./schema/schema";
+import { POST_LOGIN_SCHEMA } from "./schema/login/schema";
 
 import HttpRequest from "@/lib/network/HttpRequest";
 
@@ -15,7 +15,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       async authorize(credentials) {
         try {
-          const { id, password } = await LoginSchema.parseAsync(credentials);
+          const { id, password } = await POST_LOGIN_SCHEMA.parseAsync(credentials);
 
           const user = await HttpRequest.set<{ id: string; password: string }>(
             "POST",

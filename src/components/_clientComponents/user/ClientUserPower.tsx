@@ -15,8 +15,8 @@ import Filter from "@/components/Filter";
 
 import { DataTable } from "@/components/DataTable";
 
-import { UserPowerSchema } from "@/schema/schema";
-import { UserPowerGetRequestType } from "@/lib/network/types";
+import { GET_USER_POWER_SCHEMA } from "@/schema/user/power/schema";
+import { GET_USER_POWER_REQUEST_TYPE } from "@/lib/network/types";
 
 import UserPowerColumns from "./tableColumns/UserPowerColumns";
 
@@ -69,7 +69,7 @@ export default function ClientUserPower() {
   const [isDelete, setIsDelete] = useState(false);
 
   const { filter, setFilter, handleSubmit, handleReset } =
-    useFilter<UserPowerGetRequestType>({
+    useFilter<GET_USER_POWER_REQUEST_TYPE>({
       startDate: "",
       endDate: "",
       power: "",
@@ -279,7 +279,7 @@ export default function ClientUserPower() {
       <DataTable
         data={data}
         columns={UserPowerColumns}
-        schema={UserPowerSchema}
+        schema={GET_USER_POWER_SCHEMA}
         btnArea={{
           primary: (
             <Button size="sm" color="red" onClick={handleDelete}>

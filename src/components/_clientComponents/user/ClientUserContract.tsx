@@ -16,8 +16,8 @@ import Filter from "@/components/Filter";
 
 import { DataTable } from "@/components/DataTable";
 
-import { UserContractSchema } from "@/schema/schema";
-import { UserContractGetRequestType } from "@/lib/network/types";
+import { GET_USER_CONTRACT_SCHEMA } from "@/schema/user/contract/schema";
+import { GET_USER_CONTRACT_REQUEST_TYPE } from "@/lib/network/types";
 
 import UserContractColumns from "./tableColumns/UserContractColumns";
 
@@ -43,7 +43,7 @@ export default function ClientUserContract() {
   const debouncedSearch = useDebounce({ value: searchInput, delay: 300 });
 
   const { filter, setFilter, handleSubmit, handleReset } =
-    useFilter<UserContractGetRequestType>({
+    useFilter<GET_USER_CONTRACT_REQUEST_TYPE>({
       startDate: "",
       endDate: "",
       memberType: "all",
@@ -303,7 +303,7 @@ export default function ClientUserContract() {
       <DataTable
         data={data}
         columns={UserContractColumns}
-        schema={UserContractSchema}
+        schema={GET_USER_CONTRACT_SCHEMA}
         btnArea={{
           primary: (
             <Button

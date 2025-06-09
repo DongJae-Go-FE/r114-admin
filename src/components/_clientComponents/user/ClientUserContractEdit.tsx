@@ -19,7 +19,10 @@ import { FileUpload } from "@/components/FileUpload";
 
 import { Textarea } from "@/components/Textarea";
 
-import { UserContractDetailList } from "@/schema/schema";
+import {
+  GET_USER_CONTRACT_DETAIL_LIST_SCHEMA,
+  PUT_USER_CONTRACT,
+} from "@/schema/user/contract/schema";
 import UserContractDetailColumns from "./tableColumns/UserContractDetailColumns";
 
 import {
@@ -29,8 +32,6 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/Form";
-
-import { UserContractEdit } from "@/schema/schema";
 
 import {
   CONFIRM_EDIT_SAVE_STRING,
@@ -70,14 +71,18 @@ const data = [
   },
 ];
 
-export default function ClientUserContractEdit({ postNo }: { postNo: string }) {
+export default function ClientEDIT_USER_CONTRACT({
+  postNo,
+}: {
+  postNo: string;
+}) {
   const { push } = useRouter();
 
   const [isPending, startTransition] = useTransition();
   const [isOk, setIsOk] = useState(false);
 
-  const form = useForm<z.infer<typeof UserContractEdit>>({
-    resolver: zodResolver(UserContractEdit),
+  const form = useForm<z.infer<typeof PUT_USER_CONTRACT>>({
+    resolver: zodResolver(PUT_USER_CONTRACT),
     defaultValues: {
       code: "",
       date: "",
@@ -104,7 +109,7 @@ export default function ClientUserContractEdit({ postNo }: { postNo: string }) {
     }
   };
 
-  const handleEdit = async (values: z.infer<typeof UserContractEdit>) => {
+  const handleEdit = async (values: z.infer<typeof PUT_USER_CONTRACT>) => {
     //TODO - 규칙 미준수 처리
 
     if (confirm(`계약정보를 ${CONFIRM_EDIT_SAVE_STRING}`)) {
@@ -386,7 +391,7 @@ export default function ClientUserContractEdit({ postNo }: { postNo: string }) {
             <h4 className="sub-title">업데이트 이력</h4>
             <DataTable
               data={data}
-              schema={UserContractDetailList}
+              schema={GET_USER_CONTRACT_DETAIL_LIST_SCHEMA}
               columns={UserContractDetailColumns}
               isTableHeader={false}
             />

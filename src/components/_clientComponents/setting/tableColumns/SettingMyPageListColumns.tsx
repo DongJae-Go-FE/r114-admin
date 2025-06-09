@@ -3,10 +3,10 @@ import Link from "next/link";
 import { z } from "zod";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { SettingMyPageListSchema } from "@/schema/schema";
+import { GET_SETTING_MY_PAGE_SCHEMA } from "@/schema/setting/myPage/schema";
 
 const SettingMyPageListColumns: ColumnDef<
-  z.infer<typeof SettingMyPageListSchema>
+  z.infer<typeof GET_SETTING_MY_PAGE_SCHEMA>
 >[] = [
   {
     accessorKey: "date",

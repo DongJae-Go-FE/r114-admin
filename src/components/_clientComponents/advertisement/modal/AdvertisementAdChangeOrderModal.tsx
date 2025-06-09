@@ -14,8 +14,7 @@ import {
 import { Button } from "@/components/Button";
 import { DataTable } from "@/components/DataTable";
 import AdvertisementAdChangeOrderColumns from "@/components/_clientComponents/advertisement/tableColumns/AdvertisementAdChangeOrderColumns";
-import { AdvertisementAdChangeOrderSchema } from "@/schema/schema";
-
+import { GET_ADVERTISEMENT_AD_CHANGE_ORDER_SCHEMA } from "@/schema/advertisement/ad/schema";
 import { COMPLETE_EDIT_STRING } from "@/const/const";
 
 const data = [
@@ -80,7 +79,7 @@ export default function AdvertisementAdChangeOrderModal() {
         <DataTable
           data={data}
           columns={AdvertisementAdChangeOrderColumns}
-          schema={AdvertisementAdChangeOrderSchema}
+          schema={GET_ADVERTISEMENT_AD_CHANGE_ORDER_SCHEMA}
           isDragAndDrop
         />
         <DialogFooter>

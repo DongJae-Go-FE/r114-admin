@@ -3,21 +3,27 @@ import HttpRequest from "./HttpRequest";
 import { z } from "zod";
 
 import {
-  BoardNoticeAddEditSchema,
-  AdvertisementAdListAddAndEditSchema,
-} from "@/schema/schema";
+  POST_ADVERTISEMENT_AD_SCHEMA,
+  PUT_ADVERTISEMENT_AD_SCHEMA,
+} from "@/schema/advertisement/ad/schema";
 
 import {
-  UserCorporationGetRequestType,
-  UserMemberGetRequestType,
-  UserContractGetRequestType,
-  UserPowerGetRequestType,
-  BoardNoticeRequestType,
-  BoardNoticeResponseType,
-  BoardNoticePostAndPutType,
-  BoardNoticeDetailResponseType,
-  AdvertisementAdGetRequestType,
-  SettingManagementGetRequestType,
+  POST_BOARD_NOTICE_SCHEMA,
+  PUT_BOARD_NOTICE_SCHEMA,
+} from "@/schema/board/notice/schema";
+
+import {
+  GET_USER_CORPORATION_REQUEST_TYPE,
+  GET_USER_MEMBER_REQUEST_TYPE,
+  GET_USER_CONTRACT_REQUEST_TYPE,
+  GET_USER_POWER_REQUEST_TYPE,
+  GET_BOARD_NOTICE_REQUEST_TYPE,
+  POST_BOARD_NOTICE_RESPONSE_TYPE,
+  POST_BOARD_NOTICE_REQUEST_TYPE,
+  PUT_BOARD_NOTICE_REQUEST_TYPE,
+  POST_BOARD_NOTICE_DETAIL_RESPONSE_TYPE,
+  GET_ADVERTISEMENT_AD_REQUEST_TYPE,
+  GET_SETTING_MANAGEMENT_REQUEST_TYPE,
 } from "./types";
 
 export enum QueryKey {
@@ -36,9 +42,9 @@ export enum MutationKey {}
 
 /** 수정 예정 */
 export async function GET_USER_CORPORATION_REQUEST(
-  queryString: UserCorporationGetRequestType
+  queryString: GET_USER_CORPORATION_REQUEST_TYPE
 ) {
-  return await HttpRequest.get<unknown, UserCorporationGetRequestType>(
+  return await HttpRequest.get<unknown, GET_USER_CORPORATION_REQUEST_TYPE>(
     "/v1/api/추가예정",
     queryString
   );
@@ -46,9 +52,9 @@ export async function GET_USER_CORPORATION_REQUEST(
 
 /** 수정 예정 */
 export async function GET_USER_MEMBER_REQUEST(
-  queryString: UserMemberGetRequestType
+  queryString: GET_USER_MEMBER_REQUEST_TYPE
 ) {
-  return await HttpRequest.get<unknown, UserMemberGetRequestType>(
+  return await HttpRequest.get<unknown, GET_USER_MEMBER_REQUEST_TYPE>(
     "/v1/api/추가예정",
     queryString
   );
@@ -56,9 +62,9 @@ export async function GET_USER_MEMBER_REQUEST(
 
 /** 수정 예정 */
 export async function GET_USER_CONTRACT_REQUEST(
-  queryString: UserContractGetRequestType
+  queryString: GET_USER_CONTRACT_REQUEST_TYPE
 ) {
-  return await HttpRequest.get<unknown, UserContractGetRequestType>(
+  return await HttpRequest.get<unknown, GET_USER_CONTRACT_REQUEST_TYPE>(
     "/v1/api/추가예정",
     queryString
   );
@@ -66,9 +72,9 @@ export async function GET_USER_CONTRACT_REQUEST(
 
 /** 수정 예정 */
 export async function GET_USER_POWER_REQUEST(
-  queryString: UserPowerGetRequestType
+  queryString: GET_USER_POWER_REQUEST_TYPE
 ) {
-  return await HttpRequest.get<unknown, UserPowerGetRequestType>(
+  return await HttpRequest.get<unknown, GET_USER_POWER_REQUEST_TYPE>(
     "/v1/api/추가예정",
     queryString
   );
@@ -76,12 +82,12 @@ export async function GET_USER_POWER_REQUEST(
 
 /** 공지사항 목록 및 총 건수 조회 */
 export async function GET_BOARD_NOTICE_REQUEST(
-  queryString: BoardNoticeRequestType
+  queryString: GET_BOARD_NOTICE_REQUEST_TYPE
 ) {
-  return await HttpRequest.get<BoardNoticeResponseType, BoardNoticeRequestType>(
-    "/v1/api/board/list",
-    queryString
-  );
+  return await HttpRequest.get<
+    POST_BOARD_NOTICE_RESPONSE_TYPE,
+    GET_BOARD_NOTICE_REQUEST_TYPE
+  >("/v1/api/board/list", queryString);
 }
 
 /** 공지사항 삭제 */
@@ -99,9 +105,9 @@ export async function DELETE_BOARD_NOTICE_REQUEST({
 export async function POST_BOARD_NOTICE_REQUEST({
   values,
 }: {
-  values: z.infer<typeof BoardNoticeAddEditSchema>;
+  values: z.infer<typeof POST_BOARD_NOTICE_SCHEMA>;
 }) {
-  return await HttpRequest.set<BoardNoticePostAndPutType>(
+  return await HttpRequest.set<POST_BOARD_NOTICE_REQUEST_TYPE>(
     "POST",
     `/api/v1/board`,
     JSON.stringify(values),
@@ -116,10 +122,10 @@ export async function PUT_BOARD_NOTICE_REQUEST({
   values,
   postNo,
 }: {
-  values: z.infer<typeof BoardNoticeAddEditSchema>;
+  values: z.infer<typeof PUT_BOARD_NOTICE_SCHEMA>;
   postNo: string;
 }) {
-  return await HttpRequest.set<BoardNoticePostAndPutType>(
+  return await HttpRequest.set<PUT_BOARD_NOTICE_REQUEST_TYPE>(
     "PUT",
     `/api/v1/board/${postNo}`,
     JSON.stringify(values),
@@ -135,7 +141,7 @@ export async function GET_BOARD_NOTICE_DETAIL_REQUEST({
 }: {
   postNo: string;
 }) {
-  return await HttpRequest.get<BoardNoticeDetailResponseType>(
+  return await HttpRequest.get<POST_BOARD_NOTICE_DETAIL_RESPONSE_TYPE>(
     `/v1/api/board/${postNo}`
   );
 }
@@ -160,9 +166,9 @@ export async function GET_BOARD_NOTICE_FILE_UPLOAD_REQUEST({
 
 /** 광고 목록 조회 및 총 건수 조회 TODO.타입 수정헤야함 */
 export async function GET_ADVERTISEMENT_AD_REQUEST(
-  queryString: AdvertisementAdGetRequestType
+  queryString: GET_ADVERTISEMENT_AD_REQUEST_TYPE
 ) {
-  return await HttpRequest.get<unknown, AdvertisementAdGetRequestType>(
+  return await HttpRequest.get<unknown, GET_ADVERTISEMENT_AD_REQUEST_TYPE>(
     "/v1/api/advertise/list",
     queryString
   );
@@ -201,7 +207,7 @@ export async function DELETE_ADVERTISEMENT_AD_REQUEST({
 export async function POST_ADVERTISEMENT_AD_REQUEST({
   values,
 }: {
-  values: z.infer<typeof AdvertisementAdListAddAndEditSchema>;
+  values: z.infer<typeof POST_ADVERTISEMENT_AD_SCHEMA>;
 }) {
   return await HttpRequest.set<unknown>(
     "POST",
@@ -218,7 +224,7 @@ export async function PUT_ADVERTISEMENT_AD_REQUEST({
   values,
   advtNo,
 }: {
-  values: z.infer<typeof AdvertisementAdListAddAndEditSchema>;
+  values: z.infer<typeof PUT_ADVERTISEMENT_AD_SCHEMA>;
   advtNo: string;
 }) {
   return await HttpRequest.set<unknown>(
@@ -244,9 +250,9 @@ export async function PATCH_ADVERTISEMENT_AD_REQUEST() {
 
 /** 수정 예정 */
 export async function GET_SETTING_MANAGEMENT_REQUEST(
-  queryString: SettingManagementGetRequestType
+  queryString: GET_SETTING_MANAGEMENT_REQUEST_TYPE
 ) {
-  return await HttpRequest.get<unknown, SettingManagementGetRequestType>(
+  return await HttpRequest.get<unknown, GET_SETTING_MANAGEMENT_REQUEST_TYPE>(
     "/v1/api/추가예정",
     queryString
   );

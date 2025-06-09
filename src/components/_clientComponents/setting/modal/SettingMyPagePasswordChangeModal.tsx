@@ -28,7 +28,7 @@ import {
   FormMessage,
 } from "@/components/Form";
 
-import { SettingMyPageIdChangeSchema } from "@/schema/schema";
+import { POST_SETTING_MY_PAGE_ID_CHANGE_SCHEMA } from "@/schema/setting/myPage/schema";
 
 import {
   handleLogout,
@@ -42,8 +42,8 @@ export default function SettingMyPagePasswordChangeModal() {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof SettingMyPageIdChangeSchema>>({
-    resolver: zodResolver(SettingMyPageIdChangeSchema),
+  const form = useForm<z.infer<typeof POST_SETTING_MY_PAGE_ID_CHANGE_SCHEMA>>({
+    resolver: zodResolver(POST_SETTING_MY_PAGE_ID_CHANGE_SCHEMA),
     defaultValues: {
       pw: "",
       newPw: "",
@@ -52,7 +52,7 @@ export default function SettingMyPagePasswordChangeModal() {
   });
 
   const handleEdit = async (
-    values: z.infer<typeof SettingMyPageIdChangeSchema>
+    values: z.infer<typeof POST_SETTING_MY_PAGE_ID_CHANGE_SCHEMA>
   ) => {
     if (confirm("비밀번호를 변경하겠습니까?")) {
       try {

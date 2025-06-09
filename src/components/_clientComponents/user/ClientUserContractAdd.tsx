@@ -17,9 +17,9 @@ import { Input } from "@/components/Input";
 import { FileUpload } from "@/components/FileUpload";
 
 import {
-  UserContractIndividualAdd,
-  UserContractCorporationIndividualAdd,
-} from "@/schema/schema";
+  POST_USER_CONTRACT_INDIVIDUAL_SCHEMA,
+  POST_USER_CONTRACT_CORPORATION_INDIVIDUAL_SCHEMA,
+} from "@/schema/user/contract/schema";
 
 import {
   Form,
@@ -45,8 +45,8 @@ function ClientUserContractAddIndividual() {
 
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof UserContractIndividualAdd>>({
-    resolver: zodResolver(UserContractIndividualAdd),
+  const form = useForm<z.infer<typeof POST_USER_CONTRACT_INDIVIDUAL_SCHEMA>>({
+    resolver: zodResolver(POST_USER_CONTRACT_INDIVIDUAL_SCHEMA),
     defaultValues: {
       code: "",
       date: "",
@@ -58,7 +58,7 @@ function ClientUserContractAddIndividual() {
   });
 
   const handleSave = async (
-    values: z.infer<typeof UserContractIndividualAdd>
+    values: z.infer<typeof POST_USER_CONTRACT_INDIVIDUAL_SCHEMA>
   ) => {
     //TODO - 규칙 미준수 처리
 
@@ -263,8 +263,10 @@ function ClientUserContractAddCorporation() {
   const [isPending, startTransition] = useTransition();
   const [isOk, setIsOk] = useState(false);
 
-  const form = useForm<z.infer<typeof UserContractCorporationIndividualAdd>>({
-    resolver: zodResolver(UserContractCorporationIndividualAdd),
+  const form = useForm<
+    z.infer<typeof POST_USER_CONTRACT_CORPORATION_INDIVIDUAL_SCHEMA>
+  >({
+    resolver: zodResolver(POST_USER_CONTRACT_CORPORATION_INDIVIDUAL_SCHEMA),
     defaultValues: {
       code: "",
       date: "",
@@ -290,7 +292,7 @@ function ClientUserContractAddCorporation() {
   };
 
   const handleSave = async (
-    values: z.infer<typeof UserContractCorporationIndividualAdd>
+    values: z.infer<typeof POST_USER_CONTRACT_CORPORATION_INDIVIDUAL_SCHEMA>
   ) => {
     //TODO - 규칙 미준수 처리
 

@@ -7,7 +7,7 @@ export default async function Page() {
   return (
     <Fragment>
       <PageHeader
-        title="RPES/RCS 통합 계약 목록"
+        title="REPS/RCS 통합 계약 목록"
         items={[
           {
             title: "회원 관리",

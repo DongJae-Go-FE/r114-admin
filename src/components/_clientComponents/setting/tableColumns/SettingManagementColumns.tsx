@@ -6,14 +6,14 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { ArrowUpDown } from "lucide-react";
 
-import { SettingManagementSchema } from "@/schema/schema";
+import { GET_SETTING_MANAGEMENT_SCHEMA } from "@/schema/setting/management/schema";
 
 import { Checkbox } from "@/components/Checkbox";
 import SettingManagementChangeModal from "../modal/SettingManagementChangeModal";
 import SettingManagementDeleteModal from "../modal/SettingManagementDeleteModal";
 
 const SettingManagementColumns: ColumnDef<
-  z.infer<typeof SettingManagementSchema>
+  z.infer<typeof GET_SETTING_MANAGEMENT_SCHEMA>
 >[] = [
   {
     id: "select",

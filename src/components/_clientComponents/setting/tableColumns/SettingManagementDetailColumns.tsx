@@ -3,10 +3,10 @@ import Link from "next/link";
 import { z } from "zod";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { UserContractDetailList } from "@/schema/schema";
+import { GET_SETTING_MANAGEMENT_DETAIL_LIST_SCHEMA } from "@/schema/setting/management/schema";
 
 const UserContractDetailColumns: ColumnDef<
-  z.infer<typeof UserContractDetailList>
+  z.infer<typeof GET_SETTING_MANAGEMENT_DETAIL_LIST_SCHEMA>
 >[] = [
   {
     accessorKey: "date",

@@ -6,7 +6,7 @@ import DescriptionTable from "@/components/DescriptionTable/DescriptionTable";
 import { Button } from "@/components/Button";
 import { DataTable } from "@/components/DataTable";
 
-import { SettingMyPageListSchema } from "@/schema/schema";
+import { GET_SETTING_MY_PAGE_SCHEMA } from "@/schema/setting/myPage/schema";
 import SettingMyPageListColumns from "./tableColumns/SettingMyPageListColumns";
 
 import SettingMyPagePasswordChangeModal from "./modal/SettingMyPagePasswordChangeModal";
@@ -92,7 +92,7 @@ export default function ClientSettingMyPage() {
         <h4 className="sub-title">업데이트 이력</h4>
         <DataTable
           data={data}
-          schema={SettingMyPageListSchema}
+          schema={GET_SETTING_MY_PAGE_SCHEMA}
           columns={SettingMyPageListColumns}
         />
       </div>

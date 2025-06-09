@@ -11,9 +11,9 @@ import {
 import { Button } from "@/components/Button";
 import { DataTable } from "@/components/DataTable";
 
-import { UserMemberModalSchema } from "@/schema/schema";
+import { GET_USER_MEMBER_IP_MODAL_SCHEMA } from "@/schema/user/member/schema";
 
-import UserMemberModalColumns from "../tableColumns/UserMemberModalColumns";
+import UserMemberIpModalColumns from "../tableColumns/UserMemberIpModalColumns";
 
 const data = [
   {
@@ -28,14 +28,14 @@ const data = [
   },
 ];
 
-export default function UserMemberModal({ id }: { id: string | number }) {
+export default function UserMemberIpModal({ id }: { id: string | number }) {
   console.log(id);
 
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button type="button" size="xs" color="white">
-          확인
+          조회
         </Button>
       </DialogTrigger>
       <DialogContent className="overflow-auto ">
@@ -45,8 +45,8 @@ export default function UserMemberModal({ id }: { id: string | number }) {
 
         <DataTable
           data={data}
-          columns={UserMemberModalColumns}
-          schema={UserMemberModalSchema}
+          columns={UserMemberIpModalColumns}
+          schema={GET_USER_MEMBER_IP_MODAL_SCHEMA}
         />
       </DialogContent>
     </Dialog>

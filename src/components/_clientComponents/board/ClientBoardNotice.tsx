@@ -18,8 +18,8 @@ import { DataTable } from "@/components/DataTable";
 
 import BoardNoticeColumns from "./tableColumns/BoardNoticeColumns";
 
-import { BoardNoticeSchema } from "@/schema/schema";
-import { BoardNoticeRequestType } from "@/lib/network/types";
+import { GET_BOARD_NOTICE_SCHEMA } from "@/schema/board/notice/schema";
+import { GET_BOARD_NOTICE_REQUEST_TYPE } from "@/lib/network/types";
 
 import { useFilter } from "@/hooks/useFilter";
 import useDebounce from "@/hooks/useDebounce";
@@ -80,7 +80,7 @@ export default function ClientBoardNotice() {
   const { mutateAsync } = useBoardDeleteMutation();
 
   const { filter, handleSubmit, handleReset, setFilter } =
-    useFilter<BoardNoticeRequestType>({
+    useFilter<GET_BOARD_NOTICE_REQUEST_TYPE>({
       comCd: "001",
       searchKeyword: "",
       searchEndRegDtm: "",
@@ -250,7 +250,7 @@ export default function ClientBoardNotice() {
       <DataTable
         data={transformedData}
         columns={BoardNoticeColumns}
-        schema={BoardNoticeSchema}
+        schema={GET_BOARD_NOTICE_SCHEMA}
         btnArea={{
           primary: (
             <Button size="sm" color="red" onClick={handleDelete}>

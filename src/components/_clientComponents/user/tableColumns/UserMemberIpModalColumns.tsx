@@ -1,10 +1,10 @@
 import { z } from "zod";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { UserMemberModalSchema } from "@/schema/schema";
+import { GET_USER_MEMBER_IP_MODAL_SCHEMA } from "@/schema/user/member/schema";
 
-const UserMemberModalColumns: ColumnDef<
-  z.infer<typeof UserMemberModalSchema>
+const UserMemberIpModalColumns: ColumnDef<
+  z.infer<typeof GET_USER_MEMBER_IP_MODAL_SCHEMA>
 >[] = [
   {
     accessorKey: "loginData",
@@ -18,4 +18,4 @@ const UserMemberModalColumns: ColumnDef<
   },
 ];
 
-export default UserMemberModalColumns;
+export default UserMemberIpModalColumns;

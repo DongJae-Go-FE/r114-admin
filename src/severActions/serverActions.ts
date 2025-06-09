@@ -6,9 +6,9 @@ import HttpRequest from "@/lib/network/HttpRequest";
 import { redirect } from "next/navigation";
 
 import {
-  AdminAddType,
+  POST_ADMIN_ADD_REQUEST_TYPE,
   CommonResponse,
-  PasswordChangeType,
+  POST_ADMIN_PASSWORD_CHANGE_REQUEST_TYPE,
 } from "@/lib/network/types";
 
 export async function handleLogout() {
@@ -37,7 +37,10 @@ export async function handleAdminAdd(formData: FormData) {
     const team = formData.get("team")?.toString() || "";
     const email = formData.get("email")?.toString() || "";
 
-    const response = await HttpRequest.set<CommonResponse, AdminAddType>(
+    const response = await HttpRequest.set<
+      CommonResponse,
+      POST_ADMIN_ADD_REQUEST_TYPE
+    >(
       "POST",
       "/api/admin/add", // TODO. 수정 예정
       {
@@ -65,7 +68,10 @@ export async function handlePasswordChange(formData: FormData) {
     const newPw = formData.get("newPw")?.toString() || "";
     const newPwCheck = formData.get("newPwCheck")?.toString() || "";
 
-    const response = await HttpRequest.set<CommonResponse, PasswordChangeType>(
+    const response = await HttpRequest.set<
+      CommonResponse,
+      POST_ADMIN_PASSWORD_CHANGE_REQUEST_TYPE
+    >(
       "POST",
       "/api/admin/password", // TODO. 수정 예정
       {

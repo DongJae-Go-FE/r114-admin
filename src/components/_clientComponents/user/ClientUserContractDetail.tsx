@@ -6,7 +6,7 @@ import DescriptionTable from "@/components/DescriptionTable/DescriptionTable";
 import { Button } from "@/components/Button";
 import { DataTable } from "@/components/DataTable";
 
-import { UserContractDetailList } from "@/schema/schema";
+import { GET_USER_CONTRACT_DETAIL_LIST_SCHEMA } from "@/schema/user/contract/schema";
 import UserContractDetailColumns from "./tableColumns/UserContractDetailColumns";
 
 const data = [
@@ -93,7 +93,7 @@ export default function ClientUserContractDetail({
         <h4 className="sub-title">업데이트 이력</h4>
         <DataTable
           data={data}
-          schema={UserContractDetailList}
+          schema={GET_USER_CONTRACT_DETAIL_LIST_SCHEMA}
           columns={UserContractDetailColumns}
           isTableHeader={false}
         />

@@ -14,15 +14,15 @@ import { Label } from "@/components/Label";
 import { Checkbox } from "@/components/Checkbox";
 import Spinner from "../Spinner";
 
-import { LoginSchema, LoginMemberAddSchema } from "@/schema/schema";
-
 import {
-  handleLogin,
-  handleAdminAdd,
-} from "@/severActions/serverActions";
+  POST_LOGIN_SCHEMA,
+  POST_LOGIN_MEMBER_ADD_SCHEMA,
+} from "@/schema/login/schema";
 
-type LoginFormData = z.infer<typeof LoginSchema>;
-type LoginMemberAddFormData = z.infer<typeof LoginMemberAddSchema>;
+import { handleLogin, handleAdminAdd } from "@/severActions/serverActions";
+
+type LoginFormData = z.infer<typeof POST_LOGIN_SCHEMA>;
+type LoginMemberAddFormData = z.infer<typeof POST_LOGIN_MEMBER_ADD_SCHEMA>;
 
 export default function LoginForm({
   className,
@@ -38,7 +38,7 @@ export default function LoginForm({
     formState: { errors: errorsLogin, isLoading: isLoginLoading },
     // reset: loginReset,
   } = useForm<LoginFormData>({
-    resolver: zodResolver(LoginSchema),
+    resolver: zodResolver(POST_LOGIN_SCHEMA),
   });
 
   const {
@@ -49,7 +49,7 @@ export default function LoginForm({
     watch: addWatch,
     reset: addReset,
   } = useForm<LoginMemberAddFormData>({
-    resolver: zodResolver(LoginMemberAddSchema),
+    resolver: zodResolver(POST_LOGIN_MEMBER_ADD_SCHEMA),
   });
 
   const handleLoginSubmit = async (data: LoginFormData) => {

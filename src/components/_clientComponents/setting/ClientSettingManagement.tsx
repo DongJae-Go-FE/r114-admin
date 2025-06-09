@@ -14,8 +14,8 @@ import Filter from "@/components/Filter";
 
 import { DataTable } from "@/components/DataTable";
 
-import { SettingManagementSchema } from "@/schema/schema";
-import { SettingManagementGetRequestType } from "@/lib/network/types";
+import { GET_SETTING_MANAGEMENT_SCHEMA } from "@/schema/setting/management/schema";
+import { GET_SETTING_MANAGEMENT_REQUEST_TYPE } from "@/lib/network/types";
 
 import SettingManagementColumns from "./tableColumns/SettingManagementColumns";
 
@@ -74,7 +74,7 @@ export default function ClientSettingManagement() {
   const debouncedSearch = useDebounce({ value: searchInput, delay: 300 });
 
   const { filter, setFilter, handleSubmit, handleReset } =
-    useFilter<SettingManagementGetRequestType>({
+    useFilter<GET_SETTING_MANAGEMENT_REQUEST_TYPE>({
       startDate: "",
       endDate: "",
       adMgmt: "",
@@ -266,7 +266,7 @@ export default function ClientSettingManagement() {
       <DataTable
         data={data}
         columns={SettingManagementColumns}
-        schema={SettingManagementSchema}
+        schema={GET_SETTING_MANAGEMENT_SCHEMA}
         btnArea={{
           primary: (
             <SettingManagementOkModal

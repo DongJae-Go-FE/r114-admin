@@ -1,13 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  UserCorporationSchema,
-  UserMemberSchema,
-  UserContractSchema,
-  BoardNoticeSchema,
-  AdvertisementAdSchema,
-} from "@/schema/schema";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-
 export type CommonResponse<T = unknown> = {
   success: boolean;
   code: string;
@@ -15,7 +5,7 @@ export type CommonResponse<T = unknown> = {
   data: T;
 };
 
-export type AdminAddType = {
+export type POST_ADMIN_ADD_REQUEST_TYPE = {
   id: string;
   identification: string;
   name: string;
@@ -23,17 +13,13 @@ export type AdminAddType = {
   email: string;
 };
 
-export type PasswordChangeType = {
+export type POST_ADMIN_PASSWORD_CHANGE_REQUEST_TYPE = {
   pw: string;
   newPw: string;
   newPwCheck: string;
 };
 
-/**
- * @description /user/corporation - 회원 관리 / 법인 목록
- * @see UserCorporationSchema - Schema
- */
-export type UserCorporationGetRequestType = {
+export type GET_USER_CORPORATION_REQUEST_TYPE = {
   /**
    * 최근 업데이트 시작 일자
    * @description 최근 업데이트 시작 일자
@@ -83,23 +69,26 @@ export type UserCorporationGetRequestType = {
   code: string;
 };
 
-/**
- * @description /user/member - 회원 관리 / 회원 목록
- * @see UserMemberSchema - Schema
- */
-export type UserMemberGetRequestType = {
-  /**
-   * 아이디
-   * @description 아이디
-   */
-  id: string;
+export type GET_USER_MEMBER_REQUEST_TYPE = {
+  startDate: string;
+  endDate: string;
+  idType: string;
+  memberType: string;
+  group: string;
+  searchKeyword: string;
+  searchType: string;
 };
 
-/**
- * @description /user/contract - 회원 관리 / 회원 관리
- * @see UserContractSchema - Schema
- */
-export type UserContractGetRequestType = {
+export type GET_MEMBER_IP_REQUEST_TYPE = {
+  startDate: string;
+  endDate: string;
+  idType: string;
+  memberType: string;
+  searchKeyword: string;
+  searchType: string;
+};
+
+export type GET_USER_CONTRACT_REQUEST_TYPE = {
   startDate: string;
   endDate: string;
   memberType: string;
@@ -111,11 +100,7 @@ export type UserContractGetRequestType = {
   searchKeyword: string;
 };
 
-/**
- * @description /user/power - 회원 관리 / 권한 관리
- * @see UserPowerSchema - Schema
- */
-export type UserPowerGetRequestType = {
+export type GET_USER_POWER_REQUEST_TYPE = {
   startDate: string;
   endDate: string;
   power: string;
@@ -124,11 +109,7 @@ export type UserPowerGetRequestType = {
   excelType: string;
 };
 
-/**
- * @description /board/notice - 게시판 관리 / 공지사항 관리
- * @see BoardNoticeSchema - Schema
- */
-export type BoardNoticeRequestType = {
+export type GET_BOARD_NOTICE_REQUEST_TYPE = {
   comCd: string;
   searchKeyword: string;
   searchType: string;
@@ -140,7 +121,7 @@ export type BoardNoticeRequestType = {
   pageOrder: string;
 };
 
-export type BoardNoticeResponseType = {
+export type POST_BOARD_NOTICE_RESPONSE_TYPE = {
   totalCount: number;
   items: {
     postNo: number;
@@ -169,7 +150,7 @@ export type BoardNoticeResponseType = {
   }[];
 };
 
-export type BoardNoticeDetailResponseType = {
+export type POST_BOARD_NOTICE_DETAIL_RESPONSE_TYPE = {
   postNo: number;
   boardId: string;
   postTitle: string;
@@ -190,7 +171,8 @@ export type BoardNoticeDetailResponseType = {
     fileSize: number;
   }[];
 };
-export type BoardNoticePostAndPutType = {
+
+export type POST_BOARD_NOTICE_REQUEST_TYPE = {
   comCd: string;
   postTitle: string;
   postContent: string;
@@ -200,11 +182,17 @@ export type BoardNoticePostAndPutType = {
   }[];
 };
 
-/**
- * @description /advertisement/ad-list - 광고 관리 / 광고 목록
- * @see AdvertisementAdSchema - Schema
- */
-export type AdvertisementAdGetRequestType = {
+export type PUT_BOARD_NOTICE_REQUEST_TYPE = {
+  comCd: string;
+  postTitle: string;
+  postContent: string;
+  reservePostDtm: string;
+  boardAttList: {
+    attachNo: number;
+  }[];
+};
+
+export type GET_ADVERTISEMENT_AD_REQUEST_TYPE = {
   dateType: string;
   startDate: string;
   endDate: string;
@@ -215,7 +203,7 @@ export type AdvertisementAdGetRequestType = {
   searchKeyword: string;
 };
 
-export type SettingManagementGetRequestType = {
+export type GET_SETTING_MANAGEMENT_REQUEST_TYPE = {
   startDate: string;
   endDate: string;
   adMgmt: string;

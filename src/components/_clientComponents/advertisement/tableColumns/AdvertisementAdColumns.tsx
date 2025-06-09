@@ -7,10 +7,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/Checkbox";
 import { ArrowUpDown } from "lucide-react";
 
-import { AdvertisementAdSchema } from "@/schema/schema";
+import { GET_ADVERTISEMENT_AD_SCHEMA } from "@/schema/advertisement/ad/schema";
 
 const AdvertisementAdColumns: ColumnDef<
-  z.infer<typeof AdvertisementAdSchema>
+  z.infer<typeof GET_ADVERTISEMENT_AD_SCHEMA>
 >[] = [
   {
     id: "select",

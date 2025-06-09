@@ -18,8 +18,8 @@ import { DataTable } from "@/components/DataTable";
 import AdvertisementAdColumns from "./tableColumns/AdvertisementAdColumns";
 import AdvertisementAdChangeOrderModal from "./modal/AdvertisementAdChangeOrderModal";
 
-import { AdvertisementAdSchema } from "@/schema/schema";
-import { AdvertisementAdGetRequestType } from "@/lib/network/types";
+import { GET_ADVERTISEMENT_AD_SCHEMA } from "@/schema/advertisement/ad/schema";
+import { GET_ADVERTISEMENT_AD_REQUEST_TYPE } from "@/lib/network/types";
 
 import { useFilter } from "@/hooks/useFilter";
 import useDebounce from "@/hooks/useDebounce";
@@ -73,7 +73,7 @@ export default function ClientAdvertisementAd() {
   const { mutateAsync } = useAdvertisementAdDeleteMutation();
 
   const { filter, handleSubmit, handleReset, setFilter } =
-    useFilter<AdvertisementAdGetRequestType>({
+    useFilter<GET_ADVERTISEMENT_AD_REQUEST_TYPE>({
       dateType: "1",
       startDate: "",
       endDate: "",
@@ -283,7 +283,7 @@ export default function ClientAdvertisementAd() {
       <DataTable
         data={datas}
         columns={AdvertisementAdColumns}
-        schema={AdvertisementAdSchema}
+        schema={GET_ADVERTISEMENT_AD_SCHEMA}
         btnArea={{
           primary: <AdvertisementAdChangeOrderModal />,
           secondary: (

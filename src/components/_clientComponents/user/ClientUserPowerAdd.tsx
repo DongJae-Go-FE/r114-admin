@@ -23,7 +23,7 @@ import {
   FormMessage,
 } from "@/components/Form";
 
-import { UserPowerAddAndEditSchema } from "@/schema/schema";
+import { POST_USER_POWER_SCHEMA } from "@/schema/user/power/schema";
 
 import {
   CONFIRM_ADD_SAVE_STRING,
@@ -56,8 +56,8 @@ export default function ClientUserPowerAdd() {
   const [isPending, startTransition] = useTransition();
   const [checkedRows, setCheckedRows] = useState<string[]>([]);
 
-  const form = useForm<z.infer<typeof UserPowerAddAndEditSchema>>({
-    resolver: zodResolver(UserPowerAddAndEditSchema),
+  const form = useForm<z.infer<typeof POST_USER_POWER_SCHEMA>>({
+    resolver: zodResolver(POST_USER_POWER_SCHEMA),
     mode: "onChange",
     defaultValues: {
       name: "",
@@ -95,9 +95,7 @@ export default function ClientUserPowerAdd() {
     });
   };
 
-  const handleSave = async (
-    values: z.infer<typeof UserPowerAddAndEditSchema>
-  ) => {
+  const handleSave = async (values: z.infer<typeof POST_USER_POWER_SCHEMA>) => {
     //TODO - 규칙 미준수 처리
 
     if (confirm(`권한 정보를 ${CONFIRM_ADD_SAVE_STRING}`)) {

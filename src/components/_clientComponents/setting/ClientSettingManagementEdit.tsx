@@ -14,7 +14,10 @@ import { DataTable } from "@/components/DataTable";
 import { CustomSelect } from "@/components/Select";
 import { Textarea } from "@/components/Textarea";
 
-import { SettingManagementDetailListSchema } from "@/schema/schema";
+import {
+  GET_SETTING_MANAGEMENT_DETAIL_LIST_SCHEMA,
+  PUT_SETTING_MANAGEMENT_SCHEMA,
+} from "@/schema/setting/management/schema";
 import SettingManagementDetailColumns from "./tableColumns/SettingManagementDetailColumns";
 
 import {
@@ -24,8 +27,6 @@ import {
   FormMessage,
   FormItem,
 } from "@/components/Form";
-
-import { SettingManagementEditSchema } from "@/schema/schema";
 
 import {
   CONFIRM_EDIT_SAVE_STRING,
@@ -66,8 +67,8 @@ export default function ClientSettingManagementEdit({
   const { push } = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof SettingManagementEditSchema>>({
-    resolver: zodResolver(SettingManagementEditSchema),
+  const form = useForm<z.infer<typeof PUT_SETTING_MANAGEMENT_SCHEMA>>({
+    resolver: zodResolver(PUT_SETTING_MANAGEMENT_SCHEMA),
     defaultValues: {
       state: "",
       adMgmt: "",
@@ -187,7 +188,7 @@ export default function ClientSettingManagementEdit({
             <h4 className="sub-title">업데이트 이력</h4>
             <DataTable
               data={data}
-              schema={SettingManagementDetailListSchema}
+              schema={GET_SETTING_MANAGEMENT_DETAIL_LIST_SCHEMA}
               columns={SettingManagementDetailColumns}
               isTableHeader={false}
             />
