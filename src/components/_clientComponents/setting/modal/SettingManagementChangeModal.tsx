@@ -71,6 +71,7 @@ export default function SettingManagementChangeModal({ id }: { id: number }) {
             color="white"
             disabled={isPending}
             onClick={() => {
+              setValue(""); //TODO. 나중에 기본값으로 변경
               setIsOpen(false);
             }}
           >
