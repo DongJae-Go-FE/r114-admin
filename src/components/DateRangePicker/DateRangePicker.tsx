@@ -13,6 +13,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/Popover";
 type DateRangePickerType = {
   className: string;
   id: string;
+  disabled?: boolean;
   initialValue: {
     from: Date | undefined;
     to: Date | undefined;
@@ -25,6 +26,7 @@ export function DateRangePicker({
   id,
   initialValue,
   onChangDate,
+  disabled,
 }: DateRangePickerType) {
   const [date, setDate] = useState<DateRange | undefined>({
     from: initialValue?.from,
@@ -43,6 +45,7 @@ export function DateRangePicker({
           <Button
             id="date"
             color="white"
+            disabled={disabled}
             className={cn(
               "w-full justify-start px-4",
               !date && "text-muted-foreground"
