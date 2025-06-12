@@ -40,9 +40,11 @@ export default function UserMemberIpModal({ id }: { id: string | number }) {
       </DialogTrigger>
       <DialogContent className="overflow-auto ">
         <DialogHeader>
-          <DialogTitle>사용이력</DialogTitle>
+          <DialogTitle>접속 정보</DialogTitle>
         </DialogHeader>
-
+        <div className="border h-11 flex justify-center items-center body01b border-gray-200 rounded-sm">
+          masterforce999 : 192.111.111.11
+        </div>
         <DataTable
           data={data}
           columns={UserMemberIpModalColumns}

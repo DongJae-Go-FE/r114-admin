@@ -71,11 +71,7 @@ const data = [
   },
 ];
 
-export default function ClientEDIT_USER_CONTRACT({
-  postNo,
-}: {
-  postNo: string;
-}) {
+export default function ClientUserContractEdit({ postNo }: { postNo: string }) {
   const { push } = useRouter();
 
   const [isPending, startTransition] = useTransition();
