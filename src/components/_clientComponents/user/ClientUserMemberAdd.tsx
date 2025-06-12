@@ -2,22 +2,23 @@
 
 import { useRouter } from "next/navigation";
 
-import { addDays, format, parse } from "date-fns";
-
 import { useTransition } from "react";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, Controller } from "react-hook-form";
+import { addDays, format, parse } from "date-fns";
+
 import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useForm, Controller } from "react-hook-form";
 
 import DescriptionTable from "@/components/DescriptionTable/DescriptionTable";
 import { Button } from "@/components/Button";
 
-import { CustomSelect } from "@/components/Select";
+import { CommonIdDivideSelect } from "@/components/Select/CommonSelect/CommonIdDivideSelect";
+import { CommonPowerSettingSelect } from "@/components/Select/CommonSelect/CommonPowerSettingSelect";
+
 import { DateRangePicker } from "@/components/DateRangePicker";
 import { Input } from "@/components/Input";
-
-import { POST_USER_MEMBER } from "@/schema/user/member/schema";
 
 import {
   Form,
@@ -27,6 +28,8 @@ import {
   FormMessage,
 } from "@/components/Form";
 
+import { POST_USER_MEMBER } from "@/schema/user/member/schema";
+
 import {
   CONFIRM_ADD_SAVE_STRING,
   COMPLETE_ADD_STRING,
@@ -35,8 +38,6 @@ import {
   INPUT_MAX_LENGTH,
   INPUT_MIN_LENGTH,
 } from "@/const/const";
-
-import { contractType } from "@/const/enum";
 
 function ClientUserMemberAdd() {
   const { push } = useRouter();
@@ -99,14 +100,8 @@ function ClientUserMemberAdd() {
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <CustomSelect
+                          <CommonIdDivideSelect
                             {...field}
-                            options={Object.entries(contractType).map(
-                              ([value, title]) => ({
-                                value,
-                                label: title,
-                              })
-                            )}
                             className="bg-white w-full"
                             placeholder="전체"
                           />
@@ -302,14 +297,8 @@ function ClientUserMemberAdd() {
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <CustomSelect
+                          <CommonPowerSettingSelect
                             {...field}
-                            options={Object.entries(contractType).map(
-                              ([value, title]) => ({
-                                value,
-                                label: title,
-                              })
-                            )}
                             className="bg-white w-full"
                             placeholder="전체"
                           />

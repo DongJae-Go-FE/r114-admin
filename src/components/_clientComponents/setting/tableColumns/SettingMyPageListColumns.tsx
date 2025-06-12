@@ -3,6 +3,7 @@ import Link from "next/link";
 import { z } from "zod";
 
 import { ColumnDef } from "@tanstack/react-table";
+
 import { GET_SETTING_MY_PAGE_SCHEMA } from "@/schema/setting/myPage/schema";
 
 const SettingMyPageListColumns: ColumnDef<

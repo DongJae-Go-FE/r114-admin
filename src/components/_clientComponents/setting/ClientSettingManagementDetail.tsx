@@ -3,11 +3,13 @@
 import { useRouter } from "next/navigation";
 
 import DescriptionTable from "@/components/DescriptionTable/DescriptionTable";
+
 import { Button } from "@/components/Button";
 import { DataTable } from "@/components/DataTable";
 
-import { GET_SETTING_MANAGEMENT_DETAIL_LIST_SCHEMA } from "@/schema/setting/management/schema";
 import SettingManagementDetailColumns from "./tableColumns/SettingManagementDetailColumns";
+
+import { GET_SETTING_MANAGEMENT_DETAIL_LIST_SCHEMA } from "@/schema/setting/management/schema";
 
 const data = [
   {

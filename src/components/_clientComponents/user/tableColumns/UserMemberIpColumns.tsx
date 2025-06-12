@@ -7,9 +7,9 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/Checkbox";
 import UserMemberIpModal from "../modal/UserMemberIpModal";
 
-import { GET_USER_MEMBER_IP_SCHEMA } from "@/schema/user/member/schema";
-
 import { ArrowUpDown } from "lucide-react";
+
+import { GET_USER_MEMBER_IP_SCHEMA } from "@/schema/user/member/schema";
 
 const UserMemberIpColumns: ColumnDef<
   z.infer<typeof GET_USER_MEMBER_IP_SCHEMA>

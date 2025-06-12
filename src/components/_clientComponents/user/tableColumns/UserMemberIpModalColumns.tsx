@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { ColumnDef } from "@tanstack/react-table";
+
 import { GET_USER_MEMBER_IP_MODAL_SCHEMA } from "@/schema/user/member/schema";
 
 const UserMemberIpModalColumns: ColumnDef<

@@ -4,11 +4,11 @@ import { z } from "zod";
 
 import { ColumnDef } from "@tanstack/react-table";
 
-import { GET_BOARD_NOTICE_SCHEMA } from "@/schema/board/notice/schema";
-
 import { Checkbox } from "@/components/Checkbox";
 
 import { ArrowUpDown } from "lucide-react";
+
+import { GET_BOARD_NOTICE_SCHEMA } from "@/schema/board/notice/schema";
 
 const BoardNoticeColumns: ColumnDef<z.infer<typeof GET_BOARD_NOTICE_SCHEMA>>[] =
   [

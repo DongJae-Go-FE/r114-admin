@@ -2,31 +2,31 @@
 
 import { useRouter } from "next/navigation";
 
-import { addDays, format, parse } from "date-fns";
-
 import { Fragment, useMemo, useState, useEffect } from "react";
+
+import { useQuery } from "@tanstack/react-query";
+
+import { addDays, format, parse } from "date-fns";
 
 import { Input } from "@/components/Input";
 import { DateRangePicker } from "@/components/DateRangePicker";
-import { CustomSelect } from "@/components/Select";
-
 import { Button } from "@/components/Button";
 
-import Filter from "@/components/Filter";
 import { DataTable } from "@/components/DataTable";
+import Filter from "@/components/Filter";
+
+import { CustomSelect } from "@/components/Select";
+import { CommonServiceDivideSelect } from "@/components/Select/CommonSelect/CommonServiceDivideSelect";
 
 import AdvertisementAdColumns from "./tableColumns/AdvertisementAdColumns";
 import AdvertisementAdChangeOrderModal from "./modal/AdvertisementAdChangeOrderModal";
 
-import { GET_ADVERTISEMENT_AD_SCHEMA } from "@/schema/advertisement/ad/schema";
-import { GET_ADVERTISEMENT_AD_REQUEST_TYPE } from "@/lib/network/types";
-
 import { useFilter } from "@/hooks/useFilter";
 import useDebounce from "@/hooks/useDebounce";
-import { useQuery } from "@tanstack/react-query";
 import { useAdvertisementAdDeleteMutation } from "@/lib/network/mutation";
 
-import { memberStatusType } from "@/const/enum";
+import { GET_ADVERTISEMENT_AD_SCHEMA } from "@/schema/advertisement/ad/schema";
+import { GET_ADVERTISEMENT_AD_REQUEST_TYPE } from "@/lib/network/types";
 
 import { GET_ADVERTISEMENT_AD_REQUEST } from "@/lib/network/api";
 
@@ -166,12 +166,8 @@ export default function ClientAdvertisementAd() {
         inputs: [
           {
             node: (
-              <CustomSelect
+              <CommonServiceDivideSelect
                 value={filter.service}
-                options={[
-                  { value: "all", label: "전체" },
-                  { value: "1", label: "REPS 5.0 PRO" },
-                ]}
                 className="w-full bg-white"
                 placeholder="전체"
                 onChange={(value) =>
@@ -190,12 +186,28 @@ export default function ClientAdvertisementAd() {
             node: (
               <CustomSelect
                 value={filter.state}
-                options={Object.entries(memberStatusType).map(
-                  ([value, title]) => ({
-                    value,
-                    label: title,
-                  })
-                )}
+                options={[
+                  {
+                    label: "대기",
+                    value: "0",
+                  },
+                  {
+                    label: "노출중",
+                    value: "1",
+                  },
+                  {
+                    label: "기간 만료",
+                    value: "2",
+                  },
+                  {
+                    label: "중지",
+                    value: "3",
+                  },
+                  {
+                    label: "삭제",
+                    value: "4",
+                  },
+                ]}
                 className="w-full bg-white"
                 placeholder="전체"
                 onChange={(value) =>

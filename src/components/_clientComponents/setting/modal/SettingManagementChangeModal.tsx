@@ -11,11 +11,8 @@ import {
   DialogFooter,
 } from "@/components/Dialog";
 
-import { CustomSelect } from "@/components/Select";
-
+import { CommonAdminPowerSelect } from "@/components/Select/CommonSelect/CommonAdminPowerSelect";
 import { Button } from "@/components/Button";
-
-import { adminPermissionType } from "@/const/enum";
 
 export default function SettingManagementChangeModal({ id }: { id: number }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -51,14 +48,8 @@ export default function SettingManagementChangeModal({ id }: { id: number }) {
         <div className="text-sm">
           <p className="mb-2">아이디 계정에 대한 권한을 변경하시겠습니까?</p>
         </div>
-        <CustomSelect
+        <CommonAdminPowerSelect
           value={value}
-          options={Object.entries(adminPermissionType).map(
-            ([value, title]) => ({
-              value,
-              label: title,
-            })
-          )}
           className="w-full bg-white"
           placeholder="전체"
           disabled={isPending}

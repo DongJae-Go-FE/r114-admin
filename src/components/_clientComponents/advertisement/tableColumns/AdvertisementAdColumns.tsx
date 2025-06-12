@@ -1,7 +1,6 @@
 import Link from "next/link";
 
 import { z } from "zod";
-
 import { ColumnDef } from "@tanstack/react-table";
 
 import { Checkbox } from "@/components/Checkbox";

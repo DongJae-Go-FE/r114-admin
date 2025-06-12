@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { z } from "zod";
 
 import { ColumnDef } from "@tanstack/react-table";
@@ -7,7 +9,6 @@ import { ArrowUpDown } from "lucide-react";
 import { Checkbox } from "@/components/Checkbox";
 
 import { GET_USER_POWER_SCHEMA } from "@/schema/user/power/schema";
-import Link from "next/link";
 
 const UserContractColumns: ColumnDef<z.infer<typeof GET_USER_POWER_SCHEMA>>[] =
   [

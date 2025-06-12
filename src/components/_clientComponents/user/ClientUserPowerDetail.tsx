@@ -4,13 +4,17 @@ import { useRouter } from "next/navigation";
 
 import { useMemo, useState, useTransition } from "react";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useForm } from "react-hook-form";
 
 import DescriptionTable from "@/components/DescriptionTable/DescriptionTable";
 
-import { CustomSelect } from "@/components/Select";
+import { CommonOnOffSelect } from "@/components/Select/CommonSelect/CommonAllOnOffSelect";
+import { CommonDataCopySelect } from "@/components/Select/CommonSelect/CommonDataCopySelect";
+import { CommonExcelDownTypeSelect } from "@/components/Select/CommonSelect/CommonExcelDownTypeSelect";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/Tab";
 import { Checkbox } from "@/components/Checkbox";
 import { Button } from "@/components/Button";
@@ -33,8 +37,6 @@ import {
 } from "@/const/const";
 
 import data from "./app-sidebar-menu-list";
-
-import { menuAccessType, dataCopyType, excelDownloadType } from "@/const/enum";
 
 type TMenu = {
   title: string;
@@ -221,14 +223,8 @@ export default function ClientUserPowerDetail({ postNo }: { postNo: string }) {
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
-                            <CustomSelect
+                            <CommonOnOffSelect
                               {...field}
-                              options={Object.entries(menuAccessType).map(
-                                ([value, title]) => ({
-                                  value,
-                                  label: title,
-                                })
-                              )}
                               className="w-full bg-white"
                               placeholder="On"
                               disabled={isPending}
@@ -247,14 +243,8 @@ export default function ClientUserPowerDetail({ postNo }: { postNo: string }) {
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
-                            <CustomSelect
+                            <CommonDataCopySelect
                               {...field}
-                              options={Object.entries(dataCopyType).map(
-                                ([value, title]) => ({
-                                  value,
-                                  label: title,
-                                })
-                              )}
                               className="w-full bg-white"
                               placeholder="전체 데이터 복사"
                               disabled={isPending}
@@ -273,14 +263,8 @@ export default function ClientUserPowerDetail({ postNo }: { postNo: string }) {
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
-                            <CustomSelect
+                            <CommonExcelDownTypeSelect
                               {...field}
-                              options={Object.entries(excelDownloadType).map(
-                                ([value, title]) => ({
-                                  value,
-                                  label: title,
-                                })
-                              )}
                               className="w-full bg-white"
                               placeholder="전체 정보 다운로드"
                               disabled={isPending}

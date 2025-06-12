@@ -2,12 +2,16 @@
 
 import { useRouter } from "next/navigation";
 
-import { addDays, format, parse } from "date-fns";
-
 import { Fragment, useMemo, useState } from "react";
 
+import { addDays, format, parse } from "date-fns";
+
 import { DateRangePicker } from "@/components/DateRangePicker";
-import { CustomSelect } from "@/components/Select";
+
+import { CommonPowerGroupSelect } from "@/components/Select/CommonSelect/CommonPowerGroupSelect";
+import { CommonOnOffSelect } from "@/components/Select/CommonSelect/CommonAllOnOffSelect";
+import { CommonDataCopySelect } from "@/components/Select/CommonSelect/CommonDataCopySelect";
+import { CommonExcelDownTypeSelect } from "@/components/Select/CommonSelect/CommonExcelDownTypeSelect";
 
 import { Button } from "@/components/Button";
 
@@ -15,26 +19,19 @@ import Filter from "@/components/Filter";
 
 import { DataTable } from "@/components/DataTable";
 
-import { GET_USER_POWER_SCHEMA } from "@/schema/user/power/schema";
-import { GET_USER_POWER_REQUEST_TYPE } from "@/lib/network/types";
+import UsePowerDeleteModal from "./modal/UsePowerDeleteModal";
 
 import UserPowerColumns from "./tableColumns/UserPowerColumns";
 
 import { useFilter } from "@/hooks/useFilter";
 
+import { GET_USER_POWER_SCHEMA } from "@/schema/user/power/schema";
+import { GET_USER_POWER_REQUEST_TYPE } from "@/lib/network/types";
+
 import {
   CONFIRM_DELETE_SAVE_STRING,
   SELECTED_NOT_CHECKED,
 } from "@/const/const";
-
-import UsePowerDeleteModal from "./modal/UsePowerDeleteModal";
-
-import {
-  permissionGroupType,
-  menuAccessType,
-  dataCopyType,
-  excelDownloadType,
-} from "@/const/enum";
 
 const data = [
   {
@@ -154,14 +151,8 @@ export default function ClientUserPower() {
         inputs: [
           {
             node: (
-              <CustomSelect
+              <CommonPowerGroupSelect
                 value={filter.power}
-                options={Object.entries(permissionGroupType).map(
-                  ([value, title]) => ({
-                    value,
-                    label: title,
-                  })
-                )}
                 className="w-full bg-white"
                 placeholder="전체"
                 onChange={(value) => {
@@ -181,14 +172,9 @@ export default function ClientUserPower() {
         inputs: [
           {
             node: (
-              <CustomSelect
+              <CommonOnOffSelect
                 value={filter.menuType}
-                options={Object.entries(menuAccessType).map(
-                  ([value, title]) => ({
-                    value,
-                    label: title,
-                  })
-                )}
+                isAll
                 className="w-full bg-white"
                 placeholder="전체"
                 onChange={(value) => {
@@ -208,12 +194,8 @@ export default function ClientUserPower() {
         inputs: [
           {
             node: (
-              <CustomSelect
+              <CommonDataCopySelect
                 value={filter.dataPowerType}
-                options={Object.entries(dataCopyType).map(([value, title]) => ({
-                  value,
-                  label: title,
-                }))}
                 className="w-full bg-white"
                 placeholder="전체"
                 onChange={(value) => {
@@ -233,14 +215,8 @@ export default function ClientUserPower() {
         inputs: [
           {
             node: (
-              <CustomSelect
+              <CommonExcelDownTypeSelect
                 value={filter.excelType}
-                options={Object.entries(excelDownloadType).map(
-                  ([value, title]) => ({
-                    value,
-                    label: title,
-                  })
-                )}
                 className="w-full bg-white"
                 placeholder="전체"
                 onChange={(value) => {

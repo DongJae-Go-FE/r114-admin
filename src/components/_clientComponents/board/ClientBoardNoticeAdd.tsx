@@ -2,25 +2,24 @@
 
 import { useRouter } from "next/navigation";
 
-import { parse, format } from "date-fns";
-
 import { useState } from "react";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { POST_BOARD_NOTICE_SCHEMA } from "@/schema/board/notice/schema";
+import { useForm } from "react-hook-form";
+
+import { parse, format } from "date-fns";
 
 import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
 import { Checkbox } from "@/components/Checkbox";
 import TextEditor from "@/components/TextEditor";
 import { FileUpload } from "@/components/FileUpload";
-import { CustomSelect } from "@/components/Select";
 import { DatePicker } from "@/components/DatePicker";
 
-import { useBoardPostMutation } from "@/lib/network/mutation";
+import { CustomSelect } from "@/components/Select";
+import { CommonServiceDivideSelect } from "@/components/Select/CommonSelect/CommonServiceDivideSelect";
 
 import {
   Form,
@@ -31,6 +30,10 @@ import {
   FormMessage,
 } from "@/components/Form";
 
+import { useBoardPostMutation } from "@/lib/network/mutation";
+
+import { POST_BOARD_NOTICE_SCHEMA } from "@/schema/board/notice/schema";
+
 import {
   CONFIRM_ADD_SAVE_STRING,
   COMPLETE_ADD_STRING,
@@ -39,8 +42,6 @@ import {
   INPUT_MAX_LENGTH,
   INPUT_MIN_LENGTH,
 } from "@/const/const";
-
-import { serviceType } from "@/const/enum";
 
 export default function ClientBoardNoticeAdd() {
   const { push } = useRouter();
@@ -109,14 +110,8 @@ export default function ClientBoardNoticeAdd() {
             <FormItem>
               <FormLabel>서비스명</FormLabel>
               <FormControl>
-                <CustomSelect
+                <CommonServiceDivideSelect
                   {...field}
-                  options={[{ value: "all", label: "전체" }].concat(
-                    Object.entries(serviceType).map(([value, title]) => ({
-                      value,
-                      label: title,
-                    }))
-                  )}
                   className="w-full bg-white"
                   placeholder="전체"
                   disabled={isPending}

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { z } from "zod";
 
 import { ColumnDef } from "@tanstack/react-table";
@@ -5,7 +7,6 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 
 import { GET_USER_CONTRACT_SCHEMA } from "@/schema/user/contract/schema";
-import Link from "next/link";
 
 const UserContractColumns: ColumnDef<
   z.infer<typeof GET_USER_CONTRACT_SCHEMA>

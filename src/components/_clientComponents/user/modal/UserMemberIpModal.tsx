@@ -11,9 +11,9 @@ import {
 import { Button } from "@/components/Button";
 import { DataTable } from "@/components/DataTable";
 
-import { GET_USER_MEMBER_IP_MODAL_SCHEMA } from "@/schema/user/member/schema";
-
 import UserMemberIpModalColumns from "../tableColumns/UserMemberIpModalColumns";
+
+import { GET_USER_MEMBER_IP_MODAL_SCHEMA } from "@/schema/user/member/schema";
 
 const data = [
   {

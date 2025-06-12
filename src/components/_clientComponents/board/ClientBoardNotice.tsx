@@ -2,30 +2,31 @@
 
 import { useRouter } from "next/navigation";
 
-import { addDays, format, parse } from "date-fns";
-
 import { Fragment, useMemo, useState, useEffect } from "react";
+
+import { useQuery } from "@tanstack/react-query";
+
+import { addDays, format, parse } from "date-fns";
 
 import { Input } from "@/components/Input";
 import { DateRangePicker } from "@/components/DateRangePicker";
-import { CustomSelect } from "@/components/Select";
-
 import { Button } from "@/components/Button";
 
 import Filter from "@/components/Filter";
-
 import { DataTable } from "@/components/DataTable";
+
+import { CustomSelect } from "@/components/Select";
+import { CommonServiceDivideSelect } from "@/components/Select/CommonSelect/CommonServiceDivideSelect";
 
 import BoardNoticeColumns from "./tableColumns/BoardNoticeColumns";
 
-import { GET_BOARD_NOTICE_SCHEMA } from "@/schema/board/notice/schema";
-import { GET_BOARD_NOTICE_REQUEST_TYPE } from "@/lib/network/types";
-
 import { useFilter } from "@/hooks/useFilter";
 import useDebounce from "@/hooks/useDebounce";
-import { useQuery } from "@tanstack/react-query";
+
 import { useBoardDeleteMutation } from "@/lib/network/mutation";
 
+import { GET_BOARD_NOTICE_SCHEMA } from "@/schema/board/notice/schema";
+import { GET_BOARD_NOTICE_REQUEST_TYPE } from "@/lib/network/types";
 import { GET_BOARD_NOTICE_REQUEST } from "@/lib/network/api";
 
 import {
@@ -34,8 +35,6 @@ import {
   SELECTED_NOT_CHECKED,
   INPUT_MAX_LENGTH,
 } from "@/const/const";
-
-import { serviceType } from "@/const/enum";
 
 const datas = [
   {
@@ -172,14 +171,8 @@ export default function ClientBoardNotice() {
         inputs: [
           {
             node: (
-              <CustomSelect
+              <CommonServiceDivideSelect
                 value={filter.comCd}
-                options={[{ value: "all", label: "전체" }].concat(
-                  Object.entries(serviceType).map(([value, title]) => ({
-                    value,
-                    label: title,
-                  }))
-                )}
                 className="w-full bg-white"
                 placeholder="전체"
                 onChange={(value) =>

@@ -4,13 +4,14 @@ import { z } from "zod";
 
 import { ColumnDef } from "@tanstack/react-table";
 
+import { Checkbox } from "@/components/Checkbox";
+
+import SettingManagementChangeModal from "../modal/SettingManagementChangeModal";
+import SettingManagementDeleteModal from "../modal/SettingManagementDeleteModal";
+
 import { ArrowUpDown } from "lucide-react";
 
 import { GET_SETTING_MANAGEMENT_SCHEMA } from "@/schema/setting/management/schema";
-
-import { Checkbox } from "@/components/Checkbox";
-import SettingManagementChangeModal from "../modal/SettingManagementChangeModal";
-import SettingManagementDeleteModal from "../modal/SettingManagementDeleteModal";
 
 const SettingManagementColumns: ColumnDef<
   z.infer<typeof GET_SETTING_MANAGEMENT_SCHEMA>

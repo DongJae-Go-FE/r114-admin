@@ -1,25 +1,28 @@
 "use client";
 
-import { addDays, format, parse } from "date-fns";
-
 import { Fragment, useState, useEffect, useMemo } from "react";
+
+import { addDays, format, parse } from "date-fns";
 
 import { DateRangePicker } from "@/components/DateRangePicker";
 import { Input } from "@/components/Input";
 import { CustomSelect } from "@/components/Select";
-import { Button } from "@/components/Button";
 
+import { CommonIdDivideSelect } from "@/components/Select/CommonSelect/CommonIdDivideSelect";
+import { CommonMemberStateSelect } from "@/components/Select/CommonSelect/CommonMemberStateSelect";
+
+import { Button } from "@/components/Button";
 import Filter from "@/components/Filter";
 
 import { DataTable } from "@/components/DataTable";
-
-import { GET_USER_MEMBER_IP_SCHEMA } from "@/schema/user/member/schema";
-import { GET_MEMBER_IP_REQUEST_TYPE } from "@/lib/network/types";
 
 import UserMemberIpColumns from "./tableColumns/UserMemberIpColumns";
 
 import { useFilter } from "@/hooks/useFilter";
 import useDebounce from "@/hooks/useDebounce";
+
+import { GET_USER_MEMBER_IP_SCHEMA } from "@/schema/user/member/schema";
+import { GET_MEMBER_IP_REQUEST_TYPE } from "@/lib/network/types";
 
 import {
   INPUT_MAX_LENGTH,
@@ -27,8 +30,6 @@ import {
   SELECTED_NOT_CHECKED,
   COMPLETE_DELETE_STRING,
 } from "@/const/const";
-
-import { userType, businessType } from "@/const/enum";
 
 const data = [
   {
@@ -155,12 +156,8 @@ export default function ClientUserMemberIp() {
         inputs: [
           {
             node: (
-              <CustomSelect
+              <CommonIdDivideSelect
                 value={filter.idType}
-                options={Object.entries(userType).map(([value, title]) => ({
-                  value,
-                  label: title,
-                }))}
                 className="w-full bg-white"
                 placeholder="전체"
                 onChange={(value) => {
@@ -180,12 +177,8 @@ export default function ClientUserMemberIp() {
         inputs: [
           {
             node: (
-              <CustomSelect
+              <CommonMemberStateSelect
                 value={filter.memberType}
-                options={Object.entries(businessType).map(([value, title]) => ({
-                  value,
-                  label: title,
-                }))}
                 className="w-full bg-white"
                 placeholder="전체"
                 onChange={(value) => {

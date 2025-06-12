@@ -4,21 +4,19 @@ import { useRouter } from "next/navigation";
 
 import { useTransition } from "react";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useForm } from "react-hook-form";
 
 import DescriptionTable from "@/components/DescriptionTable/DescriptionTable";
 import { Button } from "@/components/Button";
 import { DataTable } from "@/components/DataTable";
-import { CustomSelect } from "@/components/Select";
-import { Textarea } from "@/components/Textarea";
 
-import {
-  GET_SETTING_MANAGEMENT_DETAIL_LIST_SCHEMA,
-  PUT_SETTING_MANAGEMENT_SCHEMA,
-} from "@/schema/setting/management/schema";
-import SettingManagementDetailColumns from "./tableColumns/SettingManagementDetailColumns";
+import { CommonAdminPowerSelect } from "@/components/Select/CommonSelect/CommonAdminPowerSelect";
+import { CommonStateSelect } from "@/components/Select/CommonSelect/CommonStateSelect";
+
+import { Textarea } from "@/components/Textarea";
 
 import {
   Form,
@@ -28,6 +26,13 @@ import {
   FormItem,
 } from "@/components/Form";
 
+import SettingManagementDetailColumns from "./tableColumns/SettingManagementDetailColumns";
+
+import {
+  GET_SETTING_MANAGEMENT_DETAIL_LIST_SCHEMA,
+  PUT_SETTING_MANAGEMENT_SCHEMA,
+} from "@/schema/setting/management/schema";
+
 import {
   CONFIRM_EDIT_SAVE_STRING,
   COMPLETE_EDIT_STRING,
@@ -35,8 +40,6 @@ import {
   COMPLETE_CANCEL_STRING,
   TXT_MAX_LENGTH,
 } from "@/const/const";
-
-import { adminPermissionType, statusType } from "@/const/enum";
 
 const data = [
   {
@@ -113,14 +116,8 @@ export default function ClientSettingManagementEdit({
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
-                            <CustomSelect
+                            <CommonStateSelect
                               {...field}
-                              options={Object.entries(statusType).map(
-                                ([value, title]) => ({
-                                  value,
-                                  label: title,
-                                })
-                              )}
                               className="w-[400px] bg-white mb-0"
                               disabled={isPending}
                               placeholder="전체"
@@ -141,14 +138,8 @@ export default function ClientSettingManagementEdit({
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
-                            <CustomSelect
+                            <CommonAdminPowerSelect
                               {...field}
-                              options={Object.entries(adminPermissionType).map(
-                                ([value, title]) => ({
-                                  value,
-                                  label: title,
-                                })
-                              )}
                               className="w-[400px] bg-white mb-0"
                               disabled={isPending}
                               placeholder="전체"

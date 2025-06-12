@@ -6,10 +6,11 @@ import DescriptionTable from "@/components/DescriptionTable/DescriptionTable";
 import { Button } from "@/components/Button";
 import { DataTable } from "@/components/DataTable";
 
-import { GET_SETTING_MY_PAGE_SCHEMA } from "@/schema/setting/myPage/schema";
+import SettingMyPagePasswordChangeModal from "./modal/SettingMyPagePasswordChangeModal";
+
 import SettingMyPageListColumns from "./tableColumns/SettingMyPageListColumns";
 
-import SettingMyPagePasswordChangeModal from "./modal/SettingMyPagePasswordChangeModal";
+import { GET_SETTING_MY_PAGE_SCHEMA } from "@/schema/setting/myPage/schema";
 
 const data = [
   {

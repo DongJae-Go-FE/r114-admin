@@ -2,29 +2,27 @@
 
 import { useRouter } from "next/navigation";
 
-import { addDays, format, parse } from "date-fns";
-
 import { useTransition } from "react";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, Controller } from "react-hook-form";
+import { addDays, format, parse } from "date-fns";
+
 import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useForm, Controller } from "react-hook-form";
 
 import DescriptionTable from "@/components/DescriptionTable/DescriptionTable";
 import { Button } from "@/components/Button";
 import { DataTable } from "@/components/DataTable";
 
-import { CustomSelect } from "@/components/Select";
+import { CommonMemberStateSelect } from "@/components/Select/CommonSelect/CommonMemberStateSelect";
+import { CommonIdDivideSelect } from "@/components/Select/CommonSelect/CommonIdDivideSelect";
+import { CommonPowerSettingSelect } from "@/components/Select/CommonSelect/CommonPowerSettingSelect";
+
 import { DateRangePicker } from "@/components/DateRangePicker";
 import { Input } from "@/components/Input";
 
 import { Textarea } from "@/components/Textarea";
-
-import {
-  GET_USER_MEMBER_DETAIL_LIST_SCHEMA,
-  PUT_USER_MEMBER,
-} from "@/schema/user/member/schema";
-import UserContractDetailColumns from "./tableColumns/UserContractDetailColumns";
 
 import {
   Form,
@@ -33,6 +31,13 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/Form";
+
+import UserContractDetailColumns from "./tableColumns/UserContractDetailColumns";
+
+import {
+  GET_USER_MEMBER_DETAIL_LIST_SCHEMA,
+  PUT_USER_MEMBER,
+} from "@/schema/user/member/schema";
 
 import {
   CONFIRM_EDIT_SAVE_STRING,
@@ -43,8 +48,6 @@ import {
   INPUT_MIN_LENGTH,
   TXT_MAX_LENGTH,
 } from "@/const/const";
-
-import { contractType } from "@/const/enum";
 
 const data = [
   {
@@ -127,14 +130,8 @@ export default function ClientUserMemberEdit({ postNo }: { postNo: string }) {
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
-                            <CustomSelect
+                            <CommonMemberStateSelect
                               {...field}
-                              options={Object.entries(contractType).map(
-                                ([value, title]) => ({
-                                  value,
-                                  label: title,
-                                })
-                              )}
                               className="bg-white w-full"
                               placeholder="전체"
                             />
@@ -154,14 +151,8 @@ export default function ClientUserMemberEdit({ postNo }: { postNo: string }) {
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
-                            <CustomSelect
+                            <CommonIdDivideSelect
                               {...field}
-                              options={Object.entries(contractType).map(
-                                ([value, title]) => ({
-                                  value,
-                                  label: title,
-                                })
-                              )}
                               className="bg-white w-full"
                               placeholder="전체"
                             />
@@ -334,14 +325,8 @@ export default function ClientUserMemberEdit({ postNo }: { postNo: string }) {
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
-                            <CustomSelect
+                            <CommonPowerSettingSelect
                               {...field}
-                              options={Object.entries(contractType).map(
-                                ([value, title]) => ({
-                                  value,
-                                  label: title,
-                                })
-                              )}
                               className="bg-white w-full"
                               placeholder="전체"
                             />

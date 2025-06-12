@@ -6,8 +6,9 @@ import DescriptionTable from "@/components/DescriptionTable/DescriptionTable";
 import { Button } from "@/components/Button";
 import { DataTable } from "@/components/DataTable";
 
-import { GET_USER_MEMBER_DETAIL_LIST_SCHEMA } from "@/schema/user/member/schema";
 import UserMemberDetailColumns from "./tableColumns/UserMemberDetailColumns";
+
+import { GET_USER_MEMBER_DETAIL_LIST_SCHEMA } from "@/schema/user/member/schema";
 
 const data = [
   {

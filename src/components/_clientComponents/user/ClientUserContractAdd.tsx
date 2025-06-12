@@ -4,22 +4,21 @@ import { useRouter } from "next/navigation";
 
 import { useState, useTransition } from "react";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useForm } from "react-hook-form";
 
 import DescriptionTable from "@/components/DescriptionTable/DescriptionTable";
 import { Button } from "@/components/Button";
 
-import { CustomSelect } from "@/components/Select";
+import { CommonIndustryDivideOneSelect } from "@/components/Select/CommonSelect/CommonIndustryDivideOneSelect";
+import { CommonIndustryDivideTwoSelect } from "@/components/Select/CommonSelect/CommonIndustryDivideTwoSelect";
+import { CommonContractStateSelect } from "@/components/Select/CommonSelect/CommonContractStateSelect";
+
 import { DatePicker } from "@/components/DatePicker";
 import { Input } from "@/components/Input";
 import { FileUpload } from "@/components/FileUpload";
-
-import {
-  POST_USER_CONTRACT_INDIVIDUAL_SCHEMA,
-  POST_USER_CONTRACT_CORPORATION_INDIVIDUAL_SCHEMA,
-} from "@/schema/user/contract/schema";
 
 import {
   Form,
@@ -30,6 +29,11 @@ import {
 } from "@/components/Form";
 
 import {
+  POST_USER_CONTRACT_INDIVIDUAL_SCHEMA,
+  POST_USER_CONTRACT_CORPORATION_INDIVIDUAL_SCHEMA,
+} from "@/schema/user/contract/schema";
+
+import {
   CONFIRM_ADD_SAVE_STRING,
   COMPLETE_ADD_STRING,
   CONFIRM_CANCEL_SAVE_STRING,
@@ -37,8 +41,6 @@ import {
   INPUT_MAX_LENGTH,
   INPUT_MIN_LENGTH,
 } from "@/const/const";
-
-import { contractType, businessMainType, businessSubType } from "@/const/enum";
 
 function ClientUserContractAddIndividual() {
   const { push } = useRouter();
@@ -126,14 +128,8 @@ function ClientUserContractAddIndividual() {
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <CustomSelect
+                          <CommonContractStateSelect
                             {...field}
-                            options={Object.entries(contractType).map(
-                              ([value, title]) => ({
-                                value,
-                                label: title,
-                              })
-                            )}
                             className="bg-white w-full"
                             placeholder="전체"
                           />
@@ -184,14 +180,8 @@ function ClientUserContractAddIndividual() {
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <CustomSelect
+                          <CommonIndustryDivideOneSelect
                             {...field}
-                            options={Object.entries(businessMainType).map(
-                              ([value, title]) => ({
-                                value,
-                                label: title,
-                              })
-                            )}
                             className="bg-white w-full"
                           />
                         </FormControl>
@@ -210,18 +200,8 @@ function ClientUserContractAddIndividual() {
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <CustomSelect
+                          <CommonIndustryDivideTwoSelect
                             {...field}
-                            options={Object.entries(
-                              businessSubType[
-                                form.getValues(
-                                  "divide1"
-                                ) as keyof typeof businessSubType
-                              ] || {}
-                            ).map(([value, title]) => ({
-                              value,
-                              label: title,
-                            }))}
                             className="bg-white w-full"
                             disabled={
                               isPending ||
@@ -360,14 +340,8 @@ function ClientUserContractAddCorporation() {
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <CustomSelect
+                          <CommonContractStateSelect
                             {...field}
-                            options={Object.entries(contractType).map(
-                              ([value, title]) => ({
-                                value,
-                                label: title,
-                              })
-                            )}
                             className="bg-white w-full"
                             placeholder="전체"
                           />
@@ -460,14 +434,8 @@ function ClientUserContractAddCorporation() {
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <CustomSelect
+                          <CommonIndustryDivideOneSelect
                             {...field}
-                            options={Object.entries(businessMainType).map(
-                              ([value, title]) => ({
-                                value,
-                                label: title,
-                              })
-                            )}
                             className="bg-white w-full"
                             disabled={isPending}
                           />
@@ -487,18 +455,8 @@ function ClientUserContractAddCorporation() {
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <CustomSelect
+                          <CommonIndustryDivideTwoSelect
                             {...field}
-                            options={Object.entries(
-                              businessSubType[
-                                form.getValues(
-                                  "divide1"
-                                ) as keyof typeof businessSubType
-                              ] || {}
-                            ).map(([value, title]) => ({
-                              value,
-                              label: title,
-                            }))}
                             className="bg-white w-full"
                             disabled={
                               isPending ||

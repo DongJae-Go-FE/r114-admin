@@ -4,26 +4,25 @@ import { useRouter } from "next/navigation";
 
 import { useState, useTransition } from "react";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useForm } from "react-hook-form";
 
 import DescriptionTable from "@/components/DescriptionTable/DescriptionTable";
 import { Button } from "@/components/Button";
 import { DataTable } from "@/components/DataTable";
 
-import { CustomSelect } from "@/components/Select";
+import { CommonBusinessDivideSelect } from "@/components/Select/CommonSelect/CommonBusinessDivideSelect";
+import { CommonIndustryDivideOneSelect } from "@/components/Select/CommonSelect/CommonIndustryDivideOneSelect";
+import { CommonIndustryDivideTwoSelect } from "@/components/Select/CommonSelect/CommonIndustryDivideTwoSelect";
+import { CommonContractStateSelect } from "@/components/Select/CommonSelect/CommonContractStateSelect";
+
 import { DatePicker } from "@/components/DatePicker";
 import { Input } from "@/components/Input";
 import { FileUpload } from "@/components/FileUpload";
 
 import { Textarea } from "@/components/Textarea";
-
-import {
-  GET_USER_CONTRACT_DETAIL_LIST_SCHEMA,
-  PUT_USER_CONTRACT,
-} from "@/schema/user/contract/schema";
-import UserContractDetailColumns from "./tableColumns/UserContractDetailColumns";
 
 import {
   Form,
@@ -32,6 +31,13 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/Form";
+
+import UserContractDetailColumns from "./tableColumns/UserContractDetailColumns";
+
+import {
+  GET_USER_CONTRACT_DETAIL_LIST_SCHEMA,
+  PUT_USER_CONTRACT,
+} from "@/schema/user/contract/schema";
 
 import {
   CONFIRM_EDIT_SAVE_STRING,
@@ -42,13 +48,6 @@ import {
   INPUT_MIN_LENGTH,
   TXT_MAX_LENGTH,
 } from "@/const/const";
-
-import {
-  contractType,
-  businessType,
-  businessMainType,
-  businessSubType,
-} from "@/const/enum";
 
 const data = [
   {
@@ -174,14 +173,8 @@ export default function ClientUserContractEdit({ postNo }: { postNo: string }) {
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
-                            <CustomSelect
+                            <CommonContractStateSelect
                               {...field}
-                              options={Object.entries(contractType).map(
-                                ([value, title]) => ({
-                                  value,
-                                  label: title,
-                                })
-                              )}
                               className="bg-white w-full"
                               placeholder="전체"
                               disabled={isPending}
@@ -248,14 +241,8 @@ export default function ClientUserContractEdit({ postNo }: { postNo: string }) {
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <CustomSelect
+                          <CommonBusinessDivideSelect
                             {...field}
-                            options={Object.entries(businessType).map(
-                              ([value, title]) => ({
-                                value,
-                                label: title,
-                              })
-                            )}
                             className="bg-white w-full"
                             disabled={isPending}
                             placeholder="전체"
@@ -304,14 +291,8 @@ export default function ClientUserContractEdit({ postNo }: { postNo: string }) {
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <CustomSelect
+                          <CommonIndustryDivideOneSelect
                             {...field}
-                            options={Object.entries(businessMainType).map(
-                              ([value, title]) => ({
-                                value,
-                                label: title,
-                              })
-                            )}
                             className="bg-white w-full"
                             disabled={isPending}
                           />
@@ -331,18 +312,8 @@ export default function ClientUserContractEdit({ postNo }: { postNo: string }) {
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <CustomSelect
+                          <CommonIndustryDivideTwoSelect
                             {...field}
-                            options={Object.entries(
-                              businessSubType[
-                                form.getValues(
-                                  "divide1"
-                                ) as keyof typeof businessSubType
-                              ] || {}
-                            ).map(([value, title]) => ({
-                              value,
-                              label: title,
-                            }))}
                             className="bg-white w-full"
                             disabled={
                               isPending ||

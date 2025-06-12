@@ -3,6 +3,7 @@ import Link from "next/link";
 import { z } from "zod";
 
 import { ColumnDef } from "@tanstack/react-table";
+
 import { GET_USER_MEMBER_DETAIL_LIST_SCHEMA } from "@/schema/user/member/schema";
 
 const UserMemberDetailColumns: ColumnDef<

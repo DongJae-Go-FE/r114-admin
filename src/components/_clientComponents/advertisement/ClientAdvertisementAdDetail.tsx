@@ -2,19 +2,18 @@
 
 import { useRouter } from "next/navigation";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { PUT_ADVERTISEMENT_AD_SCHEMA } from "@/schema/advertisement/ad/schema";
+import { useForm } from "react-hook-form";
 
 import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
 import { Checkbox } from "@/components/Checkbox";
 import { FileUpload } from "@/components/FileUpload";
-import { CustomSelect } from "@/components/Select";
 
-import { useAdvertisementAdEditMutation } from "@/lib/network/mutation";
+import { CustomSelect } from "@/components/Select";
+import { CommonServiceDivideSelect } from "@/components/Select/CommonSelect/CommonServiceDivideSelect";
 
 import {
   Form,
@@ -25,6 +24,10 @@ import {
   FormMessage,
 } from "@/components/Form";
 
+import { useAdvertisementAdEditMutation } from "@/lib/network/mutation";
+
+import { PUT_ADVERTISEMENT_AD_SCHEMA } from "@/schema/advertisement/ad/schema";
+
 import {
   CONFIRM_SAVE_STRING,
   COMPLETE_SAVE_STRING,
@@ -33,8 +36,6 @@ import {
   INPUT_MIN_LENGTH,
   INPUT_MAX_LENGTH,
 } from "@/const/const";
-
-import { serviceType } from "@/const/enum";
 
 export default function ClientAdvertisementAdDetail({
   advtNo,
@@ -90,14 +91,8 @@ export default function ClientAdvertisementAdDetail({
             <FormItem>
               <FormLabel>서비스명</FormLabel>
               <FormControl>
-                <CustomSelect
+                <CommonServiceDivideSelect
                   {...field}
-                  options={[{ value: "all", label: "전체" }].concat(
-                    Object.entries(serviceType).map(([value, title]) => ({
-                      value,
-                      label: title,
-                    }))
-                  )}
                   className="w-full bg-white"
                   placeholder="전체"
                   disabled={isPending}

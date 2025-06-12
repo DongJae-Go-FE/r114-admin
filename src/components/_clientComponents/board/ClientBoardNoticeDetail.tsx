@@ -4,10 +4,11 @@ import dynamic from "next/dynamic";
 
 import { useRouter } from "next/navigation";
 
+import { useQuery } from "@tanstack/react-query";
+
 import { Button } from "@/components/Button";
 import Spinner from "@/components/Spinner";
 
-import { useQuery } from "@tanstack/react-query";
 import { useBoardDeleteMutation } from "@/lib/network/mutation";
 
 import {

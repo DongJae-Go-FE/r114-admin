@@ -1,32 +1,29 @@
 "use client";
 
-// import { useRouter } from "next/navigation";
+import { Fragment, useMemo, useState, useEffect } from "react";
 
 import { addDays, format, parse } from "date-fns";
 
-import { Fragment, useMemo, useState, useEffect } from "react";
-
 import { DateRangePicker } from "@/components/DateRangePicker";
-import { CustomSelect } from "@/components/Select";
 import { Input } from "@/components/Input";
-
 import Filter from "@/components/Filter";
-
 import { DataTable } from "@/components/DataTable";
 
-import { GET_SETTING_MANAGEMENT_SCHEMA } from "@/schema/setting/management/schema";
-import { GET_SETTING_MANAGEMENT_REQUEST_TYPE } from "@/lib/network/types";
-
-import SettingManagementColumns from "./tableColumns/SettingManagementColumns";
+import { CustomSelect } from "@/components/Select";
+import { CommonAdminPowerSelect } from "@/components/Select/CommonSelect/CommonAdminPowerSelect";
+import { CommonStateSelect } from "@/components/Select/CommonSelect/CommonStateSelect";
 
 import SettingManagementOkModal from "./modal/SettingManagementOkModal";
+
+import SettingManagementColumns from "./tableColumns/SettingManagementColumns";
 
 import { useFilter } from "@/hooks/useFilter";
 import useDebounce from "@/hooks/useDebounce";
 
-import { SELECTED_NOT_CHECKED, INPUT_MAX_LENGTH } from "@/const/const";
+import { GET_SETTING_MANAGEMENT_SCHEMA } from "@/schema/setting/management/schema";
+import { GET_SETTING_MANAGEMENT_REQUEST_TYPE } from "@/lib/network/types";
 
-import { adminPermissionType, statusType } from "@/const/enum";
+import { SELECTED_NOT_CHECKED, INPUT_MAX_LENGTH } from "@/const/const";
 
 const data = [
   {
@@ -132,14 +129,8 @@ export default function ClientSettingManagement() {
         inputs: [
           {
             node: (
-              <CustomSelect
+              <CommonAdminPowerSelect
                 value={filter.adMgmt}
-                options={Object.entries(adminPermissionType).map(
-                  ([value, title]) => ({
-                    value,
-                    label: title,
-                  })
-                )}
                 className="w-full bg-white"
                 placeholder="전체"
                 onChange={(value) => {
@@ -159,12 +150,8 @@ export default function ClientSettingManagement() {
         inputs: [
           {
             node: (
-              <CustomSelect
+              <CommonStateSelect
                 value={filter.state}
-                options={Object.entries(statusType).map(([value, title]) => ({
-                  value,
-                  label: title,
-                }))}
                 className="w-full bg-white"
                 placeholder="전체"
                 onChange={(value) => {

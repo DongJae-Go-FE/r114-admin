@@ -2,13 +2,17 @@
 
 import { useRouter } from "next/navigation";
 
-import { addDays, format, parse } from "date-fns";
-
 import { Fragment, useState, useEffect, useMemo } from "react";
+
+import { addDays, format, parse } from "date-fns";
 
 import { DateRangePicker } from "@/components/DateRangePicker";
 import { Input } from "@/components/Input";
+
 import { CustomSelect } from "@/components/Select";
+import { CommonBusinessDivideSelect } from "@/components/Select/CommonSelect/CommonBusinessDivideSelect";
+import { CommonIndustryDivideOneSelect } from "@/components/Select/CommonSelect/CommonIndustryDivideOneSelect";
+import { CommonIndustryDivideTwoSelect } from "@/components/Select/CommonSelect/CommonIndustryDivideTwoSelect";
 
 import { Button } from "@/components/Button";
 
@@ -16,23 +20,15 @@ import Filter from "@/components/Filter";
 
 import { DataTable } from "@/components/DataTable";
 
-import { GET_USER_CONTRACT_SCHEMA } from "@/schema/user/contract/schema";
-import { GET_USER_CONTRACT_REQUEST_TYPE } from "@/lib/network/types";
-
 import UserContractColumns from "./tableColumns/UserContractColumns";
 
 import { useFilter } from "@/hooks/useFilter";
 import useDebounce from "@/hooks/useDebounce";
 
-import { INPUT_MAX_LENGTH } from "@/const/const";
+import { GET_USER_CONTRACT_SCHEMA } from "@/schema/user/contract/schema";
+import { GET_USER_CONTRACT_REQUEST_TYPE } from "@/lib/network/types";
 
-import {
-  userType,
-  businessType,
-  contractType,
-  businessMainType,
-  businessSubType,
-} from "@/const/enum";
+import { INPUT_MAX_LENGTH } from "@/const/const";
 
 import data from "@/dummy/data.json";
 
@@ -107,10 +103,20 @@ export default function ClientUserContract() {
             node: (
               <CustomSelect
                 value={filter.memberType}
-                options={Object.entries(userType).map(([value, title]) => ({
-                  value,
-                  label: title,
-                }))}
+                options={[
+                  {
+                    label: "전체",
+                    value: "0",
+                  },
+                  {
+                    label: "개인",
+                    value: "1",
+                  },
+                  {
+                    label: "법인",
+                    value: "2",
+                  },
+                ]}
                 className="w-full bg-white"
                 placeholder="전체"
                 onChange={(value) => {
@@ -130,12 +136,8 @@ export default function ClientUserContract() {
         inputs: [
           {
             node: (
-              <CustomSelect
+              <CommonBusinessDivideSelect
                 value={filter.corporationType}
-                options={Object.entries(businessType).map(([value, title]) => ({
-                  value,
-                  label: title,
-                }))}
                 className="w-full bg-white"
                 placeholder="전체"
                 onChange={(value) => {
@@ -157,10 +159,40 @@ export default function ClientUserContract() {
             node: (
               <CustomSelect
                 value={filter.contractType}
-                options={Object.entries(contractType).map(([value, title]) => ({
-                  value,
-                  label: title,
-                }))}
+                options={[
+                  {
+                    label: "전체",
+                    value: "0",
+                  },
+                  {
+                    label: "신규 계약",
+                    value: "1",
+                  },
+                  {
+                    label: "재계약",
+                    value: "2",
+                  },
+                  {
+                    label: "계약만료",
+                    value: "3",
+                  },
+                  {
+                    label: "계약해지",
+                    value: "4",
+                  },
+                  {
+                    label: "계약대기",
+                    value: "5",
+                  },
+                  {
+                    label: "계약연장",
+                    value: "6",
+                  },
+                  {
+                    label: "계약보류",
+                    value: "7",
+                  },
+                ]}
                 className="w-full bg-white"
                 placeholder="전체"
                 onChange={(value) => {
@@ -180,14 +212,8 @@ export default function ClientUserContract() {
         inputs: [
           {
             node: (
-              <CustomSelect
+              <CommonIndustryDivideOneSelect
                 value={filter.industry1}
-                options={Object.entries(businessMainType).map(
-                  ([value, title]) => ({
-                    value,
-                    label: title,
-                  })
-                )}
                 className="w-full bg-white"
                 placeholder="전체"
                 onChange={(value) => {
@@ -207,16 +233,8 @@ export default function ClientUserContract() {
         inputs: [
           {
             node: (
-              <CustomSelect
+              <CommonIndustryDivideTwoSelect
                 value={filter.industry2}
-                options={Object.entries(
-                  businessSubType[
-                    filter.industry1 as keyof typeof businessSubType
-                  ] || {}
-                ).map(([value, title]) => ({
-                  value,
-                  label: title,
-                }))}
                 className="w-full bg-white"
                 placeholder="전체"
                 onChange={(value) => {
