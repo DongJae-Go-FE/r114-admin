@@ -185,7 +185,7 @@ function ClientUserContractAddIndividual() {
                             className="bg-white w-full"
                             onChange={(value) => {
                               field.onChange(value);
-                              form.resetField("divide2");
+                              form.setValue("divide2", "0");
                             }}
                           />
                         </FormControl>
@@ -209,10 +209,6 @@ function ClientUserContractAddIndividual() {
                             className="bg-white w-full"
                             placeholder="구분1을 먼저 선택해주세요"
                             prevValue={form.watch("divide1")}
-                            onChange={(value) => {
-                              field.onChange(value);
-                              form.setValue("divide2", "0");
-                            }}
                             disabled={
                               isPending ||
                               form.watch("divide1") === "0" ||
@@ -447,6 +443,10 @@ function ClientUserContractAddCorporation() {
                           <CommonIndustryDivideOneSelect
                             {...field}
                             className="bg-white w-full"
+                            onChange={(value) => {
+                              field.onChange(value);
+                              form.setValue("divide2", "0");
+                            }}
                             disabled={isPending}
                           />
                         </FormControl>
@@ -470,10 +470,6 @@ function ClientUserContractAddCorporation() {
                             className="bg-white w-full"
                             placeholder="구분1을 먼저 선택해주세요"
                             prevValue={form.watch("divide1")}
-                            onChange={(value) => {
-                              field.onChange(value);
-                              form.setValue("divide2", "0");
-                            }}
                             disabled={
                               isPending ||
                               form.watch("divide1") === "0" ||

@@ -295,6 +295,10 @@ export default function ClientUserContractEdit({ postNo }: { postNo: string }) {
                             {...field}
                             className="bg-white w-full"
                             disabled={isPending}
+                            onChange={(value) => {
+                              field.onChange(value);
+                              form.setValue("divide2", "0");
+                            }}
                           />
                         </FormControl>
                         <FormMessage />
