@@ -1,6 +1,6 @@
 export type CommonResponse<T = unknown> = {
   success: boolean;
-  code: string;
+  code: number;
   message: string;
   data: T;
 };
@@ -112,16 +112,16 @@ export type GET_USER_POWER_REQUEST_TYPE = {
 export type GET_BOARD_NOTICE_REQUEST_TYPE = {
   comCd: string;
   searchKeyword: string;
-  searchType: string;
+  searchType?: string;
   searchStartRegDtm: string;
   searchEndRegDtm: string;
   modId: string;
-  pageSize: string;
-  pageIndex: string;
+  pageSize: number;
+  pageIndex: number;
   pageOrder: string;
 };
 
-export type POST_BOARD_NOTICE_RESPONSE_TYPE = {
+export type GET_BOARD_NOTICE_RESPONSE_TYPE = {
   totalCount: number;
   items: {
     postNo: number;

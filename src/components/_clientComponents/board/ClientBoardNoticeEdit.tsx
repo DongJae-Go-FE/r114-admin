@@ -7,6 +7,7 @@ import { useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 
 import { parse, format } from "date-fns";
@@ -32,6 +33,8 @@ import {
 
 import { useBoardEditMutation } from "@/lib/network/mutation";
 
+import { GET_BOARD_NOTICE_DETAIL_REQUEST } from "@/lib/network/api";
+
 import { PUT_BOARD_NOTICE_SCHEMA } from "@/schema/board/notice/schema";
 
 import {
@@ -46,7 +49,16 @@ import {
 export default function ClientBoardNoticeEdit({ postNo }: { postNo: string }) {
   const { push } = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const [isTime, setIsTime] = useState(["", "00", "00"]);
+  const [isTime, setIsTime] = useState([
+    format(new Date(), "yyyy-MM-dd"),
+    "00",
+    "00",
+  ]);
+
+  const { data } = useQuery({
+    queryKey: ["BOARD_NOTICE_DETAIL_REQUEST", postNo],
+    queryFn: () => GET_BOARD_NOTICE_DETAIL_REQUEST({ postNo }),
+  });
 
   const { mutateAsync, isPending } = useBoardEditMutation();
 
@@ -55,12 +67,12 @@ export default function ClientBoardNoticeEdit({ postNo }: { postNo: string }) {
     defaultValues: {
       date: "",
       writer: "가동재",
-      service: "1",
+      service: "001",
       title: "",
       content: "",
       file: "",
       reservation: false,
-      time: "",
+      time: data?.data.reservePostDtm || "",
     },
   });
 
@@ -203,7 +215,9 @@ export default function ClientBoardNoticeEdit({ postNo }: { postNo: string }) {
                     setIsOpen(checked as boolean);
                     if (!checked) {
                       form.setValue("time", "");
-                      setIsTime(["", "00", "00"]);
+                      setIsTime([format(new Date(), "yyyy-MM-dd"), "00", "00"]);
+                    } else {
+                      updateTime([isTime[0], isTime[1], isTime[2]]);
                     }
                   }}
                 />

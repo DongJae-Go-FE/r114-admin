@@ -30,7 +30,10 @@ import {
   FormMessage,
 } from "@/components/Form";
 
-import { useBoardPostMutation } from "@/lib/network/mutation";
+import {
+  useBoardPostMutation,
+  useBoardDetailFileUploadMutation,
+} from "@/lib/network/mutation";
 
 import { POST_BOARD_NOTICE_SCHEMA } from "@/schema/board/notice/schema";
 
@@ -46,16 +49,22 @@ import {
 export default function ClientBoardNoticeAdd() {
   const { push } = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const [isTime, setIsTime] = useState(["", "00", "00"]);
+  const [isTime, setIsTime] = useState([
+    format(new Date(), "yyyy-MM-dd"),
+    "00",
+    "00",
+  ]);
 
   const { mutateAsync, isPending } = useBoardPostMutation();
+  const { mutateAsync: fileMutateAsync, isPending: isUploadPending } =
+    useBoardDetailFileUploadMutation();
 
   const form = useForm<z.infer<typeof POST_BOARD_NOTICE_SCHEMA>>({
     resolver: zodResolver(POST_BOARD_NOTICE_SCHEMA),
     defaultValues: {
       date: "",
       writer: "가동재",
-      service: "1",
+      service: "001",
       title: "",
       content: "",
       file: "",
@@ -82,6 +91,17 @@ export default function ClientBoardNoticeAdd() {
     if (confirm(CONFIRM_CANCEL_SAVE_STRING)) {
       alert(COMPLETE_CANCEL_STRING);
       push("/board/notice");
+    }
+  };
+
+  const handleUpload = async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      await fileMutateAsync(formData);
+    } catch (error) {
+      console.error("업로드 실패", error);
     }
   };
 
@@ -179,6 +199,8 @@ export default function ClientBoardNoticeAdd() {
                   dragAreaPlaceholder="이곳을 클릭하거나 파일을 드롭하세요."
                   multiple
                   limit={5}
+                  upload={handleUpload}
+                  disabled={isUploadPending}
                   onLimitOver={() =>
                     alert("파일은 최대 5개까지 첨부 가능합니다.")
                   }
@@ -203,7 +225,9 @@ export default function ClientBoardNoticeAdd() {
                     setIsOpen(checked as boolean);
                     if (!checked) {
                       form.setValue("time", "");
-                      setIsTime(["", "00", "00"]);
+                      setIsTime([format(new Date(), "yyyy-MM-dd"), "00", "00"]);
+                    } else {
+                      updateTime([isTime[0], isTime[1], isTime[2]]);
                     }
                   }}
                 />

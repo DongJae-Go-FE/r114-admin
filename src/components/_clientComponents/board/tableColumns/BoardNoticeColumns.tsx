@@ -37,12 +37,14 @@ const BoardNoticeColumns: ColumnDef<z.infer<typeof GET_BOARD_NOTICE_SCHEMA>>[] =
           />
         </div>
       ),
+      size: 30,
       enableSorting: false,
       enableHiding: false,
     },
 
     {
       accessorKey: "boardId",
+      size: 100,
       header: () => <div className="text-center">서비스 구분</div>,
       cell: ({ row }) => (
         <div className="text-center">{row.original.boardId}</div>
@@ -50,6 +52,7 @@ const BoardNoticeColumns: ColumnDef<z.infer<typeof GET_BOARD_NOTICE_SCHEMA>>[] =
     },
     {
       accessorKey: "postNo",
+      size: 100,
       header: () => <div className="text-center">번호</div>,
       cell: ({ row }) => (
         <div className="text-center">{row.original.postNo}</div>
@@ -58,8 +61,6 @@ const BoardNoticeColumns: ColumnDef<z.infer<typeof GET_BOARD_NOTICE_SCHEMA>>[] =
     {
       accessorKey: "postTitle",
       header: () => <div className="text-center">제목</div>,
-      minSize: 600,
-      maxSize: 1000,
       cell: ({ row }) => (
         <Link
           href={`/board/notice/${row.original.postNo}`}
@@ -72,6 +73,7 @@ const BoardNoticeColumns: ColumnDef<z.infer<typeof GET_BOARD_NOTICE_SCHEMA>>[] =
     },
     {
       accessorKey: "regNm",
+      size: 100,
       header: () => <div className="text-center">등록자</div>,
       cell: ({ row }) => (
         <div className="text-center">{row.original.regNm}</div>
@@ -79,6 +81,7 @@ const BoardNoticeColumns: ColumnDef<z.infer<typeof GET_BOARD_NOTICE_SCHEMA>>[] =
     },
     {
       accessorKey: "regDtm",
+      size: 100,
       header: ({ column }) => (
         <button
           type="button"
