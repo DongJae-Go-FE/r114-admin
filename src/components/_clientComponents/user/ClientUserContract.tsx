@@ -46,7 +46,7 @@ export default function ClientUserContract() {
       corporationType: "all",
       contractType: "all",
       industry1: "0",
-      industry2: "all",
+      industry2: "0",
       searchType: "all",
       searchKeyword: "",
     });
@@ -237,7 +237,7 @@ export default function ClientUserContract() {
               <CommonIndustryDivideTwoSelect
                 value={filter.industry2}
                 className="w-full bg-white"
-                placeholder="전체"
+                placeholder="구분1을 먼저 선택해주세요"
                 prevValue={filter.industry1}
                 disabled={filter.industry1 === "0"}
                 onChange={(value) => {

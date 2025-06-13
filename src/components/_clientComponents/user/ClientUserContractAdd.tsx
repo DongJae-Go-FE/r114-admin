@@ -207,11 +207,11 @@ function ClientUserContractAddIndividual() {
                           <CommonIndustryDivideTwoSelect
                             {...field}
                             className="bg-white w-full"
-                            placeholder=""
+                            placeholder="구분1을 먼저 선택해주세요"
                             prevValue={form.watch("divide1")}
                             onChange={(value) => {
                               field.onChange(value);
-                              form.resetField("divide2");
+                              form.setValue("divide2", "0");
                             }}
                             disabled={
                               isPending ||
@@ -468,11 +468,11 @@ function ClientUserContractAddCorporation() {
                           <CommonIndustryDivideTwoSelect
                             {...field}
                             className="bg-white w-full"
-                            placeholder=""
+                            placeholder="구분1을 먼저 선택해주세요"
                             prevValue={form.watch("divide1")}
                             onChange={(value) => {
                               field.onChange(value);
-                              form.resetField("divide2");
+                              form.setValue("divide2", "0");
                             }}
                             disabled={
                               isPending ||
