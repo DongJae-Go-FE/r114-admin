@@ -220,6 +220,7 @@ export default function ClientUserContract() {
                   setFilter((prev) => ({
                     ...prev,
                     industry1: value,
+                    industry2: "0",
                   }));
                 }}
               />

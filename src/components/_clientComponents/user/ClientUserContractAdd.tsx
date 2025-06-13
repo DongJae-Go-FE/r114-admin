@@ -183,6 +183,10 @@ function ClientUserContractAddIndividual() {
                           <CommonIndustryDivideOneSelect
                             {...field}
                             className="bg-white w-full"
+                            onChange={(value) => {
+                              field.onChange(value);
+                              form.resetField("divide2");
+                            }}
                           />
                         </FormControl>
                         <FormMessage />
@@ -205,6 +209,10 @@ function ClientUserContractAddIndividual() {
                             className="bg-white w-full"
                             placeholder=""
                             prevValue={form.watch("divide1")}
+                            onChange={(value) => {
+                              field.onChange(value);
+                              form.resetField("divide2");
+                            }}
                             disabled={
                               isPending ||
                               form.watch("divide1") === "0" ||
@@ -462,6 +470,10 @@ function ClientUserContractAddCorporation() {
                             className="bg-white w-full"
                             placeholder=""
                             prevValue={form.watch("divide1")}
+                            onChange={(value) => {
+                              field.onChange(value);
+                              form.resetField("divide2");
+                            }}
                             disabled={
                               isPending ||
                               form.watch("divide1") === "0" ||
