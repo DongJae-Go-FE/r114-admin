@@ -52,6 +52,7 @@ export function CommonIndustryDivideTwoSelect({
   value,
   onChange,
   className,
+  placeholder = "",
   size = "md",
   label,
   disabled,
