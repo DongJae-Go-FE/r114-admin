@@ -55,7 +55,7 @@ function ClientUserContractAddIndividual() {
       contract: "",
       member: "",
       divide1: "0",
-      divide2: "",
+      divide2: "1",
     },
   });
 
@@ -185,7 +185,8 @@ function ClientUserContractAddIndividual() {
                             className="bg-white w-full"
                             onChange={(value) => {
                               field.onChange(value);
-                              form.setValue("divide2", "0");
+                              form.setValue("divide2", "1");
+                              form.trigger("divide2");
                             }}
                           />
                         </FormControl>
@@ -207,7 +208,6 @@ function ClientUserContractAddIndividual() {
                           <CommonIndustryDivideTwoSelect
                             {...field}
                             className="bg-white w-full"
-                            placeholder="구분1을 먼저 선택해주세요"
                             prevValue={form.watch("divide1")}
                             disabled={
                               isPending ||
@@ -445,7 +445,8 @@ function ClientUserContractAddCorporation() {
                             className="bg-white w-full"
                             onChange={(value) => {
                               field.onChange(value);
-                              form.setValue("divide2", "0");
+                              form.setValue("divide2", "1");
+                              form.trigger("divide2");
                             }}
                             disabled={isPending}
                           />
@@ -468,7 +469,6 @@ function ClientUserContractAddCorporation() {
                           <CommonIndustryDivideTwoSelect
                             {...field}
                             className="bg-white w-full"
-                            placeholder="구분1을 먼저 선택해주세요"
                             prevValue={form.watch("divide1")}
                             disabled={
                               isPending ||
