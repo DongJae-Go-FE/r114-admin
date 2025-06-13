@@ -45,7 +45,7 @@ export default function ClientUserContract() {
       memberType: "all",
       corporationType: "all",
       contractType: "all",
-      industry1: "all",
+      industry1: "0",
       industry2: "all",
       searchType: "all",
       searchKeyword: "",
@@ -237,6 +237,8 @@ export default function ClientUserContract() {
                 value={filter.industry2}
                 className="w-full bg-white"
                 placeholder="전체"
+                prevValue={filter.industry1}
+                disabled={filter.industry1 === "0"}
                 onChange={(value) => {
                   setFilter((prev) => ({
                     ...prev,

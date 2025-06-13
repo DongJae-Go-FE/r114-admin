@@ -54,7 +54,7 @@ function ClientUserContractAddIndividual() {
       date: "",
       contract: "",
       member: "",
-      divide1: "1",
+      divide1: "0",
       divide2: "",
     },
   });
@@ -203,9 +203,11 @@ function ClientUserContractAddIndividual() {
                           <CommonIndustryDivideTwoSelect
                             {...field}
                             className="bg-white w-full"
+                            placeholder=""
+                            prevValue={form.watch("divide1")}
                             disabled={
                               isPending ||
-                              !form.watch("divide1") ||
+                              form.watch("divide1") === "0" ||
                               form.watch("divide1").length === 0
                             }
                           />
@@ -458,9 +460,11 @@ function ClientUserContractAddCorporation() {
                           <CommonIndustryDivideTwoSelect
                             {...field}
                             className="bg-white w-full"
+                            placeholder=""
+                            prevValue={form.watch("divide1")}
                             disabled={
                               isPending ||
-                              !form.watch("divide1") ||
+                              form.watch("divide1") === "0" ||
                               form.watch("divide1").length === 0
                             }
                           />
