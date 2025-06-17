@@ -11,10 +11,7 @@ import Spinner from "@/components/Spinner";
 
 import { useBoardDeleteMutation } from "@/lib/network/mutation";
 
-import {
-  GET_BOARD_NOTICE_DETAIL_REQUEST,
-  GET_BOARD_NOTICE_DETAIL_FILE_DOWNLOAD_REQUEST,
-} from "@/lib/network/api";
+import { GET_BOARD_NOTICE_DETAIL_REQUEST } from "@/lib/network/api";
 
 import {
   CONFIRM_DELETE_SAVE_STRING,
@@ -65,16 +62,7 @@ export default function ClientBoardNoticeDetail({
     queryFn: () => GET_BOARD_NOTICE_DETAIL_REQUEST({ postNo }),
   });
 
-  const { data: downloadData, isLoading: downloadDataIsLoading } = useQuery({
-    queryKey: ["BOARD_NOTICE_DETAIL_FILE_DOWNLOAD_REQUEST"],
-    queryFn: () =>
-      GET_BOARD_NOTICE_DETAIL_FILE_DOWNLOAD_REQUEST({
-        attachNo: data?.data.attachments[0].attachNo.toString() || "",
-      }),
-    enabled: !!data,
-  });
-
-  console.log(isLoading, downloadData, downloadDataIsLoading);
+  console.log(data, isLoading);
 
   const handleDelete = async () => {
     if (confirm(`공지사항을 ${CONFIRM_DELETE_SAVE_STRING}`)) {

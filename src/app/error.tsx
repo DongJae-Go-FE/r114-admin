@@ -22,7 +22,7 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="flex h-[100dvh] items-center justify-center flex-col gap-y-2">
+    <div className="flex h-[100vh] items-center justify-center flex-col gap-y-2">
       <Empty description={`${errorText} 오류`} />
       <Button
         type="button"

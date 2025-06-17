@@ -22,7 +22,7 @@ function parseCookie(cookie: string) {
 type Header = HeadersInit & {};
 
 export default class HttpRequest {
-  private static baseUrl = process.env.NEXT_PUBLIC_API_URL;
+  private static baseUrl = process.env.NEXT_PUBLIC_BACKEND_SERVER_API_URL;
 
   private static credentials = "include" as const;
 
@@ -44,7 +44,8 @@ export default class HttpRequest {
     headerData?: Header
   ) {
     const path = `${this.baseUrl}${uri}?${queryString.stringify(
-      bodyData as queryString.ParsedQuery
+      bodyData as queryString.ParsedQuery,
+      { encode: true }
     )}`;
 
     const response = await fetch(path, {
@@ -66,13 +67,13 @@ export default class HttpRequest {
   ) {
     const response = await fetch(this.baseUrl + uri, {
       method,
-      credentials: this.credentials,
+      // credentials: this.credentials,
       headers: {
         ...this.defaultHeaders,
         ...headerData,
-        Authorization: `Bearer ${parseCookie(document.cookie).get(
-          "accessToken"
-        )}`,
+        // Authorization: `Bearer ${parseCookie(document.cookie).get(
+        //   "accessToken"
+        // )}`,
       },
       body: JSON.stringify(bodyData),
     });
@@ -80,16 +81,19 @@ export default class HttpRequest {
     return await this.responseToJson<Res>(response);
   }
 
-  static async upload(formData: FormData) {
-    const response = await fetch(this.baseUrl + "/aws/upload", {
+  static async upload(formData: FormData, { uri }: { uri: string }) {
+    const response = await fetch(this.baseUrl + uri, {
       method: "POST",
-      credentials: this.credentials,
+      // credentials: this.credentials,
       body: formData,
       headers: {
-        Authorization: `Bearer ${parseCookie(document.cookie).get(
-          "accessToken"
-        )}`,
+        "Content-Type": "multipart/form-data",
       },
+      // headers: {
+      //   Authorization: `Bearer ${parseCookie(document.cookie).get(
+      //     "accessToken"
+      //   )}`,
+      // },
     });
 
     return await this.responseToJson<{ key: string; url: string }>(response);

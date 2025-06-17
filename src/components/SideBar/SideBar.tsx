@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 import { ReactNode, useContext, useState, createContext } from "react";
@@ -13,6 +14,10 @@ import {
 } from "@/components/Accordion";
 
 import { ChevronRight, ChevronLeft } from "lucide-react";
+
+import { LOGOUT_CONFIRM_STRING } from "@/const/const";
+
+import { handleLogout as handleServerLogout } from "@/severActions/serverActions";
 
 type SideBarContextType = {
   isOpen: boolean;
@@ -172,12 +177,25 @@ function SideBar() {
   const infoLiStyle = "flex gap-x-1";
   const infoParagraphStyle = "truncate max-w-[120px]";
 
+  const handleLogout = async () => {
+    if (confirm(LOGOUT_CONFIRM_STRING)) {
+      await handleServerLogout();
+    }
+  };
+
   return (
     <div aria-expanded={isOpen ? true : false} className={sideBarStyle}>
       <div className="flex items-center justify-center h-[117px] border-b">
-        <h4 className="heading04b">REPS 5.0 Admin</h4>
+        <h1>
+          <Link
+            className="flex justify-center items-center w-full h-full"
+            href="/"
+          >
+            <Image src="/logo.svg" alt="로고" width={117} height={24} />
+          </Link>
+        </h1>
       </div>
-      <div className="w-full h-30 border-b border-gray-200">
+      <div className="w-full h-33 border-b border-gray-200">
         <div className="w-full h-full p-4 body03b">
           <h3>
             <p className="truncate">유저이름유저이름유저이름유저이름유저이름</p>
@@ -193,6 +211,12 @@ function SideBar() {
               최근 접속시간: <p className={infoParagraphStyle}>2025.01.01</p>
             </li>
           </ul>
+          <button
+            onClick={handleLogout}
+            className="underline underline-offset-2"
+          >
+            로그아웃
+          </button>
         </div>
       </div>
       <div className="h-[calc(100%-364px)] overflow-auto">

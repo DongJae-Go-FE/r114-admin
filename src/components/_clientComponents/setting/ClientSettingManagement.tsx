@@ -197,7 +197,7 @@ export default function ClientSettingManagement() {
                 value={searchInput}
                 placeholder="검색어를 입력해주세요."
                 maxLength={INPUT_MAX_LENGTH}
-                onChange={(e) => setSearchInput(e.target.value)}
+                onChange={(e) => setSearchInput(() => e.target.value)}
               />
             ),
           },
@@ -226,6 +226,7 @@ export default function ClientSettingManagement() {
   const handleFilterSubmit = () => {
     handleSubmit({
       ...filter,
+      search: searchInput,
     });
   };
 

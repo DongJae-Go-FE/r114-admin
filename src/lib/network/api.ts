@@ -18,7 +18,7 @@ import {
   GET_USER_CONTRACT_REQUEST_TYPE,
   GET_USER_POWER_REQUEST_TYPE,
   GET_BOARD_NOTICE_REQUEST_TYPE,
-  POST_BOARD_NOTICE_RESPONSE_TYPE,
+  GET_BOARD_NOTICE_RESPONSE_TYPE,
   POST_BOARD_NOTICE_REQUEST_TYPE,
   PUT_BOARD_NOTICE_REQUEST_TYPE,
   POST_BOARD_NOTICE_DETAIL_RESPONSE_TYPE,
@@ -45,7 +45,7 @@ export async function GET_USER_CORPORATION_REQUEST(
   queryString: GET_USER_CORPORATION_REQUEST_TYPE
 ) {
   return await HttpRequest.get<unknown, GET_USER_CORPORATION_REQUEST_TYPE>(
-    "/v1/api/추가예정",
+    "/api/v1/추가예정",
     queryString
   );
 }
@@ -55,7 +55,7 @@ export async function GET_USER_MEMBER_REQUEST(
   queryString: GET_USER_MEMBER_REQUEST_TYPE
 ) {
   return await HttpRequest.get<unknown, GET_USER_MEMBER_REQUEST_TYPE>(
-    "/v1/api/추가예정",
+    "/api/v1/추가예정",
     queryString
   );
 }
@@ -65,7 +65,7 @@ export async function GET_USER_CONTRACT_REQUEST(
   queryString: GET_USER_CONTRACT_REQUEST_TYPE
 ) {
   return await HttpRequest.get<unknown, GET_USER_CONTRACT_REQUEST_TYPE>(
-    "/v1/api/추가예정",
+    "/api/v1/추가예정",
     queryString
   );
 }
@@ -75,7 +75,7 @@ export async function GET_USER_POWER_REQUEST(
   queryString: GET_USER_POWER_REQUEST_TYPE
 ) {
   return await HttpRequest.get<unknown, GET_USER_POWER_REQUEST_TYPE>(
-    "/v1/api/추가예정",
+    "/api/v1/추가예정",
     queryString
   );
 }
@@ -85,9 +85,12 @@ export async function GET_BOARD_NOTICE_REQUEST(
   queryString: GET_BOARD_NOTICE_REQUEST_TYPE
 ) {
   return await HttpRequest.get<
-    POST_BOARD_NOTICE_RESPONSE_TYPE,
+    GET_BOARD_NOTICE_RESPONSE_TYPE,
     GET_BOARD_NOTICE_REQUEST_TYPE
-  >("/v1/api/board/list", queryString);
+  >("/api/v1/board/list", queryString, {
+    "Access-Control-Allow-Origin": "*",
+    "Content-Type": "application/json",
+  });
 }
 
 /** 공지사항 삭제 */
@@ -96,9 +99,7 @@ export async function DELETE_BOARD_NOTICE_REQUEST({
 }: {
   postNo: string;
 }) {
-  return await HttpRequest.set("DELETE", `/api/v1/board/${postNo}`, {
-    "Content-Type": "application/json",
-  });
+  return await HttpRequest.set("DELETE", `/api/v1/board/${postNo}`, {});
 }
 
 /** 공지사항 등록 */
@@ -109,7 +110,7 @@ export async function POST_BOARD_NOTICE_REQUEST({
 }) {
   return await HttpRequest.set<POST_BOARD_NOTICE_REQUEST_TYPE>(
     "POST",
-    `/api/v1/board`,
+    `/api/v1/board/`,
     JSON.stringify(values),
     {
       "Content-Type": "application/json",
@@ -142,7 +143,12 @@ export async function GET_BOARD_NOTICE_DETAIL_REQUEST({
   postNo: string;
 }) {
   return await HttpRequest.get<POST_BOARD_NOTICE_DETAIL_RESPONSE_TYPE>(
-    `/v1/api/board/${postNo}`
+    `/api/v1/board/${postNo}`,
+    "",
+    {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json",
+    }
   );
 }
 
@@ -152,16 +158,15 @@ export async function GET_BOARD_NOTICE_DETAIL_FILE_DOWNLOAD_REQUEST({
 }: {
   attachNo: string;
 }) {
-  return await HttpRequest.get(`/v1/api/board/download/${attachNo}`);
+  return await HttpRequest.get(`/api/v1/board/download/${attachNo}`);
 }
 
-/** 공지사항 상세 조회 파일 업로드 TODO.타입 수정헤야함 */
-export async function GET_BOARD_NOTICE_FILE_UPLOAD_REQUEST({
-  attachNo,
+export async function POST_BOARD_DETAIL_FILE_UPLOAD_REQUEST({
+  values,
 }: {
-  attachNo: string;
+  values: FormData;
 }) {
-  return await HttpRequest.get(`/v1/api/board/download/${attachNo}`);
+  return await HttpRequest.upload(values, { uri: "/api/v1/board/uploadFile" });
 }
 
 /** 광고 목록 조회 및 총 건수 조회 TODO.타입 수정헤야함 */
@@ -169,7 +174,7 @@ export async function GET_ADVERTISEMENT_AD_REQUEST(
   queryString: GET_ADVERTISEMENT_AD_REQUEST_TYPE
 ) {
   return await HttpRequest.get<unknown, GET_ADVERTISEMENT_AD_REQUEST_TYPE>(
-    "/v1/api/advertise/list",
+    "/api/v1/advertise/list",
     queryString
   );
 }
@@ -180,7 +185,7 @@ export async function GET_ADVERTISEMENT_AD_DETAIL_REQUEST({
 }: {
   advtNo: string;
 }) {
-  return await HttpRequest.get<unknown>(`/v1/api/advertise/${advtNo}`);
+  return await HttpRequest.get<unknown>(`/api/v1/advertise/${advtNo}`);
 }
 
 /** 현재 노출중인 광고 목록 조회 TODO.타입 수정헤야함 */
@@ -189,7 +194,7 @@ export async function GET_ADVERTISEMENT_AD_ACTIVE_LIST_REQUEST({
 }: {
   comCd: string;
 }) {
-  return await HttpRequest.get<unknown>(`/v1/api/advertise/active/${comCd}`);
+  return await HttpRequest.get<unknown>(`/api/v1/advertise/active/${comCd}`);
 }
 
 /** 광고 삭제 TODO.타입 수정헤야함 */
@@ -253,7 +258,7 @@ export async function GET_SETTING_MANAGEMENT_REQUEST(
   queryString: GET_SETTING_MANAGEMENT_REQUEST_TYPE
 ) {
   return await HttpRequest.get<unknown, GET_SETTING_MANAGEMENT_REQUEST_TYPE>(
-    "/v1/api/추가예정",
+    "/api/v1/추가예정",
     queryString
   );
 }

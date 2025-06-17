@@ -45,6 +45,7 @@ export default function ClientUserMember() {
   const { push } = useRouter();
 
   const [searchInput, setSearchInput] = useState("");
+  console.log("searchInput", searchInput);
   const debouncedSearch = useDebounce({ value: searchInput, delay: 300 });
 
   const { filter, setFilter, handleSubmit, handleReset } =
@@ -61,6 +62,7 @@ export default function ClientUserMember() {
   const handleFilterSubmit = () => {
     handleSubmit({
       ...filter,
+      searchKeyword: searchInput,
     });
   };
 
@@ -197,7 +199,7 @@ export default function ClientUserMember() {
                 value={searchInput}
                 placeholder="검색어를 입력해주세요."
                 maxLength={INPUT_MAX_LENGTH}
-                onChange={(e) => setSearchInput(e.target.value)}
+                onChange={(e) => setSearchInput(() => e.target.value)}
               />
             ),
           },

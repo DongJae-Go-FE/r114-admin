@@ -3,6 +3,7 @@ import {
   DELETE_BOARD_NOTICE_REQUEST,
   POST_BOARD_NOTICE_REQUEST,
   PUT_BOARD_NOTICE_REQUEST,
+  POST_BOARD_DETAIL_FILE_UPLOAD_REQUEST,
   DELETE_ADVERTISEMENT_AD_REQUEST,
   POST_ADVERTISEMENT_AD_REQUEST,
   PUT_ADVERTISEMENT_AD_REQUEST,
@@ -66,6 +67,16 @@ export function useBoardEditMutation() {
         queryKey: ["BOARD_NOTICE_REQUEST", postNo],
       });
     },
+    onError: (error: string) => {
+      console.error(error);
+    },
+  });
+}
+
+export function useBoardDetailFileUploadMutation() {
+  return useMutation({
+    mutationFn: (values: FormData) =>
+      POST_BOARD_DETAIL_FILE_UPLOAD_REQUEST({ values }),
     onError: (error: string) => {
       console.error(error);
     },

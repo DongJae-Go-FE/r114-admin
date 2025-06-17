@@ -40,7 +40,7 @@ export function CommonServiceDivideSelect({
 
       <SelectContent className="max-h-60 overflow-y-auto">
         <SelectScrollUpButton />
-        <SelectItem value="0">RES 5.0 PRO</SelectItem>
+        <SelectItem value="001">RES 5.0 PRO</SelectItem>
         <SelectScrollDownButton />
       </SelectContent>
     </Select>

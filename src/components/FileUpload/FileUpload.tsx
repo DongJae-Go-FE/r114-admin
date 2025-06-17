@@ -45,6 +45,8 @@ interface FileUploadProps
 
   limit?: number;
 
+  disabled?: boolean;
+
   onLimitOver?: () => void;
 }
 const convertByteToString = (byte: number) => {
@@ -62,6 +64,7 @@ export default function FileUpload({
   upload = test,
   onDeleteClick,
   initialFiles = [],
+  disabled,
   limit,
   onLimitOver,
 }: FileUploadProps) {
@@ -190,6 +193,7 @@ export default function FileUpload({
         type="file"
         hidden
         accept={accept}
+        disabled={disabled}
         multiple={multiple}
         onChange={({ target: { files } }) => {
           if (files) {

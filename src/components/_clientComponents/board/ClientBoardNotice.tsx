@@ -38,7 +38,7 @@ import {
 
 const datas = [
   {
-    postNo: 480,
+    postNo: 489,
     boardId: "notice",
     parentPostNo: 0,
     firstPostNo: 0,
@@ -82,13 +82,13 @@ export default function ClientBoardNotice() {
     useFilter<GET_BOARD_NOTICE_REQUEST_TYPE>({
       comCd: "001",
       searchKeyword: "",
-      searchEndRegDtm: "",
-      searchStartRegDtm: "",
-      searchType: "",
-      modId: "",
-      pageSize: "1",
-      pageIndex: "20",
+      searchStartRegDtm: "2023-01-01",
+      searchEndRegDtm: "2025-12-31",
+      modId: "teamgod7min",
+      pageSize: 20,
+      pageIndex: 1,
       pageOrder: "DESC",
+      searchType: "",
     });
 
   const { data } = useQuery({
@@ -134,18 +134,10 @@ export default function ClientBoardNotice() {
                 id="picker"
                 initialValue={{
                   from: filter.searchStartRegDtm
-                    ? parse(
-                        filter.searchStartRegDtm,
-                        "yyyy-MM-dd HH:mm",
-                        new Date()
-                      )
+                    ? parse(filter.searchStartRegDtm, "yyyy-MM-dd", new Date())
                     : new Date(),
                   to: filter.searchEndRegDtm
-                    ? parse(
-                        filter.searchEndRegDtm,
-                        "yyyy-MM-dd HH:mm",
-                        new Date()
-                      )
+                    ? parse(filter.searchEndRegDtm, "yyyy-MM-dd", new Date())
                     : addDays(new Date(), 31),
                 }}
                 className="w-full"
@@ -153,11 +145,9 @@ export default function ClientBoardNotice() {
                   setFilter((prev) => ({
                     ...prev,
                     startDate: value?.from
-                      ? format(value.from, "yyyy-MM-dd HH:mm")
+                      ? format(value.from, "yyyy-MM-dd")
                       : "",
-                    endDate: value?.to
-                      ? format(value.to, "yyyy-MM-dd HH:mm")
-                      : "",
+                    endDate: value?.to ? format(value.to, "yyyy-MM-dd") : "",
                   }));
                 }}
               />
@@ -212,7 +202,7 @@ export default function ClientBoardNotice() {
                 value={searchInput}
                 placeholder="검색어를 입력해주세요."
                 maxLength={INPUT_MAX_LENGTH}
-                onChange={(e) => setSearchInput(e.target.value)}
+                onChange={(e) => setSearchInput(() => e.target.value)}
               />
             ),
           },
@@ -228,12 +218,19 @@ export default function ClientBoardNotice() {
     ...item,
   }));
 
+  const handleFilterSubmit = () => {
+    handleSubmit({
+      ...filter,
+      searchKeyword: searchInput,
+    });
+  };
+
   return (
     <Fragment>
       <div className="mb-4">
         <Filter
           items={filterItems}
-          onSubmit={() => handleSubmit(filter)}
+          onSubmit={handleFilterSubmit}
           onReset={() => {
             setSearchInput("");
             handleReset();

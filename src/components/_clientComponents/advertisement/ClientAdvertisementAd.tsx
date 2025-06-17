@@ -269,7 +269,7 @@ export default function ClientAdvertisementAd() {
                 value={searchInput}
                 placeholder="검색어를 입력해주세요."
                 maxLength={INPUT_MAX_LENGTH}
-                onChange={(e) => setSearchInput(e.target.value)}
+                onChange={(e) => setSearchInput(() => e.target.value)}
               />
             ),
           },
@@ -280,12 +280,19 @@ export default function ClientAdvertisementAd() {
     [filter, searchInput, setFilter]
   );
 
+  const handleFilterSubmit = () => {
+    handleSubmit({
+      ...filter,
+      searchKeyword: searchInput,
+    });
+  };
+
   return (
     <Fragment>
       <div className="mb-4">
         <Filter
           items={filterItems}
-          onSubmit={() => handleSubmit(filter)}
+          onSubmit={handleFilterSubmit}
           onReset={() => {
             setSearchInput("");
             handleReset();

@@ -487,24 +487,6 @@
     @apply body01m mb-3 text-black;
   }
 
-  .gird-container {
-    @apply min-h-[calc(100dvh-130px)] w-full h-full grid gap-4 grid-cols-3 grid-rows-3;
-
-    &.two {
-      @apply grid-cols-4 grid-rows-4;
-    }
-  }
-  .grid-item {
-    @apply bg-white rounded-2xl col-span-1 row-span-1;
-
-    &.type2 {
-      @apply col-span-2 row-span-2;
-    }
-    &.type3 {
-      @apply row-span-3;
-    }
-  }
-
   .form-item {
     @apply grid grid-cols-4 items-center gap-4;
   }
