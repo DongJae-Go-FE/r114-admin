@@ -6,9 +6,9 @@ import ClientSettingManagementDetail from "@/components/_clientComponents/settin
 export default async function Page({
   params,
 }: {
-  params: Promise<{ postNo: string }>;
+  params: Promise<{ adminCd: string }>;
 }) {
-  const { postNo } = await params;
+  const { adminCd } = await params;
 
   return (
     <Fragment>
@@ -25,11 +25,11 @@ export default async function Page({
           },
           {
             title: "관리자 정보 상세",
-            href: `/setting/management/${postNo}`,
+            href: `/setting/management/${adminCd}`,
           },
         ]}
       />
-      <ClientSettingManagementDetail postNo={postNo} />
+      <ClientSettingManagementDetail adminCd={adminCd} />
     </Fragment>
   );
 }

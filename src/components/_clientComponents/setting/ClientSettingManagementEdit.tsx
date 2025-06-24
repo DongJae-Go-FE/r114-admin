@@ -63,9 +63,9 @@ const data = [
 ];
 
 export default function ClientSettingManagementEdit({
-  postNo,
+  adminCd,
 }: {
-  postNo: string;
+  adminCd: string;
 }) {
   const { push } = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -84,7 +84,7 @@ export default function ClientSettingManagementEdit({
       try {
         startTransition(() => {
           alert(`관리자 정보 내용이 ${COMPLETE_EDIT_STRING}`);
-          push(`/setting/management/${postNo}`);
+          push(`/setting/management/${adminCd}`);
         });
       } catch (e) {
         alert(e);
@@ -95,7 +95,7 @@ export default function ClientSettingManagementEdit({
   const handleCancel = () => {
     if (confirm(CONFIRM_CANCEL_SAVE_STRING)) {
       alert(COMPLETE_CANCEL_STRING);
-      push(`/setting/management/${postNo}`);
+      push(`/setting/management/${adminCd}`);
     }
   };
 

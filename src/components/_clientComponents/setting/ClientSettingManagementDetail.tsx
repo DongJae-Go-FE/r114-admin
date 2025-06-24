@@ -33,13 +33,13 @@ const data = [
 ];
 
 export default function ClientSettingManagementDetail({
-  postNo,
+  adminCd,
 }: {
-  postNo: string;
+  adminCd: string;
 }) {
   const { push } = useRouter();
 
-  console.log(postNo);
+  console.log(adminCd);
 
   return (
     <div className="flex flex-col gap-6">
@@ -99,7 +99,7 @@ export default function ClientSettingManagementDetail({
         </Button>
         <Button
           type="button"
-          onClick={() => push(`/setting/management/${postNo}/edit`)}
+          onClick={() => push(`/setting/management/${adminCd}/edit`)}
         >
           수정
         </Button>
