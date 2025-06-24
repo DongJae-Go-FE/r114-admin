@@ -2,8 +2,14 @@
 
 import { useRouter } from "next/navigation";
 
+import { useEffect, useRef } from "react";
+
+import { addDays, format, parse } from "date-fns";
+
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useQuery } from "@tanstack/react-query";
 
 import { useForm } from "react-hook-form";
 
@@ -12,8 +18,10 @@ import { Button } from "@/components/Button";
 import { Checkbox } from "@/components/Checkbox";
 import { FileUpload } from "@/components/FileUpload";
 
-import { CustomSelect } from "@/components/Select";
+import { CommonOnOffSelect } from "@/components/Select/CommonSelect/CommonAllOnOffSelect";
 import { CommonServiceDivideSelect } from "@/components/Select/CommonSelect/CommonServiceDivideSelect";
+
+import { DateRangePicker } from "@/components/DateRangePicker";
 
 import {
   Form,
@@ -24,7 +32,12 @@ import {
   FormMessage,
 } from "@/components/Form";
 
-import { useAdvertisementAdEditMutation } from "@/lib/network/mutation";
+import {
+  useAdvertisementAdEditMutation,
+  useAdvertisementAdFileUploadMutation,
+} from "@/lib/network/mutation";
+
+import { GET_ADVERTISEMENT_AD_DETAIL_REQUEST } from "@/lib/network/api";
 
 import { PUT_ADVERTISEMENT_AD_SCHEMA } from "@/schema/advertisement/ad/schema";
 
@@ -44,21 +57,97 @@ export default function ClientAdvertisementAdDetail({
 }) {
   const { push } = useRouter();
   const { mutateAsync, isPending } = useAdvertisementAdEditMutation();
+  const { mutateAsync: fileMutateAsync, isPending: isUploadPending } =
+    useAdvertisementAdFileUploadMutation();
+
+  const { data, isLoading, isSuccess, refetch } = useQuery({
+    queryKey: ["ADVERTISEMENT_AD_DETAIL_REQUEST", advtNo],
+    queryFn: () => GET_ADVERTISEMENT_AD_DETAIL_REQUEST({ advtNo }),
+  });
 
   const form = useForm<z.infer<typeof PUT_ADVERTISEMENT_AD_SCHEMA>>({
     resolver: zodResolver(PUT_ADVERTISEMENT_AD_SCHEMA),
     defaultValues: {
-      title: "",
-      date: "123123123",
-      writer: "이름",
-      file: "",
-      link: "",
-      service: "",
-      isOpen: false,
-      isStop: false,
-      order: "",
+      comCd: "001",
+      advtNo: 0,
+      advtNm: "",
+      imgOrgName: "",
+      imgFileName: "",
+      fileSize: 0,
+      advtLink: "",
+      newWinYn: "",
+      advtYn: "N",
+      srvStGb: "",
+      advtStartDt: "",
+      advtEndDt: "",
+      regId: "",
+      modId: "",
     },
   });
+
+  const fileRef = useRef<
+    (File | { name: string; size: number; lastModified: number })[]
+  >([]);
+
+  useEffect(() => {
+    if (data?.data && isSuccess && !isLoading) {
+      const resetData = {
+        comCd: "001",
+        advtNo: data.data.advtNo || 0,
+        advtNm: data.data.advtNm || "",
+        imgOrgName: data.data.imgOrgName || "",
+        imgFileName: data.data.imgFileName || "",
+        fileSize: data.data.fileSize || 0,
+        advtLink: data.data.advtLink || "",
+        newWinYn: data.data.newWinYn || null,
+        advtYn: data.data.advtYn || "N",
+        srvStGb: data.data.srvStGb || "",
+        advtStartDt: data.data.advtStartDt || "",
+        advtEndDt: data.data.advtEndDt || "",
+        regId: data.data.regId,
+        modId: data.data.regId,
+      };
+      form.reset(resetData);
+      fileRef.current = [
+        {
+          name: data.data.imgOrgName,
+          size: data.data.fileSize || 0,
+          lastModified: Date.now(),
+        },
+      ];
+    }
+  }, [data, isSuccess, isLoading, form]);
+
+  const handleUpload = async (files: File[]) => {
+    const file = files[0];
+
+    if (file.size > 10 * 1024 * 1024) {
+      alert("파일 크기가 너무 큽니다. (최대 10MB)");
+      return;
+    }
+
+    const formData = new FormData();
+
+    formData.append("file", files[0]);
+
+    try {
+      const res = await fileMutateAsync(formData);
+      form.setValue("imgFileName", res.data.imgFileName);
+      form.setValue("imgOrgName", res.data.imgOrgName);
+      form.setValue("fileSize", res.data.fileSize);
+    } catch (error) {
+      alert(`업로드 실패: ${error}`);
+      console.error("업로드 실패", error);
+    }
+  };
+
+  const handleDelete = () => {
+    fileRef.current = [];
+
+    form.setValue("imgFileName", "");
+    form.setValue("imgOrgName", "");
+    form.setValue("fileSize", 0);
+  };
 
   const handleEdit = async (
     values: z.infer<typeof PUT_ADVERTISEMENT_AD_SCHEMA>
@@ -67,7 +156,8 @@ export default function ClientAdvertisementAdDetail({
       try {
         await mutateAsync({ values, advtNo });
         alert(`광고 ${COMPLETE_SAVE_STRING}`);
-        push(`/advertisement/ad-list/${advtNo}`);
+        refetch();
+        push("/advertisement/ad-list");
       } catch (e) {
         alert(e);
       }
@@ -81,12 +171,15 @@ export default function ClientAdvertisementAdDetail({
     }
   };
 
+  const isDisable = isLoading || isPending;
+  const isDisableUploading = isLoading || isPending || isUploadPending;
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleEdit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="service"
+          name="comCd"
           render={({ field }) => (
             <FormItem>
               <FormLabel>서비스명</FormLabel>
@@ -95,7 +188,7 @@ export default function ClientAdvertisementAdDetail({
                   {...field}
                   className="w-full bg-white"
                   placeholder="전체"
-                  disabled={isPending}
+                  disabled={isDisable}
                 />
               </FormControl>
               <FormMessage />
@@ -104,7 +197,7 @@ export default function ClientAdvertisementAdDetail({
         />
         <FormField
           control={form.control}
-          name="title"
+          name="advtNm"
           render={({ field }) => (
             <FormItem>
               <FormLabel>
@@ -117,7 +210,7 @@ export default function ClientAdvertisementAdDetail({
                   placeholder="광고명을 입력해주세요."
                   minLength={INPUT_MIN_LENGTH}
                   maxLength={INPUT_MAX_LENGTH}
-                  disabled={isPending}
+                  disabled={isDisable}
                 />
               </FormControl>
               <FormMessage />
@@ -126,7 +219,7 @@ export default function ClientAdvertisementAdDetail({
         />
         <FormField
           control={form.control}
-          name="link"
+          name="advtLink"
           render={({ field }) => (
             <FormItem>
               <FormLabel>
@@ -135,9 +228,13 @@ export default function ClientAdvertisementAdDetail({
                 <Checkbox
                   id="reservation"
                   className="ml-2 mr-1 relative top-0.5"
-                  checked={form.watch("isOpen")}
+                  checked={form.watch("newWinYn") === "Y" ? true : false}
                   onCheckedChange={(checked) => {
-                    form.setValue("isOpen", checked === true);
+                    if (checked) {
+                      form.setValue("newWinYn", "Y");
+                    } else {
+                      form.setValue("newWinYn", "N");
+                    }
                   }}
                   disabled={isPending}
                 />
@@ -150,7 +247,7 @@ export default function ClientAdvertisementAdDetail({
                   placeholder="URL을 입력해주세요."
                   minLength={INPUT_MIN_LENGTH}
                   maxLength={INPUT_MAX_LENGTH}
-                  disabled={isPending}
+                  disabled={isDisable}
                 />
               </FormControl>
               <FormMessage />
@@ -160,7 +257,7 @@ export default function ClientAdvertisementAdDetail({
 
         <FormField
           control={form.control}
-          name="file"
+          name="imgFileName"
           render={({ field }) => (
             <FormItem>
               <FormLabel>
@@ -174,82 +271,83 @@ export default function ClientAdvertisementAdDetail({
                 <FileUpload
                   {...field}
                   dragAreaPlaceholder="이곳을 클릭하거나 파일을 드롭하세요."
-                  multiple
-                  limit={5}
+                  limit={1}
+                  disabled={isDisableUploading}
+                  isLoading={isDisableUploading}
                   accept="image/png, image/jpeg, img/jpg"
+                  initialFiles={fileRef.current}
+                  upload={handleUpload}
+                  onDeleteClick={handleDelete}
                   onLimitOver={() =>
-                    alert("파일은 최대 5개까지 첨부 가능합니다.")
+                    alert("파일은 최대 1개까지 첨부 가능합니다.")
                   }
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
         <FormField
           control={form.control}
-          name="service"
+          name="advtYn"
           render={({ field }) => (
             <FormItem>
               <FormLabel>광고 여부</FormLabel>
               <FormControl>
-                <CustomSelect
+                <CommonOnOffSelect
                   {...field}
-                  options={[
-                    { value: "on", label: "true" },
-                    { value: "off", label: "false" },
-                  ]}
+                  value={field.value ?? undefined}
                   className="w-full bg-white"
-                  placeholder="on"
-                  disabled={isPending}
+                  placeholder="OFF"
+                  disabled={isDisable}
                 />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+        <FormLabel>광고 순서</FormLabel>
+        <Input type="text" value={data?.data.dispOrdNo || 0} disabled />
         <FormField
           control={form.control}
-          name="order"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>광고 순서</FormLabel>
-              <FormControl>
-                <Input
-                  type="text"
-                  {...field}
-                  placeholder="제목을 입력해주세요."
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="date"
-          render={({ field }) => (
+          name="advtStartDt"
+          render={() => (
             <FormItem>
               <FormLabel>
                 광고 기간{" "}
                 <Checkbox
                   id="reservation2"
                   className="ml-2 mr-1 relative top-0.5"
-                  checked={form.watch("isStop")}
-                  onCheckedChange={(checked) => {
-                    form.setValue("isStop", checked === true);
-                  }}
-                  disabled={isPending}
+                  disabled={isDisable}
                 />
                 <label htmlFor="reservation2">광고 중지</label>
               </FormLabel>
               <FormControl>
-                <Input
-                  {...field}
-                  type="text"
-                  placeholder="광고기간을 입력해주세요 EX) YYYY.MM.DD~YYYY.MM.DD"
-                  minLength={INPUT_MIN_LENGTH}
-                  maxLength={INPUT_MAX_LENGTH}
-                  disabled={isPending}
+                <DateRangePicker
+                  id="picker"
+                  initialValue={{
+                    from: form.watch("advtStartDt")
+                      ? parse(
+                          form.watch("advtStartDt"),
+                          "yyyy-MM-dd",
+                          new Date()
+                        )
+                      : new Date(),
+                    to: form.watch("advtEndDt")
+                      ? parse(form.watch("advtEndDt"), "yyyy-MM-dd", new Date())
+                      : addDays(new Date(), 31),
+                  }}
+                  className="w-full"
+                  disabled={isDisable}
+                  onChangDate={(value) => {
+                    const from = value?.from
+                      ? format(value.from, "yyyy-MM-dd")
+                      : "";
+                    const to = value?.to ? format(value.to, "yyyy-MM-dd") : "";
+
+                    form.setValue("advtStartDt", from);
+                    form.setValue("advtEndDt", to);
+                  }}
                 />
               </FormControl>
               <FormMessage />

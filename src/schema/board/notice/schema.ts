@@ -10,41 +10,33 @@ export const GET_BOARD_NOTICE_SCHEMA = z.object({
   id: z.number(),
   postNo: z.number(),
   boardId: z.string(),
-  parentPostNo: z.number(),
-  firstPostNo: z.number(),
-  postLevel: z.number(),
+  comTypCd: z.string(),
+  comCd: z.string(),
+  postLevel: z.number().nullable().optional().default(1),
   postTitle: z.string(),
-  postContent: z.string().optional(),
-  reservePostDtm: z.string().optional(),
-  postStartDtm: z.string().optional(),
-  postEndDtm: z.string().optional(),
-  topFixYn: z.string(),
-  firstYn: z.string(),
-  delYn: z.string().optional(),
-  delDtm: z.string().optional(),
-  blockYn: z.string().optional(),
-  blockReason: z.string().optional(),
-  blockDtm: z.string().optional(),
-  readCnt: z.number(),
-  modCnt: z.number(),
-  ipAddr: z.string().optional(),
-  attr: z.string(),
+  postContent: z.string().nullable().optional(),
+  reservePostDtm: z.string().nullable().optional(),
+  topFixYn: z.string().default("N"),
+  firstYn: z.string().default("N"),
+  delYn: z.string().nullable().default("N"),
+  delDtm: z.string().nullable().optional(),
+  blockYn: z.string().nullable().default("N"),
+  readCnt: z.number().nullable().optional(),
+  modCnt: z.number().nullable().optional(),
+  ipAddr: z.string().nullable().optional(),
+  attr: z.string().nullable().optional(),
   regId: z.string(),
-  regMenuId: z.string().optional(),
-  regDtm: z.string(),
-  modId: z.string().optional(),
-  modMenuId: z.string().optional(),
-  modDtm: z.string().optional(),
-  nowDtm: z.string(),
   regNm: z.string(),
-  dispRegDtm: z.string(),
+  regDtm: z.string(),
+  modId: z.string().nullable().optional(),
+  modDtm: z.string().nullable().optional(),
+  nowDtm: z.string(),
+  attachCnt: z.string(),
 });
 
 export const POST_BOARD_NOTICE_SCHEMA = z.object({
-  date: z.string(),
-  writer: z.string(),
-  service: z.string(),
-  title: z
+  comCd: z.string(),
+  postTitle: z
     .string()
     .nonempty({ message: REQUIRED_FIELD_MESSAGE })
     .min(INPUT_MIN_LENGTH, {
@@ -53,17 +45,23 @@ export const POST_BOARD_NOTICE_SCHEMA = z.object({
     .max(INPUT_MAX_LENGTH, {
       message: `최대 ${INPUT_MAX_LENGTH}글자 이하로 입력해주세요`,
     }),
-  content: z.string().nonempty({ message: REQUIRED_FIELD_MESSAGE }),
-  file: z.string().optional(),
-  reservation: z.boolean(),
-  time: z.string().optional(),
+  postContent: z.string().nonempty({ message: REQUIRED_FIELD_MESSAGE }),
+  boardAttList: z
+    .array(
+      z.object({
+        attachNo: z.number(),
+        attachFileName: z.string(),
+        attachOrgName: z.string(),
+      })
+    )
+    .optional(),
+  reservePostDtm: z.string().nullable(),
 });
 
 export const PUT_BOARD_NOTICE_SCHEMA = z.object({
-  date: z.string(),
-  writer: z.string(),
-  service: z.string(),
-  title: z
+  postNo: z.number(),
+  comCd: z.string(),
+  postTitle: z
     .string()
     .nonempty({ message: REQUIRED_FIELD_MESSAGE })
     .min(INPUT_MIN_LENGTH, {
@@ -72,8 +70,15 @@ export const PUT_BOARD_NOTICE_SCHEMA = z.object({
     .max(INPUT_MAX_LENGTH, {
       message: `최대 ${INPUT_MAX_LENGTH}글자 이하로 입력해주세요`,
     }),
-  content: z.string().nonempty({ message: REQUIRED_FIELD_MESSAGE }),
-  file: z.string().optional(),
-  reservation: z.boolean(),
-  time: z.string().optional(),
+  postContent: z.string().nonempty({ message: REQUIRED_FIELD_MESSAGE }),
+  boardAttList: z
+    .array(
+      z.object({
+        attachNo: z.number(),
+        attachFileName: z.string(),
+        attachOrgName: z.string(),
+      })
+    )
+    .optional(),
+  reservePostDtm: z.string().nullable(),
 });

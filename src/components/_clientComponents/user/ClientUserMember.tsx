@@ -24,7 +24,7 @@ import { useFilter } from "@/hooks/useFilter";
 import useDebounce from "@/hooks/useDebounce";
 
 import { GET_USER_MEMBER_SCHEMA } from "@/schema/user/member/schema";
-import { GET_USER_MEMBER_REQUEST_TYPE } from "@/lib/network/types";
+import { GET_USER_MEMBER_REQUEST_TYPE } from "@/types/user/member/types";
 
 import { INPUT_MAX_LENGTH } from "@/const/const";
 
@@ -237,6 +237,7 @@ export default function ClientUserMember() {
       </div>
       <DataTable
         data={data}
+        totalCount={data.length}
         columns={UserMemberColumns}
         schema={GET_USER_MEMBER_SCHEMA}
         btnArea={{

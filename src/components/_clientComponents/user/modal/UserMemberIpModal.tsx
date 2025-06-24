@@ -47,6 +47,7 @@ export default function UserMemberIpModal({ id }: { id: string | number }) {
         </div>
         <DataTable
           data={data}
+          totalCount={data.length}
           columns={UserMemberIpModalColumns}
           schema={GET_USER_MEMBER_IP_MODAL_SCHEMA}
         />

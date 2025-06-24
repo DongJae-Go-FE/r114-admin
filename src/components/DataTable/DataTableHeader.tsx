@@ -4,14 +4,6 @@ import { RefObject } from "react";
 
 import { Table } from "@tanstack/react-table";
 import { Button } from "@/components/Button";
-// import { Label } from "@/components/Label";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/Select";
 
 import { TableDownload, BtnAreaType } from "./type";
 
@@ -22,15 +14,16 @@ interface DataTableHeaderProps<TData> {
   isExcelDown?: boolean;
   btnArea?: BtnAreaType;
   data: TData[];
+  totalCount?: number;
 }
 
 export function DataTableHeader<TData>({
-  // table,
   ref,
   download,
   isExcelDown,
   btnArea,
   data,
+  totalCount,
 }: DataTableHeaderProps<TData>) {
   const handleExcelDownload = (download?: TableDownload) => {
     if (ref.current) {
@@ -55,33 +48,7 @@ export function DataTableHeader<TData>({
   return (
     <div className="flex justify-between items-center">
       <div className="flex gap-x-2 items-center">
-        <span className="body02r">총 {data.length} 개</span>
-        {/* {data.length > 10 && (
-          <div className="flex items-center gap-2">
-            <Label htmlFor="rows-per-page" className="sr-only">
-              갯수 보기
-            </Label>
-            <Select
-              value={`${table.getState().pagination.pageSize}`}
-              onValueChange={(value) => {
-                table.setPageSize(Number(value));
-              }}
-            >
-              <SelectTrigger className="w-30" id="rows-per-page" size="sm">
-                <SelectValue
-                  placeholder={table.getState().pagination.pageSize}
-                />
-              </SelectTrigger>
-              <SelectContent side="top">
-                {[10, 20, 30, 40, 50].map((pageSize) => (
-                  <SelectItem key={pageSize} value={`${pageSize}`}>
-                    {pageSize}개씩
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        )} */}
+        <span className="body02r">총 {totalCount} 개</span>
       </div>
       <div className="flex items-center gap-x-1">
         {btnArea && (

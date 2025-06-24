@@ -48,6 +48,7 @@ import {
 
 export default function ClientBoardNoticeAdd() {
   const { push } = useRouter();
+
   const [isOpen, setIsOpen] = useState(false);
   const [isTime, setIsTime] = useState([
     format(new Date(), "yyyy-MM-dd"),
@@ -62,14 +63,11 @@ export default function ClientBoardNoticeAdd() {
   const form = useForm<z.infer<typeof POST_BOARD_NOTICE_SCHEMA>>({
     resolver: zodResolver(POST_BOARD_NOTICE_SCHEMA),
     defaultValues: {
-      date: "",
-      writer: "가동재",
-      service: "001",
-      title: "",
-      content: "",
-      file: "",
-      reservation: false,
-      time: "",
+      comCd: "001",
+      postTitle: "",
+      postContent: "",
+      boardAttList: [],
+      reservePostDtm: null,
     },
   });
 
@@ -79,12 +77,20 @@ export default function ClientBoardNoticeAdd() {
     if (confirm(`공지사항${CONFIRM_ADD_SAVE_STRING}`)) {
       try {
         await mutateAsync(values);
+
         alert(`공지사항 ${COMPLETE_ADD_STRING}`);
+
         push("/board/notice");
       } catch (e) {
         alert(e);
       }
     }
+  };
+
+  const handleDelete = (fileName: string) => {
+    const current = form.getValues("boardAttList");
+    const filtered = current?.filter((f) => f.attachOrgName !== fileName);
+    form.setValue("boardAttList", filtered);
   };
 
   const handleCancel = () => {
@@ -94,20 +100,51 @@ export default function ClientBoardNoticeAdd() {
     }
   };
 
-  const handleUpload = async (file: File) => {
+  const handleUpload = async (files: File[]) => {
     const formData = new FormData();
-    formData.append("file", file);
+
+    for (const file of files) {
+      if (file.size > 10 * 1024 * 1024) {
+        alert("파일 크기가 너무 큽니다. (최대 10MB)");
+        return;
+      }
+
+      formData.append("files", file);
+    }
 
     try {
-      await fileMutateAsync(formData);
+      const res = await fileMutateAsync(formData);
+      const existingFiles = form.getValues("boardAttList") ?? [];
+
+      const newFiles = res.data.map((value) => ({
+        attachNo: value.attachNo,
+        attachFileName: value.attachFileName,
+        attachOrgName: value.attachOrgName,
+      }));
+
+      const combinedFiles = [
+        ...existingFiles,
+        ...newFiles.filter(
+          (newFile) =>
+            !existingFiles.some(
+              (existFile) => existFile.attachOrgName === newFile.attachOrgName
+            )
+        ),
+      ];
+
+      form.setValue("boardAttList", combinedFiles);
     } catch (error) {
+      alert(`업로드 실패: ${error}`);
       console.error("업로드 실패", error);
     }
   };
 
-  const updateTime = (newTime: [string, string, string]) => {
+  const handleUptime = (newTime: [string, string, string]) => {
     setIsTime(newTime);
-    form.setValue("time", `${newTime[0]} ${newTime[1]}:${newTime[2]}`);
+    form.setValue(
+      "reservePostDtm",
+      `${newTime[0]} ${newTime[1]}:${newTime[2]}`
+    );
   };
 
   const hourOptions = Array.from({ length: 24 }, (_, i) => {
@@ -125,7 +162,7 @@ export default function ClientBoardNoticeAdd() {
       <form onSubmit={form.handleSubmit(handleSave)} className="space-y-8">
         <FormField
           control={form.control}
-          name="service"
+          name="comCd"
           render={({ field }) => (
             <FormItem>
               <FormLabel>서비스명</FormLabel>
@@ -144,7 +181,7 @@ export default function ClientBoardNoticeAdd() {
 
         <FormField
           control={form.control}
-          name="title"
+          name="postTitle"
           render={({ field }) => (
             <FormItem>
               <FormLabel>
@@ -167,7 +204,7 @@ export default function ClientBoardNoticeAdd() {
 
         <FormField
           control={form.control}
-          name="content"
+          name="postContent"
           render={({ field }) => (
             <FormItem>
               <FormLabel>내용</FormLabel>
@@ -184,7 +221,7 @@ export default function ClientBoardNoticeAdd() {
         />
         <FormField
           control={form.control}
-          name="file"
+          name="boardAttList"
           render={({ field }) => (
             <FormItem>
               <FormLabel>
@@ -200,7 +237,11 @@ export default function ClientBoardNoticeAdd() {
                   multiple
                   limit={5}
                   upload={handleUpload}
-                  disabled={isUploadPending}
+                  disabled={isUploadPending || isPending}
+                  isLoading={isUploadPending || isPending}
+                  onDeleteClick={(file) => {
+                    handleDelete(file.name);
+                  }}
                   onLimitOver={() =>
                     alert("파일은 최대 5개까지 첨부 가능합니다.")
                   }
@@ -213,21 +254,20 @@ export default function ClientBoardNoticeAdd() {
 
         <FormField
           control={form.control}
-          name="time"
+          name="reservePostDtm"
           render={() => (
             <FormItem>
               <FormLabel>
                 <Checkbox
-                  id="reservation"
                   checked={isOpen}
                   className="mr-1 relative top-0.5"
                   onCheckedChange={(checked) => {
                     setIsOpen(checked as boolean);
                     if (!checked) {
-                      form.setValue("time", "");
+                      form.setValue("reservePostDtm", null);
                       setIsTime([format(new Date(), "yyyy-MM-dd"), "00", "00"]);
                     } else {
-                      updateTime([isTime[0], isTime[1], isTime[2]]);
+                      handleUptime([isTime[0], isTime[1], isTime[2]]);
                     }
                   }}
                 />
@@ -240,14 +280,15 @@ export default function ClientBoardNoticeAdd() {
                 {isOpen && (
                   <div className="flex gap-2">
                     <DatePicker
-                      id="time"
+                      id="reservePostDtm"
+                      disabled={isPending}
                       initialValue={
                         isTime[0]
                           ? parse(isTime[0], "yyyy-MM-dd", new Date())
                           : new Date()
                       }
                       onChangDate={(date) =>
-                        updateTime([
+                        handleUptime([
                           format(date, "yyyy-MM-dd"),
                           isTime[1],
                           isTime[2],
@@ -256,16 +297,18 @@ export default function ClientBoardNoticeAdd() {
                     />
                     <CustomSelect
                       options={hourOptions}
+                      disabled={isPending}
                       value={isTime[1]}
                       onChange={(val) =>
-                        updateTime([isTime[0], val, isTime[2]])
+                        handleUptime([isTime[0], val, isTime[2]])
                       }
                     />
                     <CustomSelect
                       options={minuteOptions}
+                      disabled={isPending}
                       value={isTime[2]}
                       onChange={(val) =>
-                        updateTime([isTime[0], isTime[1], val])
+                        handleUptime([isTime[0], isTime[1], val])
                       }
                     />
                   </div>

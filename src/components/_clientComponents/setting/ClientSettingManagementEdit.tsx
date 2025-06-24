@@ -179,6 +179,7 @@ export default function ClientSettingManagementEdit({
             <h4 className="sub-title">업데이트 이력</h4>
             <DataTable
               data={data}
+              totalCount={data.length}
               schema={GET_SETTING_MANAGEMENT_DETAIL_LIST_SCHEMA}
               columns={SettingManagementDetailColumns}
               isTableHeader={false}

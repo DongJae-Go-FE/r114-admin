@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import { Fragment, useMemo, useState, useEffect } from "react";
+import { Fragment, useState } from "react";
 
 import { useQuery } from "@tanstack/react-query";
 
@@ -22,11 +22,11 @@ import AdvertisementAdColumns from "./tableColumns/AdvertisementAdColumns";
 import AdvertisementAdChangeOrderModal from "./modal/AdvertisementAdChangeOrderModal";
 
 import { useFilter } from "@/hooks/useFilter";
-import useDebounce from "@/hooks/useDebounce";
+
 import { useAdvertisementAdDeleteMutation } from "@/lib/network/mutation";
 
 import { GET_ADVERTISEMENT_AD_SCHEMA } from "@/schema/advertisement/ad/schema";
-import { GET_ADVERTISEMENT_AD_REQUEST_TYPE } from "@/lib/network/types";
+import { GET_ADVERTISEMENT_AD_REQUEST_TYPE } from "@/types/advertisement/ad/types";
 
 import { GET_ADVERTISEMENT_AD_REQUEST } from "@/lib/network/api";
 
@@ -37,63 +37,32 @@ import {
   INPUT_MAX_LENGTH,
 } from "@/const/const";
 
-const datas = [
-  {
-    id: 1,
-    service: "1",
-    state: "1",
-    number: "1",
-    title: "광고 제목제목제목제목제목제목제목제목제목제목제목제목",
-    startDate: "",
-    endDate: "",
-    writer: "홍길동",
-    date: "2023-10-01",
-    order: "",
-  },
-  {
-    id: 2,
-    service: "2",
-    state: "2",
-    number: "2",
-    title: "광고 제목제목제목제목제목제목제목제목제목제목제목제목",
-    startDate: "",
-    endDate: "",
-    writer: "홍길동",
-    date: "2023-10-01",
-    order: "",
-  },
-];
-
 export default function ClientAdvertisementAd() {
   const { push } = useRouter();
   const [searchInput, setSearchInput] = useState("");
   const [selectedRowIds, setSelectedRowIds] = useState<(string | number)[]>([]);
-  const debouncedSearch = useDebounce({ value: searchInput, delay: 300 });
 
   const { mutateAsync } = useAdvertisementAdDeleteMutation();
 
-  const { filter, handleSubmit, handleReset, setFilter } =
+  const { filter, handleSubmit, handleReset, setFilter, query } =
     useFilter<GET_ADVERTISEMENT_AD_REQUEST_TYPE>({
-      dateType: "1",
-      startDate: "",
-      endDate: "",
-      service: "",
-      state: "",
-      order: "",
-      searchType: "",
+      comCd: "001",
+      regStartDtm: "2023-01-01",
+      regEndDtm: "2025-12-31",
+      advtStartDt: "2023-01-01",
+      advtEndDt: "2025-12-31",
+      srvStGb: "Y",
+      searchType: "all",
       searchKeyword: "",
+      pageSize: 10,
+      pageIndex: 1,
+      pageOrder: "DESC",
     });
 
-  const { data } = useQuery({
-    queryKey: ["BOARD_NOTICE_REQUEST"],
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["ADVERTISEMENT_AD_REQUEST", query],
     queryFn: () => GET_ADVERTISEMENT_AD_REQUEST({ ...filter }),
   });
-
-  console.log(data);
-
-  useEffect(() => {
-    setFilter((prev) => ({ ...prev, searchKeyword: debouncedSearch }));
-  }, [debouncedSearch, setFilter]);
 
   const handleDelete = async () => {
     if (selectedRowIds.length === 0) return alert(SELECTED_NOT_CHECKED);
@@ -104,181 +73,13 @@ export default function ClientAdvertisementAd() {
           selectedRowIds.map((id) => mutateAsync(id.toString()))
         );
         alert(`광고 ${COMPLETE_DELETE_STRING}`);
+        setSelectedRowIds([]);
+        refetch();
       } catch (e) {
         alert(e);
       }
     }
   };
-
-  const filterItems = useMemo(
-    () => [
-      {
-        title: "등록일자",
-        inputs: [
-          {
-            node: (
-              <CustomSelect
-                value={filter.dateType}
-                options={[
-                  { value: "1", label: "등록 일자" },
-                  { value: "2", label: "공지사항 제목" },
-                ]}
-                className="w-40 bg-white"
-                placeholder="전체"
-                onChange={(value) =>
-                  setFilter((prev) => ({ ...prev, dateType: value }))
-                }
-              />
-            ),
-          },
-          {
-            node: (
-              <DateRangePicker
-                id="picker"
-                initialValue={{
-                  from: filter.startDate
-                    ? parse(filter.startDate, "yyyy-MM-dd HH:mm", new Date())
-                    : new Date(),
-                  to: filter.endDate
-                    ? parse(filter.endDate, "yyyy-MM-dd HH:mm", new Date())
-                    : addDays(new Date(), 31),
-                }}
-                className="w-full"
-                onChangDate={(value) => {
-                  setFilter((prev) => ({
-                    ...prev,
-                    startDate: value?.from
-                      ? format(value.from, "yyyy-MM-dd HH:mm")
-                      : "",
-                    endDate: value?.to
-                      ? format(value.to, "yyyy-MM-dd HH:mm")
-                      : "",
-                  }));
-                }}
-              />
-            ),
-          },
-        ],
-        ratio: 2,
-      },
-      {
-        title: "서비스 구분",
-        inputs: [
-          {
-            node: (
-              <CommonServiceDivideSelect
-                value={filter.service}
-                className="w-full bg-white"
-                placeholder="전체"
-                onChange={(value) =>
-                  setFilter((prev) => ({ ...prev, service: value }))
-                }
-              />
-            ),
-          },
-        ],
-        ratio: 1,
-      },
-      {
-        title: "광고 상태",
-        inputs: [
-          {
-            node: (
-              <CustomSelect
-                value={filter.state}
-                options={[
-                  {
-                    label: "대기",
-                    value: "0",
-                  },
-                  {
-                    label: "노출중",
-                    value: "1",
-                  },
-                  {
-                    label: "기간 만료",
-                    value: "2",
-                  },
-                  {
-                    label: "중지",
-                    value: "3",
-                  },
-                  {
-                    label: "삭제",
-                    value: "4",
-                  },
-                ]}
-                className="w-full bg-white"
-                placeholder="전체"
-                onChange={(value) =>
-                  setFilter((prev) => ({ ...prev, state: value }))
-                }
-              />
-            ),
-          },
-        ],
-        ratio: 1,
-      },
-      {
-        title: "광고 순서",
-        inputs: [
-          {
-            node: (
-              <CustomSelect
-                value={filter.order}
-                options={[
-                  { value: "all", label: "전체" },
-                  { value: "1", label: "1" },
-                ]}
-                className="w-full bg-white"
-                placeholder="전체"
-                onChange={(value) =>
-                  setFilter((prev) => ({ ...prev, order: value }))
-                }
-              />
-            ),
-          },
-        ],
-        ratio: 1,
-      },
-      {
-        title: "검색",
-        inputs: [
-          {
-            node: (
-              <CustomSelect
-                value={filter.searchType}
-                options={[
-                  { value: "all", label: "전체" },
-                  { value: "1", label: "등록자 아이디" },
-                  { value: "2", label: "광고 제목" },
-                  { value: "3", label: "등록 번호" },
-                ]}
-                className="w-40 bg-white"
-                placeholder="전체"
-                onChange={(value) =>
-                  setFilter((prev) => ({ ...prev, searchType: value }))
-                }
-              />
-            ),
-          },
-          {
-            node: (
-              <Input
-                type="search"
-                value={searchInput}
-                placeholder="검색어를 입력해주세요."
-                maxLength={INPUT_MAX_LENGTH}
-                onChange={(e) => setSearchInput(() => e.target.value)}
-              />
-            ),
-          },
-        ],
-        ratio: 3,
-      },
-    ],
-    [filter, searchInput, setFilter]
-  );
 
   const handleFilterSubmit = () => {
     handleSubmit({
@@ -291,7 +92,180 @@ export default function ClientAdvertisementAd() {
     <Fragment>
       <div className="mb-4">
         <Filter
-          items={filterItems}
+          items={[
+            {
+              title: "광고기간",
+              inputs: [
+                {
+                  node: (
+                    <DateRangePicker
+                      id="picker"
+                      initialValue={{
+                        from: filter.advtStartDt
+                          ? parse(filter.advtStartDt, "yyyy-MM-dd", new Date())
+                          : new Date(),
+                        to: filter.advtEndDt
+                          ? parse(filter.advtEndDt, "yyyy-MM-dd", new Date())
+                          : addDays(new Date(), 31),
+                      }}
+                      className="w-full"
+                      onChangDate={(value) => {
+                        setFilter((prev) => ({
+                          ...prev,
+                          advtStartDt: value?.from
+                            ? format(value.from, "yyyy-MM-dd")
+                            : "",
+                          advtEndDt: value?.to
+                            ? format(value.to, "yyyy-MM-dd")
+                            : "",
+                        }));
+                      }}
+                    />
+                  ),
+                },
+              ],
+              ratio: 1,
+            },
+            {
+              title: "등록일자",
+              inputs: [
+                {
+                  node: (
+                    <DateRangePicker
+                      id="picker"
+                      initialValue={{
+                        from: filter.regStartDtm
+                          ? parse(filter.regStartDtm, "yyyy-MM-dd", new Date())
+                          : new Date(),
+                        to: filter.regEndDtm
+                          ? parse(filter.regEndDtm, "yyyy-MM-dd", new Date())
+                          : addDays(new Date(), 31),
+                      }}
+                      className="w-full"
+                      onChangDate={(value) => {
+                        setFilter((prev) => ({
+                          ...prev,
+                          regStartDtm: value?.from
+                            ? format(value.from, "yyyy-MM-dd")
+                            : "",
+                          regEndDtm: value?.to
+                            ? format(value.to, "yyyy-MM-dd")
+                            : "",
+                        }));
+                      }}
+                    />
+                  ),
+                },
+              ],
+              ratio: 1,
+            },
+            {
+              title: "서비스 구분",
+              inputs: [
+                {
+                  node: (
+                    <CommonServiceDivideSelect
+                      value={filter.comCd}
+                      className="w-full bg-white"
+                      placeholder="전체"
+                      onChange={(value) =>
+                        setFilter((prev) => ({ ...prev, comCd: value }))
+                      }
+                    />
+                  ),
+                },
+              ],
+              ratio: 1,
+            },
+            {
+              title: "광고 상태",
+              inputs: [
+                {
+                  node: (
+                    <CustomSelect
+                      value={filter.srvStGb}
+                      placeholder="전체"
+                      options={[
+                        {
+                          label: "전체",
+                          value: "all",
+                        },
+                        {
+                          label: "대기",
+                          value: "R",
+                        },
+                        {
+                          label: "노출 중",
+                          value: "Y",
+                        },
+                        {
+                          label: "기간 만료",
+                          value: "N",
+                        },
+                        {
+                          label: "중지",
+                          value: "P",
+                        },
+                        {
+                          label: "삭제",
+                          value: "D",
+                        },
+                      ]}
+                      className="w-full bg-white"
+                      onChange={(value) => {
+                        if (value === "all") {
+                          setFilter((prev) => ({
+                            ...prev,
+                            srvStGb: "",
+                          }));
+                        } else {
+                          setFilter((prev) => ({
+                            ...prev,
+                            srvStGb: value as "" | "R" | "Y" | "N" | "P" | "D",
+                          }));
+                        }
+                      }}
+                    />
+                  ),
+                },
+              ],
+              ratio: 1,
+            },
+            {
+              title: "검색",
+              inputs: [
+                {
+                  node: (
+                    <CustomSelect
+                      value={filter.searchKeyword}
+                      options={[
+                        { value: "all", label: "전체" },
+                        { value: "title", label: "광고 제목" },
+                        { value: "regId", label: "등록자 아이디" },
+                      ]}
+                      className="w-40 bg-white"
+                      placeholder="전체"
+                      onChange={(value) =>
+                        setFilter((prev) => ({ ...prev, searchKeyword: value }))
+                      }
+                    />
+                  ),
+                },
+                {
+                  node: (
+                    <Input
+                      type="search"
+                      value={searchInput}
+                      placeholder="검색어를 입력해주세요."
+                      maxLength={INPUT_MAX_LENGTH}
+                      onChange={(e) => setSearchInput(() => e.target.value)}
+                    />
+                  ),
+                },
+              ],
+              ratio: 3,
+            },
+          ]}
           onSubmit={handleFilterSubmit}
           onReset={() => {
             setSearchInput("");
@@ -300,9 +274,18 @@ export default function ClientAdvertisementAd() {
         />
       </div>
       <DataTable
-        data={datas}
+        data={
+          data?.data.item?.map((item) => ({
+            id: item.advtNo,
+            ...item,
+          })) || []
+        }
+        key={data?.data.totalCount}
         columns={AdvertisementAdColumns}
         schema={GET_ADVERTISEMENT_AD_SCHEMA}
+        page={filter.pageIndex}
+        pageSize={filter.pageSize}
+        totalCount={data?.data.totalCount || 0}
         btnArea={{
           primary: <AdvertisementAdChangeOrderModal />,
           secondary: (
@@ -321,8 +304,14 @@ export default function ClientAdvertisementAd() {
           ),
         }}
         isTableHeader
-        isDragAndDrop
+        isLoading={isLoading}
         onRowSelectionChange={setSelectedRowIds}
+        onPageChange={(value) => {
+          handleSubmit({
+            ...filter,
+            pageIndex: value,
+          });
+        }}
       />
     </Fragment>
   );

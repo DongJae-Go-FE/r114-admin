@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogFooter,
   DialogTitle,
   DialogTrigger,
 } from "@/components/Dialog";
@@ -16,59 +15,38 @@ import { DataTable } from "@/components/DataTable";
 
 import AdvertisementAdChangeOrderColumns from "@/components/_clientComponents/advertisement/tableColumns/AdvertisementAdChangeOrderColumns";
 
+import { GET_ADVERTISEMENT_AD_ACTIVE_LIST_REQUEST } from "@/lib/network/api";
 import { GET_ADVERTISEMENT_AD_CHANGE_ORDER_SCHEMA } from "@/schema/advertisement/ad/schema";
-import { COMPLETE_EDIT_STRING } from "@/const/const";
 
-const data = [
-  {
-    id: 1,
-    order: "1",
-    state: "노출중",
-    title: "제목1",
-  },
-  {
-    id: 2,
-    order: "2",
-    state: "미노출",
-    title: "제목2",
-  },
-  {
-    id: 3,
-    order: "3",
-    state: "미노출",
-    title: "제목3",
-  },
-  {
-    id: 4,
-    order: "4",
-    state: "미노출",
-    title: "제목4",
-  },
-  {
-    id: 5,
-    order: "5",
-    state: "미노출",
-    title: "제목5",
-  },
-];
+import { useAdvertisementAdListPatchMutation } from "@/lib/network/mutation";
 
 export default function AdvertisementAdChangeOrderModal() {
-  const [isOpen, setIsOpen] = useState(false);
+  const { data, isLoading } = useQuery({
+    queryKey: ["ADVERTISEMENT_AD_ACTIVE_LIST_REQUEST"],
+    queryFn: () => GET_ADVERTISEMENT_AD_ACTIVE_LIST_REQUEST({ comCd: "001" }),
+  });
 
-  const handleSave = async () => {
-    if (confirm("광고 순서를 변경하시겠습니까?")) {
-      try {
-        alert(COMPLETE_EDIT_STRING);
-      } catch (e) {
-        alert(e);
-      } finally {
-        setIsOpen(false);
-      }
+  const qc = useQueryClient();
+
+  const { mutateAsync } = useAdvertisementAdListPatchMutation();
+
+  const handleDragComplete = async (oldIndex: number, newIndex: number) => {
+    try {
+      await mutateAsync({
+        advtNo: data?.data[oldIndex].advtNo || 0,
+        targetAdvtNo: data?.data[newIndex].advtNo || 0,
+        modId: "webmaster",
+      });
+      qc.refetchQueries({
+        queryKey: ["ADVERTISEMENT_AD_REQUEST"],
+      });
+    } catch (e) {
+      alert(e);
     }
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog>
       <DialogTrigger asChild>
         <Button type="button" size="sm">
           광고 순서 변경
@@ -79,16 +57,19 @@ export default function AdvertisementAdChangeOrderModal() {
           <DialogTitle>광고 순서 변경</DialogTitle>
         </DialogHeader>
         <DataTable
-          data={data}
+          data={
+            data?.data.map((item) => ({
+              ...item,
+              id: item.advtNo,
+            })) || []
+          }
+          totalCount={data?.data.length || 0}
           columns={AdvertisementAdChangeOrderColumns}
           schema={GET_ADVERTISEMENT_AD_CHANGE_ORDER_SCHEMA}
+          isLoading={isLoading}
           isDragAndDrop
+          onDragEnd={handleDragComplete}
         />
-        <DialogFooter>
-          <Button type="button" color="white" onClick={handleSave}>
-            저장
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

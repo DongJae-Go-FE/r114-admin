@@ -43,8 +43,8 @@ export function CommonOnOffSelect({
       <SelectContent className="max-h-60 overflow-y-auto">
         <SelectScrollUpButton />
         {isAll && <SelectItem value="0">전체</SelectItem>}
-        <SelectItem value="1">on</SelectItem>
-        <SelectItem value="2">off</SelectItem>
+        <SelectItem value="Y">ON</SelectItem>
+        <SelectItem value="N">OFF</SelectItem>
         <SelectScrollDownButton />
       </SelectContent>
     </Select>

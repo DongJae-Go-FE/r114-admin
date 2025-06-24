@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import { Fragment, useMemo, useState, useEffect } from "react";
+import { Fragment, useState } from "react";
 
 import { useQuery } from "@tanstack/react-query";
 
@@ -18,15 +18,14 @@ import { DataTable } from "@/components/DataTable";
 import { CustomSelect } from "@/components/Select";
 import { CommonServiceDivideSelect } from "@/components/Select/CommonSelect/CommonServiceDivideSelect";
 
-import BoardNoticeColumns from "./tableColumns/BoardNoticeColumns";
+import { BoardNoticeColumns } from "./tableColumns/BoardNoticeColumns";
 
 import { useFilter } from "@/hooks/useFilter";
-import useDebounce from "@/hooks/useDebounce";
 
 import { useBoardDeleteMutation } from "@/lib/network/mutation";
 
 import { GET_BOARD_NOTICE_SCHEMA } from "@/schema/board/notice/schema";
-import { GET_BOARD_NOTICE_REQUEST_TYPE } from "@/lib/network/types";
+import { GET_BOARD_NOTICE_REQUEST_TYPE } from "@/types/board/notice/types";
 import { GET_BOARD_NOTICE_REQUEST } from "@/lib/network/api";
 
 import {
@@ -36,74 +35,29 @@ import {
   INPUT_MAX_LENGTH,
 } from "@/const/const";
 
-const datas = [
-  {
-    postNo: 489,
-    boardId: "notice",
-    parentPostNo: 0,
-    firstPostNo: 0,
-    postLevel: 1,
-    postTitle: "[빈출문의] 실거래통계는 어떤 메뉴인가요?",
-    postContent: "",
-    reservePostDtm: "",
-    postStartDtm: "",
-    postEndDtm: "",
-    topFixYn: "N",
-    firstYn: "N",
-    delYn: "",
-    delDtm: "",
-    blockYn: "",
-    blockReason: "",
-    blockDtm: "",
-    readCnt: 0,
-    modCnt: 0,
-    ipAddr: "",
-    attr: "{}",
-    regId: "teamgod7min",
-    regMenuId: "",
-    regDtm: "2023-07-21 09:26:04",
-    modId: "",
-    modMenuId: "",
-    modDtm: "",
-    nowDtm: "2025-05-20 08:54",
-    regNm: "민상준",
-    dispRegDtm: "2023-07-21 09:26:04",
-  },
-];
-
 export default function ClientBoardNotice() {
   const { push } = useRouter();
-  const [searchInput, setSearchInput] = useState("");
   const [selectedRowIds, setSelectedRowIds] = useState<(string | number)[]>([]);
-  const debouncedSearch = useDebounce({ value: searchInput, delay: 300 });
+
   const { mutateAsync } = useBoardDeleteMutation();
 
-  const { filter, handleSubmit, handleReset, setFilter } =
+  const { filter, handleSubmit, handleReset, setFilter, query } =
     useFilter<GET_BOARD_NOTICE_REQUEST_TYPE>({
       comCd: "001",
+      searchType: "all",
       searchKeyword: "",
       searchStartRegDtm: "2023-01-01",
       searchEndRegDtm: "2025-12-31",
       modId: "teamgod7min",
-      pageSize: 20,
+      pageSize: 10,
       pageIndex: 1,
       pageOrder: "DESC",
-      searchType: "",
     });
 
-  const { data } = useQuery({
-    queryKey: ["BOARD_NOTICE_REQUEST"],
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["BOARD_NOTICE_REQUEST", query],
     queryFn: () => GET_BOARD_NOTICE_REQUEST({ ...filter }),
   });
-
-  console.log(data);
-
-  useEffect(() => {
-    setFilter((prev) => ({
-      ...prev,
-      searchKeyword: debouncedSearch,
-    }));
-  }, [debouncedSearch, setFilter]);
 
   const handleDelete = async () => {
     if (selectedRowIds.length === 0) {
@@ -116,112 +70,20 @@ export default function ClientBoardNotice() {
         await Promise.all(
           selectedRowIds.map((id) => mutateAsync(id.toString()))
         );
-        alert(`공지사항이 ${COMPLETE_DELETE_STRING}`);
+        alert(
+          `공지사항 ${selectedRowIds.length}개를 ${COMPLETE_DELETE_STRING}`
+        );
+        setSelectedRowIds([]);
+        refetch();
       } catch (e) {
         alert(e);
       }
     }
   };
 
-  const filterItems = useMemo(
-    () => [
-      {
-        title: "등록일자",
-        inputs: [
-          {
-            node: (
-              <DateRangePicker
-                id="picker"
-                initialValue={{
-                  from: filter.searchStartRegDtm
-                    ? parse(filter.searchStartRegDtm, "yyyy-MM-dd", new Date())
-                    : new Date(),
-                  to: filter.searchEndRegDtm
-                    ? parse(filter.searchEndRegDtm, "yyyy-MM-dd", new Date())
-                    : addDays(new Date(), 31),
-                }}
-                className="w-full"
-                onChangDate={(value) => {
-                  setFilter((prev) => ({
-                    ...prev,
-                    startDate: value?.from
-                      ? format(value.from, "yyyy-MM-dd")
-                      : "",
-                    endDate: value?.to ? format(value.to, "yyyy-MM-dd") : "",
-                  }));
-                }}
-              />
-            ),
-          },
-        ],
-        ratio: 1,
-      },
-      {
-        title: "서비스 구분",
-        inputs: [
-          {
-            node: (
-              <CommonServiceDivideSelect
-                value={filter.comCd}
-                className="w-full bg-white"
-                placeholder="전체"
-                onChange={(value) =>
-                  setFilter((prev) => ({ ...prev, service: value }))
-                }
-              />
-            ),
-          },
-        ],
-        ratio: 1,
-      },
-      {
-        title: "검색",
-        inputs: [
-          {
-            node: (
-              <CustomSelect
-                value={filter.searchType}
-                options={[
-                  { value: "all", label: "전체" },
-                  { value: "1", label: "등록자 아이디" },
-                  { value: "2", label: "공지사항 제목" },
-                  { value: "3", label: "등록 번호" },
-                ]}
-                className="w-40 bg-white"
-                placeholder="전체"
-                onChange={(value) =>
-                  setFilter((prev) => ({ ...prev, searchType: value }))
-                }
-              />
-            ),
-          },
-          {
-            node: (
-              <Input
-                type="search"
-                value={searchInput}
-                placeholder="검색어를 입력해주세요."
-                maxLength={INPUT_MAX_LENGTH}
-                onChange={(e) => setSearchInput(() => e.target.value)}
-              />
-            ),
-          },
-        ],
-        ratio: 3,
-      },
-    ],
-    [filter, searchInput, setFilter]
-  );
-
-  const transformedData = datas.map((item) => ({
-    id: item.postNo,
-    ...item,
-  }));
-
   const handleFilterSubmit = () => {
     handleSubmit({
       ...filter,
-      searchKeyword: searchInput,
     });
   };
 
@@ -229,21 +91,140 @@ export default function ClientBoardNotice() {
     <Fragment>
       <div className="mb-4">
         <Filter
-          items={filterItems}
+          items={[
+            {
+              title: "등록일자",
+              inputs: [
+                {
+                  node: (
+                    <DateRangePicker
+                      id="picker"
+                      initialValue={{
+                        from: filter.searchStartRegDtm
+                          ? parse(
+                              filter.searchStartRegDtm,
+                              "yyyy-MM-dd",
+                              new Date()
+                            )
+                          : new Date(),
+                        to: filter.searchEndRegDtm
+                          ? parse(
+                              filter.searchEndRegDtm,
+                              "yyyy-MM-dd",
+                              new Date()
+                            )
+                          : addDays(new Date(), 31),
+                      }}
+                      className="w-full"
+                      disabled={isLoading}
+                      onChangDate={(value) => {
+                        setFilter((prev) => ({
+                          ...prev,
+                          searchStartRegDtm: value?.from
+                            ? format(value.from, "yyyy-MM-dd")
+                            : "",
+                          searchEndRegDtm: value?.to
+                            ? format(value.to, "yyyy-MM-dd")
+                            : "",
+                        }));
+                      }}
+                    />
+                  ),
+                },
+              ],
+              ratio: 1,
+            },
+            {
+              title: "서비스 구분",
+              inputs: [
+                {
+                  node: (
+                    <CommonServiceDivideSelect
+                      value={filter.comCd}
+                      className="w-full bg-white"
+                      placeholder="전체"
+                      disabled={isLoading}
+                      onChange={(value) =>
+                        setFilter((prev) => ({ ...prev, service: value }))
+                      }
+                    />
+                  ),
+                },
+              ],
+              ratio: 1,
+            },
+            {
+              title: "검색",
+              inputs: [
+                {
+                  node: (
+                    <CustomSelect
+                      value={filter.searchType}
+                      options={[
+                        { value: "all", label: "전체" },
+                        { value: "title", label: "공지사항 제목" },
+                        { value: "regId", label: "등록자 아이디" },
+                      ]}
+                      className="w-40 bg-white"
+                      placeholder="전체"
+                      disabled={isLoading}
+                      onChange={(value) =>
+                        setFilter((prev) => ({
+                          ...prev,
+                          searchType: value as "all" | "title" | "regId",
+                        }))
+                      }
+                    />
+                  ),
+                },
+                {
+                  node: (
+                    <Input
+                      type="search"
+                      value={filter.searchKeyword}
+                      placeholder="검색어를 입력해주세요."
+                      disabled={isLoading}
+                      maxLength={INPUT_MAX_LENGTH}
+                      onChange={(e) =>
+                        setFilter((prev) => ({
+                          ...prev,
+                          searchKeyword: e.target.value,
+                        }))
+                      }
+                    />
+                  ),
+                },
+              ],
+              ratio: 3,
+            },
+          ]}
           onSubmit={handleFilterSubmit}
           onReset={() => {
-            setSearchInput("");
             handleReset();
           }}
         />
       </div>
       <DataTable
-        data={transformedData}
-        columns={BoardNoticeColumns}
+        data={
+          data?.data.items?.map((item) => ({
+            id: item.postNo,
+            ...item,
+          })) || []
+        }
+        columns={BoardNoticeColumns(
+          data?.data.totalCount || 0,
+          filter.pageIndex,
+          filter.pageSize
+        )}
         schema={GET_BOARD_NOTICE_SCHEMA}
         btnArea={{
           primary: (
-            <Button size="sm" color="red" onClick={handleDelete}>
+            <Button
+              size="sm"
+              color="red"
+              onClick={handleDelete}
+              disabled={isLoading}
+            >
               삭제
             </Button>
           ),
@@ -252,12 +233,24 @@ export default function ClientBoardNotice() {
               size="sm"
               color="white"
               onClick={() => push("/board/notice/add")}
+              disabled={isLoading}
             >
               신규 등록
             </Button>
           ),
         }}
+        key={data?.data.totalCount}
+        page={filter.pageIndex}
+        pageSize={filter.pageSize}
+        totalCount={data?.data.totalCount || 0}
+        onPageChange={(value) => {
+          handleSubmit({
+            ...filter,
+            pageIndex: value,
+          });
+        }}
         isTableHeader
+        isLoading={isLoading}
         onRowSelectionChange={setSelectedRowIds}
       />
     </Fragment>

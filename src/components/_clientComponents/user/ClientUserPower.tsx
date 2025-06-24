@@ -26,7 +26,7 @@ import UserPowerColumns from "./tableColumns/UserPowerColumns";
 import { useFilter } from "@/hooks/useFilter";
 
 import { GET_USER_POWER_SCHEMA } from "@/schema/user/power/schema";
-import { GET_USER_POWER_REQUEST_TYPE } from "@/lib/network/types";
+import { GET_USER_POWER_REQUEST_TYPE } from "@/types/user/power/types";
 
 import {
   CONFIRM_DELETE_SAVE_STRING,
@@ -254,6 +254,7 @@ export default function ClientUserPower() {
       </div>
       <DataTable
         data={data}
+        totalCount={data.length}
         columns={UserPowerColumns}
         schema={GET_USER_POWER_SCHEMA}
         btnArea={{

@@ -98,6 +98,7 @@ export default function ClientUserMemberDetail({ postNo }: { postNo: string }) {
         <h4 className="sub-title">업데이트 이력</h4>
         <DataTable
           data={data}
+          totalCount={data.length}
           schema={GET_USER_MEMBER_DETAIL_LIST_SCHEMA}
           columns={UserMemberDetailColumns}
           isTableHeader={false}

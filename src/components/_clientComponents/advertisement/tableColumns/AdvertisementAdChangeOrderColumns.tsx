@@ -10,27 +10,35 @@ const AdvertisementAdChangeOrderColumns: ColumnDef<
   z.infer<typeof GET_ADVERTISEMENT_AD_CHANGE_ORDER_SCHEMA>
 >[] = [
   {
-    accessorKey: "order",
+    accessorKey: "dispOrdNo",
     header: () => <div className="text-center">현재 순서</div>,
-    size: 90,
-    cell: ({ row }) => <div className="text-center">{row.original.order}</div>,
+    size: 50,
+    cell: ({ row }) => (
+      <div className="text-center">{row.original.dispOrdNo}</div>
+    ),
   },
   {
-    accessorKey: "state",
+    accessorKey: "srvStGbNm",
     header: () => <div className="text-center">광고 상태</div>,
-    size: 90,
-    cell: ({ row }) => <div className="text-center">{row.original.state}</div>,
+    size: 50,
+    cell: ({ row }) => (
+      <div className="text-center">{row.original.srvStGbNm}</div>
+    ),
   },
   {
-    accessorKey: "title",
+    accessorKey: "advtNm",
     header: () => <div className="text-center">광고 제목</div>,
-    size: 90,
-    cell: ({ row }) => <div className="text-center">{row.original.title}</div>,
+    size: 160,
+    cell: ({ row }) => (
+      <div className="text-center truncate" title={row.original.advtNm}>
+        {row.original.advtNm}
+      </div>
+    ),
   },
   {
     id: "drag",
     header: () => <div className="text-center">순서 변경</div>,
-    size: 90,
+    size: 50,
     cell: ({ row }) => (
       <div className="flex justify-center">
         <DragHandle id={row.original.id} />

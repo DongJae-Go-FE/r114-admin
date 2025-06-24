@@ -94,6 +94,7 @@ export default function ClientUserContractDetail({
         <h4 className="sub-title">업데이트 이력</h4>
         <DataTable
           data={data}
+          totalCount={data.length}
           schema={GET_USER_CONTRACT_DETAIL_LIST_SCHEMA}
           columns={UserContractDetailColumns}
           isTableHeader={false}

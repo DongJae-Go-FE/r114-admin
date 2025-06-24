@@ -8,12 +8,14 @@ import {
   POST_ADVERTISEMENT_AD_REQUEST,
   PUT_ADVERTISEMENT_AD_REQUEST,
   PATCH_ADVERTISEMENT_AD_REQUEST,
+  POST_ADVERTISEMENT_AD_DETAIL_FILE_UPLOAD_REQUEST,
 } from "./api";
 import { z } from "zod";
 
 import {
   POST_ADVERTISEMENT_AD_SCHEMA,
   PUT_ADVERTISEMENT_AD_SCHEMA,
+  PATCH_ADVERTISEMENT_AD_ORDER_CHANGE_SCHEMA,
 } from "@/schema/advertisement/ad/schema";
 
 import {
@@ -64,7 +66,7 @@ export function useBoardEditMutation() {
     onSuccess: (_, variables) => {
       const { postNo } = variables;
       queryClient.invalidateQueries({
-        queryKey: ["BOARD_NOTICE_REQUEST", postNo],
+        queryKey: ["BOARD_NOTICE_DETAIL_REQUEST", postNo],
       });
     },
     onError: (error: string) => {
@@ -112,6 +114,16 @@ export function useAdvertisementAdPostMutation() {
   });
 }
 
+export function useAdvertisementAdFileUploadMutation() {
+  return useMutation({
+    mutationFn: (values: FormData) =>
+      POST_ADVERTISEMENT_AD_DETAIL_FILE_UPLOAD_REQUEST({ values }),
+    onError: (error: string) => {
+      console.error(error);
+    },
+  });
+}
+
 export function useAdvertisementAdEditMutation() {
   const queryClient = useQueryClient();
 
@@ -126,7 +138,7 @@ export function useAdvertisementAdEditMutation() {
     onSuccess: (_, variables) => {
       const { advtNo } = variables;
       queryClient.invalidateQueries({
-        queryKey: ["BOARD_NOTICE_REQUEST", advtNo],
+        queryKey: ["ADVERTISEMENT_AD_REQUEST", advtNo],
       });
     },
     onError: (error: string) => {
@@ -135,14 +147,16 @@ export function useAdvertisementAdEditMutation() {
   });
 }
 
-export function useAdvertisementAdPatchMutation() {
+export function useAdvertisementAdListPatchMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: () => PATCH_ADVERTISEMENT_AD_REQUEST(),
+    mutationFn: (
+      values: z.infer<typeof PATCH_ADVERTISEMENT_AD_ORDER_CHANGE_SCHEMA>
+    ) => PATCH_ADVERTISEMENT_AD_REQUEST(values),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["BOARD_NOTICE_REQUEST"],
+        queryKey: ["ADVERTISEMENT_AD_ACTIVE_LIST_REQUEST"],
       });
     },
     onError: (error: string) => {

@@ -22,7 +22,7 @@ import { useFilter } from "@/hooks/useFilter";
 import useDebounce from "@/hooks/useDebounce";
 
 import { GET_USER_MEMBER_IP_SCHEMA } from "@/schema/user/member/schema";
-import { GET_MEMBER_IP_REQUEST_TYPE } from "@/lib/network/types";
+import { GET_MEMBER_IP_REQUEST_TYPE } from "@/types/user/member/types";
 
 import {
   INPUT_MAX_LENGTH,
@@ -260,6 +260,7 @@ export default function ClientUserMemberIp() {
       </div>
       <DataTable
         data={data}
+        totalCount={data.length}
         columns={UserMemberIpColumns}
         schema={GET_USER_MEMBER_IP_SCHEMA}
         btnArea={{

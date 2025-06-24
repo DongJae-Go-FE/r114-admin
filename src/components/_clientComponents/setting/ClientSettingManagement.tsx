@@ -21,7 +21,7 @@ import { useFilter } from "@/hooks/useFilter";
 import useDebounce from "@/hooks/useDebounce";
 
 import { GET_SETTING_MANAGEMENT_SCHEMA } from "@/schema/setting/management/schema";
-import { GET_SETTING_MANAGEMENT_REQUEST_TYPE } from "@/lib/network/types";
+import { GET_SETTING_MANAGEMENT_REQUEST_TYPE } from "@/types/setting/management/types";
 
 import { SELECTED_NOT_CHECKED, INPUT_MAX_LENGTH } from "@/const/const";
 
@@ -255,6 +255,7 @@ export default function ClientSettingManagement() {
         data={data}
         columns={SettingManagementColumns}
         schema={GET_SETTING_MANAGEMENT_SCHEMA}
+        totalCount={data.length}
         btnArea={{
           primary: (
             <SettingManagementOkModal

@@ -9,6 +9,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/Button";
 import Spinner from "@/components/Spinner";
 
+import { Skeleton } from "@/components/Skeleton";
+
 import { useBoardDeleteMutation } from "@/lib/network/mutation";
 
 import { GET_BOARD_NOTICE_DETAIL_REQUEST } from "@/lib/network/api";
@@ -62,13 +64,13 @@ export default function ClientBoardNoticeDetail({
     queryFn: () => GET_BOARD_NOTICE_DETAIL_REQUEST({ postNo }),
   });
 
-  console.log(data, isLoading);
-
   const handleDelete = async () => {
     if (confirm(`공지사항을 ${CONFIRM_DELETE_SAVE_STRING}`)) {
       try {
         await mutateAsync(postNo);
+
         alert(`공지사항을 ${COMPLETE_DELETE_STRING}`);
+
         push("/board/notice");
       } catch (e) {
         alert(e);
@@ -79,11 +81,27 @@ export default function ClientBoardNoticeDetail({
   const renderDetailHeader = () => {
     return (
       <div className="w-full">
-        <h3 className="heading04m">제목</h3>
+        <h3 className="heading04m">
+          {data?.data.postTitle ? (
+            data?.data.postTitle
+          ) : (
+            <Skeleton className="w-50 h-7.5" />
+          )}
+        </h3>
         <hr className="my-3 border-gray-200" />
         <div className="flex justify-between items-center">
-          <p className="body02m">전성현</p>
-          <p className="body02m">2024-11-20 08:51:29</p>
+          {data?.data.regNm ? (
+            <p className="body02m">
+              {data.data.regNm}({data.data.regId})
+            </p>
+          ) : (
+            <Skeleton className="w-30 h-[21px]" />
+          )}
+          {data?.data.regDtm ? (
+            <p className="body02m">{data.data.regDtm}</p>
+          ) : (
+            <Skeleton className="w-30 h-[21px]" />
+          )}
         </div>
       </div>
     );
@@ -92,28 +110,39 @@ export default function ClientBoardNoticeDetail({
   const renderDetailBody = () => {
     return (
       <div className="flex flex-col w-full my-6 h-[calc(100%-120px)] overflow-y-auto relative">
-        <SafeHtml
-          html={`
-  <h2>안전한 제목</h2>
-  <p>이건 <strong>굵은 텍스트</strong>입니다.</p>
-  <script>alert('XSS');</script>
-`}
-        />
-        <ul className="mt-auto flex flex-col">
-          <li className="w-full px-3 py-2 bg-white border border-gray-200 rounded-[6px] flex items-center gap-x-2">
-            <div className="p-3 border border-gray-200 rounded-[6px] flex justify-center items-center">
-              {fileIcon()}
-            </div>
-            <a
-              href="#"
-              download
-              className="w-[calc(100%-70px)] truncate body02m"
-              title="asd"
-            >
-              asd
-            </a>
-          </li>
-        </ul>
+        <SafeHtml html={`${data?.data.postContent}`} />
+        {!!data?.data.attachments && data?.data.attachments.length > 0 && (
+          <ul className="mt-auto flex flex-col gap-y-2">
+            {data.data.attachments.map(
+              ({ attachOrgName, attachNo, fileSize }) => {
+                return (
+                  <li
+                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded-[6px] flex items-center gap-x-2"
+                    key={attachNo}
+                  >
+                    <div className="p-3 border border-gray-200 rounded-[6px] flex justify-center items-center">
+                      {fileIcon()}
+                    </div>
+                    <div className="flex flex-col w-[calc(100%-70px)] ">
+                      <a
+                        href={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_API_URL}/api/v1/board/download/${attachNo}`}
+                        className="truncate body02m"
+                        title={attachOrgName}
+                        target="_blank"
+                        download
+                      >
+                        {attachOrgName}
+                      </a>
+                      <p className="body03r text-gray-500">
+                        {(fileSize / (1024 * 1024)).toFixed(2)}MB
+                      </p>
+                    </div>
+                  </li>
+                );
+              }
+            )}
+          </ul>
+        )}
       </div>
     );
   };
@@ -130,6 +159,7 @@ export default function ClientBoardNoticeDetail({
                 onClick={() => {
                   push(`/board/notice/${postNo}/edit`);
                 }}
+                disabled={isLoading}
               >
                 수정
               </Button>
@@ -138,7 +168,7 @@ export default function ClientBoardNoticeDetail({
               <Button
                 type="button"
                 color="red"
-                disabled={isPending}
+                disabled={isLoading || isPending}
                 onClick={handleDelete}
               >
                 삭제

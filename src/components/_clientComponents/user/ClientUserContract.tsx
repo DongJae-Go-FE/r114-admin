@@ -26,7 +26,7 @@ import { useFilter } from "@/hooks/useFilter";
 import useDebounce from "@/hooks/useDebounce";
 
 import { GET_USER_CONTRACT_SCHEMA } from "@/schema/user/contract/schema";
-import { GET_USER_CONTRACT_REQUEST_TYPE } from "@/lib/network/types";
+import { GET_USER_CONTRACT_REQUEST_TYPE } from "@/types/user/contract/types";
 
 import { INPUT_MAX_LENGTH } from "@/const/const";
 
@@ -323,6 +323,7 @@ export default function ClientUserContract() {
       </div>
       <DataTable
         data={data}
+        totalCount={data.length}
         columns={UserContractColumns}
         schema={GET_USER_CONTRACT_SCHEMA}
         btnArea={{
