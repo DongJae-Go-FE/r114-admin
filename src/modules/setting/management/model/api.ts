@@ -90,15 +90,11 @@ export async function PATCH_SETTING_MANAGEMENT_REQUEST({
 }
 
 /** 관리자 계정/권한 관리 계정 삭제 TODO. 수정 예정 */
-export async function DELETE_SETTING_MANAGEMENT_REQUEST({
-  values,
-}: {
-  values: unknown;
-}) {
+export async function DELETE_SETTING_MANAGEMENT_REQUEST() {
   return await HttpRequest.set<unknown, unknown>(
     "DELETE",
     `/api/v1/admin`,
-    values,
+
     {
       "Content-Type": "application/json",
     }
@@ -131,4 +127,22 @@ export async function GET_SETTING_MANAGEMENT_LOG_REQUEST(adminCd: string) {
 /** 관리자 계정/권한 관리 계정 상태 / 권한 목록 조회 TODO. 수정 예정 */
 export async function GET_SETTING_MANAGEMENT_CODE_REQUEST() {
   return await HttpRequest.get<unknown, unknown>(`/api/v1/admin/code`);
+}
+
+/** 관리자 계정/권한 관리 계정 상태 비밀번호 초기화 TODO. 수정 예정 */
+export async function PUT_SETTING_MANAGEMENT_RESET_PASSWORD_REQUEST({
+  adminCd,
+  values,
+}: {
+  adminCd: string;
+  values: unknown;
+}) {
+  return await HttpRequest.set<unknown, unknown>(
+    "PUT",
+    `/api/v1/admin/reset-password/${adminCd}`,
+    values,
+    {
+      "Content-Type": "application/json",
+    }
+  );
 }
