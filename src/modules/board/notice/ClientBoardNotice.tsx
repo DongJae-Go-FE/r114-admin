@@ -89,7 +89,7 @@ export default function ClientBoardNotice() {
 
   return (
     <Fragment>
-      <div className="mb-4">
+      <div className="mb-6">
         <Filter
           items={[
             {

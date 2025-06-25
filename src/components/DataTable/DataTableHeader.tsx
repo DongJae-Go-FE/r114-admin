@@ -46,7 +46,7 @@ export function DataTableHeader<TData>({
   };
 
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex justify-between items-end">
       <div className="flex gap-x-2 items-center">
         <span className="body02r">총 {totalCount} 개</span>
       </div>

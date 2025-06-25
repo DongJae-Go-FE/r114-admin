@@ -237,7 +237,9 @@ export default function ClientUserMember() {
       </div>
       <DataTable
         data={data}
-        totalCount={data.length}
+        totalCount={30}
+        page={1}
+        pageSize={10}
         columns={UserMemberColumns}
         schema={GET_USER_MEMBER_SCHEMA}
         btnArea={{

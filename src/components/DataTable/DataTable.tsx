@@ -178,7 +178,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
 
   const renderEmptyOrLoading = () => (
     <TableRow>
-      <TableCell colSpan={columns.length} className="h-[500px]">
+      <TableCell colSpan={columns.length} className="h-[490px]">
         {isLoading ? (
           <Spinner />
         ) : (

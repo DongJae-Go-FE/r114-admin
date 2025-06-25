@@ -61,7 +61,7 @@ export function DataTablePagination({
     "rounded-sm border border-gray-200 p-[9px] cursor-pointer";
 
   return (
-    <div className="flex h-8 items-center gap-x-2 justify-center">
+    <div className="flex h-8 items-center gap-x-2 justify-center mt-4">
       <button
         type="button"
         className={btnArrowStyle}
