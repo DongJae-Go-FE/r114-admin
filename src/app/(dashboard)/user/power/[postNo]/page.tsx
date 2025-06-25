@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 
 import PageHeader from "@/components/PageHeader";
-import ClientUserPowerDetail from "@/components/_clientComponents/user/ClientUserPowerDetail";
+import ClientUserPowerDetail from "@/modules/user/power/ClientUserPowerDetail";
 
 export default async function Page({
   params,

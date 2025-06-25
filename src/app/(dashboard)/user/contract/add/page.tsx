@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/Tab";
 import {
   ClientUserContractAddIndividual,
   ClientUserContractAddCorporation,
-} from "@/components/_clientComponents/user/ClientUserContractAdd";
+} from "@/modules/user/contract/ClientUserContractAdd";
 
 export default async function Page() {
   return (

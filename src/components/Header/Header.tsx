@@ -5,7 +5,7 @@ import Image from "next/image";
 
 import { Button } from "../Button";
 
-import { LOGOUT_CONFIRM_STRING } from "@/const/const";
+import { LOGOUT_CONFIRM_STRING } from "@/lib/const";
 
 import { handleLogout as handleServerLogout } from "@/severActions/serverActions";
 

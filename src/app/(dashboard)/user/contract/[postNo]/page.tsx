@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 
 import PageHeader from "@/components/PageHeader";
-import ClientUserContractDetail from "@/components/_clientComponents/user/ClientUserContractDetail";
+import ClientUserContractDetail from "@/modules/user/contract/ClientUserContractDetail";
 
 export default async function Page({
   params,

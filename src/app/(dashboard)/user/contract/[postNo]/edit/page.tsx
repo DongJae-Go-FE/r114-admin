@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 
 import PageHeader from "@/components/PageHeader";
-import ClientUserContractEdit from "@/components/_clientComponents/user/ClientUserContractEdit";
+import ClientUserContractEdit from "@/modules/user/contract/ClientUserContractEdit";
 
 export default async function Page({
   params,

@@ -1,6 +1,11 @@
 import queryString from "query-string";
 
-import { CommonResponse } from "@/types/common";
+export type CommonResponse<T = unknown> = {
+  success: boolean;
+  code: number;
+  message: string;
+  data: T;
+};
 
 function parseCookie(cookie: string) {
   const map = new Map();

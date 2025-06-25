@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 
 import PageHeader from "@/components/PageHeader";
-import ClientBoardNoticeAdd from "@/components/_clientComponents/board/ClientBoardNoticeAdd";
+import ClientBoardNoticeAdd from "@/modules/board/notice/ClientBoardNoticeAdd";
 
 export default async function Page() {
   return (

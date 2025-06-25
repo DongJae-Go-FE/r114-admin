@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 import {
   POST_ADMIN_ADD_REQUEST_TYPE,
   POST_ADMIN_PASSWORD_CHANGE_REQUEST_TYPE,
-} from "@/types/login/types";
+} from "@/modules/login/model/types";
 
 export async function handleLogout() {
   await signOut({ redirectTo: "/login" });

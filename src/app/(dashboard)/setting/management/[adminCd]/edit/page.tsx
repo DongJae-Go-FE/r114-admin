@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 
 import PageHeader from "@/components/PageHeader";
-import ClientSettingManagementEdit from "@/components/_clientComponents/setting/ClientSettingManagementEdit";
+import ClientSettingManagementEdit from "@/modules/setting/management/ClientSettingManagementEdit";
 
 export default async function Page({
   params,
