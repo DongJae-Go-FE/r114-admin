@@ -1,11 +1,10 @@
-import { Fragment, ReactNode } from "react";
+import { Fragment } from "react";
 
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  // BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/Breadcrumb";
 
@@ -15,25 +14,29 @@ type itemsType = {
 };
 
 type PageHeaderType = {
-  title: ReactNode;
+  title: string;
   items?: itemsType[];
 };
 
-export default async function PageHeader({ title, items }: PageHeaderType) {
+export default async function PageHeader({
+  title = "",
+  items,
+}: PageHeaderType) {
   return (
     <div className="w-full flex justify-between border-b border-gray-200 items-end mb-6 pb-2">
-      <h3 className="heading03b">{title}</h3>
-      {items && (
+      <h3 className="heading03b">{title || ""}</h3>
+      {items && items.length > 0 && (
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/">
+              <BreadcrumbLink href="/" title="메인으로">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="14"
                   height="14"
                   viewBox="0 0 14 14"
                   fill="none"
+                  aria-hidden
                 >
                   <path
                     fillRule="evenodd"

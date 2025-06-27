@@ -184,22 +184,32 @@ function SideBar() {
   };
 
   return (
-    <div aria-expanded={isOpen ? true : false} className={sideBarStyle}>
+    <div
+      aria-label="사이트 네비게이션 및 사용자 정보"
+      role="navigation"
+      className={sideBarStyle}
+    >
       <div className="flex items-center justify-center h-[117px] border-b">
         <h1>
           <Link
             className="flex justify-center items-center w-full h-full"
             href="/"
           >
-            <Image src="/logo.svg" alt="로고" width={117} height={24} />
+            <Image
+              src="/logo.svg"
+              alt="로고"
+              width={117}
+              height={24}
+              priority
+            />
           </Link>
         </h1>
       </div>
       <div className="w-full h-33 border-b border-gray-200">
         <div className="w-full h-full p-4 body03b">
-          <h3>
+          <h2>
             <p className="truncate">유저이름유저이름유저이름유저이름유저이름</p>
-          </h3>
+          </h2>
           <ul className="mt-2">
             <li className={infoLiStyle}>
               메일주소: <p className={infoParagraphStyle}>admin@naver.com</p>
@@ -226,8 +236,10 @@ function SideBar() {
         type="button"
         className="absolute -right-6 top-1/2 -translate-y-1/2 w-6 h-12 flex justify-center items-center bg-white z-30 rounded-r-sm border border-gray-200 shadow-xs"
         onClick={setIsOpen}
+        title={isOpen ? "메뉴 닫기" : "메뉴 열기"}
+        aria-expanded={isOpen}
       >
-        {isOpen ? <ChevronLeft /> : <ChevronRight />}
+        {isOpen ? <ChevronLeft aria-hidden /> : <ChevronRight aria-hidden />}
       </button>
     </div>
   );

@@ -296,6 +296,7 @@ export default function FileUpload({
                     size="xs"
                     color="white"
                     disabled={isLoading}
+                    title="파일 삭제"
                     onClick={() => handleDeleteClick(key)}
                   >
                     <CloseIcon />
