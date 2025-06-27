@@ -27,7 +27,7 @@ export default function TextEditor({
   return (
     <div
       className={cn(
-        "relative min-h-[243.86px] border border-gray-200 rounded-sm",
+        "relative min-h-[244.86px] border border-gray-200 rounded-sm",
         isError && "border-red-500"
       )}
     >
