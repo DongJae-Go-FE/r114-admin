@@ -69,7 +69,9 @@ export const POST_ADVERTISEMENT_AD_SCHEMA = z.object({
     .max(INPUT_MAX_LENGTH, {
       message: `최대 ${INPUT_MAX_LENGTH}글자 이하로 입력해주세요`,
     }),
-  imgOrgName: z.string(),
+  imgOrgName: z
+    .string()
+    .nonempty({ message: ESSENTIAL_REQUIRED_FIELD_MESSAGE }),
   imgFileName: z
     .string()
     .nonempty({ message: ESSENTIAL_REQUIRED_FIELD_MESSAGE }),
@@ -104,7 +106,9 @@ export const PUT_ADVERTISEMENT_AD_SCHEMA = z.object({
     .max(INPUT_MAX_LENGTH, {
       message: `최대 ${INPUT_MAX_LENGTH}글자 이하로 입력해주세요`,
     }),
-  imgOrgName: z.string(),
+  imgOrgName: z
+    .string()
+    .nonempty({ message: ESSENTIAL_REQUIRED_FIELD_MESSAGE }),
   imgFileName: z
     .string()
     .nonempty({ message: ESSENTIAL_REQUIRED_FIELD_MESSAGE }),

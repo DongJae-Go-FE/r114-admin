@@ -17,6 +17,7 @@ interface FileUploadProps
   limit?: number;
   disabled?: boolean;
   isLoading?: boolean;
+  isError?: boolean;
   onLimitOver?: () => void;
 }
 

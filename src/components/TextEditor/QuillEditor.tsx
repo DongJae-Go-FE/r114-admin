@@ -86,7 +86,7 @@ const QuillEditor: FC<QuillEditorProps> = ({
   }, [disabled]);
 
   return (
-    <div className="h-[calc(100%-30px)]">
+    <div>
       <div ref={quillEditorRef} className="h-full" />
       <label htmlFor="content" className="sr-only">
         텍스트 에디터

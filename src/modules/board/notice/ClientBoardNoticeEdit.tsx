@@ -48,7 +48,6 @@ import {
   CONFIRM_CANCEL_SAVE_STRING,
   COMPLETE_CANCEL_STRING,
   INPUT_MAX_LENGTH,
-  INPUT_MIN_LENGTH,
 } from "@/lib/const";
 
 export default function ClientBoardNoticeEdit({ postNo }: { postNo: string }) {
@@ -258,7 +257,6 @@ export default function ClientBoardNoticeEdit({ postNo }: { postNo: string }) {
                   {...field}
                   type="text"
                   placeholder="제목을 입력해주세요."
-                  minLength={INPUT_MIN_LENGTH}
                   maxLength={INPUT_MAX_LENGTH}
                   disabled={isDisable}
                 />
@@ -271,7 +269,7 @@ export default function ClientBoardNoticeEdit({ postNo }: { postNo: string }) {
         <FormField
           control={form.control}
           name="postContent"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
               <FormLabel>내용</FormLabel>
               <FormControl>
@@ -280,9 +278,10 @@ export default function ClientBoardNoticeEdit({ postNo }: { postNo: string }) {
                   defaultValue={field.value}
                   onChange={field.onChange}
                   disabled={isDisable}
+                  isError={!!fieldState.error}
                 />
               </FormControl>
-              <FormMessage className="mt-3" />
+              <FormMessage />
             </FormItem>
           )}
         />

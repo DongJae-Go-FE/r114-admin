@@ -46,7 +46,6 @@ import {
   COMPLETE_SAVE_STRING,
   CONFIRM_CANCEL_SAVE_STRING,
   COMPLETE_CANCEL_STRING,
-  INPUT_MIN_LENGTH,
   INPUT_MAX_LENGTH,
 } from "@/lib/const";
 
@@ -132,8 +131,12 @@ export default function ClientAdvertisementAdDetail({
 
     try {
       const res = await fileMutateAsync(formData);
-      form.setValue("imgFileName", res.data.imgFileName);
-      form.setValue("imgOrgName", res.data.imgOrgName);
+      form.setValue("imgFileName", res.data.imgFileName, {
+        shouldValidate: true,
+      });
+      form.setValue("imgOrgName", res.data.imgOrgName, {
+        shouldValidate: true,
+      });
       form.setValue("fileSize", res.data.fileSize);
     } catch (error) {
       alert(`업로드 실패: ${error}`);
@@ -208,7 +211,6 @@ export default function ClientAdvertisementAdDetail({
                   type="text"
                   {...field}
                   placeholder="광고명을 입력해주세요."
-                  minLength={INPUT_MIN_LENGTH}
                   maxLength={INPUT_MAX_LENGTH}
                   disabled={isDisable}
                 />
@@ -238,14 +240,15 @@ export default function ClientAdvertisementAdDetail({
                   }}
                   disabled={isPending}
                 />
-                <label htmlFor="reservation">새창에서 열기</label>
+                <label htmlFor="reservation" className="text-black">
+                  새창에서 열기
+                </label>
               </FormLabel>
               <FormControl>
                 <Input
                   {...field}
                   type="text"
                   placeholder="URL을 입력해주세요."
-                  minLength={INPUT_MIN_LENGTH}
                   maxLength={INPUT_MAX_LENGTH}
                   disabled={isDisable}
                 />
@@ -258,7 +261,7 @@ export default function ClientAdvertisementAdDetail({
         <FormField
           control={form.control}
           name="imgFileName"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
               <FormLabel>
                 파일 첨부
@@ -278,6 +281,7 @@ export default function ClientAdvertisementAdDetail({
                   initialFiles={fileRef.current}
                   upload={handleUpload}
                   onDeleteClick={handleDelete}
+                  isError={!!fieldState.error}
                   onLimitOver={() =>
                     alert("파일은 최대 1개까지 첨부 가능합니다.")
                   }

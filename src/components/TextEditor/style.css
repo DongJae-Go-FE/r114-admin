@@ -1,5 +1,6 @@
 .ql-container {
   font-family: "pretendard", "pretendard Fallback";
+  height: 200px;
 }
 
 .ql-editor.ql-blank:before {
@@ -12,11 +13,14 @@
 }
 
 .ql-container.ql-snow {
-  border-radius: 0 0 4px 4px;
+  border: 0;
 }
 
 .ql-toolbar.ql-snow {
-  border-radius: 4px 4px 0 0;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  border-color: #eee;
 }
 
 .ql-toolbar.ql-snow:not(#\#):not(#\#):not(#\#),

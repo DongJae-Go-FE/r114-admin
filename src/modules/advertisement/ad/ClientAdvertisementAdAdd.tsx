@@ -41,7 +41,6 @@ import {
   CONFIRM_CANCEL_SAVE_STRING,
   COMPLETE_CANCEL_STRING,
   INPUT_MAX_LENGTH,
-  INPUT_MIN_LENGTH,
 } from "@/lib/const";
 
 export default function ClientAdvertisementAdAdd() {
@@ -110,8 +109,12 @@ export default function ClientAdvertisementAdAdd() {
     try {
       const res = await fileMutateAsync(formData);
 
-      form.setValue("imgFileName", res.data.imgFileName);
-      form.setValue("imgOrgName", res.data.imgOrgName);
+      form.setValue("imgFileName", res.data.imgFileName, {
+        shouldValidate: true,
+      });
+      form.setValue("imgOrgName", res.data.imgOrgName, {
+        shouldValidate: true,
+      });
       form.setValue("fileSize", res.data.fileSize);
     } catch (error) {
       alert(`업로드 실패: ${error}`);
@@ -161,7 +164,6 @@ export default function ClientAdvertisementAdAdd() {
                   type="text"
                   {...field}
                   placeholder="광고명을 입력해주세요."
-                  minLength={INPUT_MIN_LENGTH}
                   maxLength={INPUT_MAX_LENGTH}
                   disabled={isPending}
                 />
@@ -191,14 +193,15 @@ export default function ClientAdvertisementAdAdd() {
                   }}
                   disabled={isPending}
                 />
-                <label htmlFor="reservation">새창에서 열기</label>
+                <label htmlFor="reservation" className="text-black">
+                  새창에서 열기
+                </label>
               </FormLabel>
               <FormControl>
                 <Input
                   {...field}
                   type="text"
                   placeholder="URL을 입력해주세요."
-                  minLength={INPUT_MIN_LENGTH}
                   maxLength={INPUT_MAX_LENGTH}
                   disabled={isPending}
                 />
@@ -210,7 +213,7 @@ export default function ClientAdvertisementAdAdd() {
         <FormField
           control={form.control}
           name="imgFileName"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
               <FormLabel>
                 파일 첨부
@@ -228,6 +231,7 @@ export default function ClientAdvertisementAdAdd() {
                   isLoading={isPending || isUploadPending}
                   accept="image/png, image/jpeg, img/jpg"
                   initialFiles={fileRef.current}
+                  isError={!!fieldState.error}
                   upload={handleUpload}
                   onDeleteClick={handleDelete}
                   onLimitOver={() =>
@@ -235,6 +239,7 @@ export default function ClientAdvertisementAdAdd() {
                   }
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />

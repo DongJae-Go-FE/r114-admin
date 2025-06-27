@@ -34,6 +34,7 @@ export default function FileUpload({
   initialFiles = [],
   disabled,
   isLoading,
+  isError,
   limit,
   onLimitOver,
 }: FileUploadProps) {
@@ -167,8 +168,9 @@ export default function FileUpload({
 
   const hasFail = failFiles.length > 0;
 
-  const dragAreaStyle =
-    "w-full p-8 flex flex-col items-center justify-center border border-dashed rounded-[6px] border-gray-200 text-gray-500 body02m relative h-[147px]";
+  const dragAreaStyle = `w-full p-8 flex flex-col items-center justify-center border border-dashed rounded-[6px] ${
+    isError ? "border-red-500" : "border-gray-200"
+  }  text-gray-500 body02m relative h-[147px]`;
   const labelStyle =
     "relative inline-flex cursor-pointer after:content-[''] after:absolute after:inset-0";
   const progressStyle =
