@@ -25,6 +25,7 @@ const QuillEditor: FC<QuillEditorProps> = ({
 }) => {
   const quillEditorRef = useRef<HTMLDivElement>(null);
   const quillRef = useRef<Quill | null>(null);
+  const isUpdatingRef = useRef(false);
 
   useEffect(() => {
     const toolbarOptions = [
@@ -46,24 +47,46 @@ const QuillEditor: FC<QuillEditorProps> = ({
       quillRef.current = new Quill(quillEditorRef.current, {
         theme: "snow",
         modules: { toolbar: toolbarOptions },
-        readOnly: disabled,
+        readOnly: !!disabled,
         placeholder,
       });
 
-      if (defaultValue) {
-        quillRef.current.clipboard.dangerouslyPasteHTML(defaultValue);
-        onChange?.(defaultValue);
+      if (defaultValue || value) {
+        const initialValue = value || defaultValue;
+        quillRef.current.clipboard.dangerouslyPasteHTML(initialValue);
       }
 
       quillRef.current.on("text-change", () => {
-        const html = quillRef.current?.root.innerHTML || "";
-        onChange?.(html);
+        if (!isUpdatingRef.current && onChange) {
+          const html = quillRef.current?.root.innerHTML || "";
+          onChange(html);
+        }
       });
     }
-  }, [placeholder, defaultValue, onChange, disabled]);
+
+    return () => {};
+  }, [placeholder, defaultValue, value, onChange, disabled]);
+
+  useEffect(() => {
+    if (quillRef.current && value !== undefined) {
+      const currentContent = quillRef.current.root.innerHTML;
+
+      if (currentContent !== value) {
+        isUpdatingRef.current = true;
+        quillRef.current.clipboard.dangerouslyPasteHTML(value);
+        isUpdatingRef.current = false;
+      }
+    }
+  }, [value]);
+
+  useEffect(() => {
+    if (quillRef.current) {
+      quillRef.current.enable(!disabled);
+    }
+  }, [disabled]);
 
   return (
-    <div className="h-[calc(100%-30px)]">
+    <div>
       <div ref={quillEditorRef} className="h-full" />
       <label htmlFor="content" className="sr-only">
         텍스트 에디터

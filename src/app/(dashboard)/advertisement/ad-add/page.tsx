@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 
 import PageHeader from "@/components/PageHeader";
-import ClientAdvertisementAdAdd from "@/components/_clientComponents/advertisement/ClientAdvertisementAdAdd";
+import ClientAdvertisementAdAdd from "@/modules/advertisement/ad/ClientAdvertisementAdAdd";
 
 export default async function Page() {
   return (

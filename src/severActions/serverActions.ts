@@ -7,9 +7,8 @@ import { redirect } from "next/navigation";
 
 import {
   POST_ADMIN_ADD_REQUEST_TYPE,
-  CommonResponse,
   POST_ADMIN_PASSWORD_CHANGE_REQUEST_TYPE,
-} from "@/lib/network/types";
+} from "@/modules/login/model/types";
 
 export async function handleLogout() {
   await signOut({ redirectTo: "/login" });
@@ -44,7 +43,7 @@ export async function handleAdminAdd(formData: FormData) {
     const email = formData.get("email")?.toString() || "";
 
     const response = await HttpRequest.set<
-      CommonResponse,
+      unknown,
       POST_ADMIN_ADD_REQUEST_TYPE
     >(
       "POST",
@@ -75,7 +74,7 @@ export async function handlePasswordChange(formData: FormData) {
     const newPwCheck = formData.get("newPwCheck")?.toString() || "";
 
     const response = await HttpRequest.set<
-      CommonResponse,
+      unknown,
       POST_ADMIN_PASSWORD_CHANGE_REQUEST_TYPE
     >(
       "POST",

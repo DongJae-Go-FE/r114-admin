@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 
 import PageHeader from "@/components/PageHeader";
-import ClientUserPowerAdd from "@/components/_clientComponents/user/ClientUserPowerAdd";
+import ClientUserPowerAdd from "@/modules/user/power/ClientUserPowerAdd";
 
 export default async function Page() {
   return (

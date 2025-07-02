@@ -10,7 +10,6 @@ import {
   useSensor,
   useSensors,
   type DragEndEvent,
-  type UniqueIdentifier,
 } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -56,12 +55,15 @@ interface DataTableProps<TData, TValue> {
   isTableHeader?: boolean;
   isExcelDown?: boolean;
   isLoading?: boolean;
-  onRowSelectionChange?: (
-    selectedIds: UniqueIdentifier[] | (string | number)[]
-  ) => void;
+  totalCount: number;
+  page?: number;
+  pageSize?: number;
+  onPageChange?: (value: number) => void;
+  onRowSelectionChange?: (selectedIds: (string | number)[]) => void;
+  onDragEnd?: (oldIndex: number, newIndex: number, newData?: TData[]) => void;
 }
 
-export function DataTable<TData extends { id: UniqueIdentifier }, TValue>({
+export function DataTable<TData extends { id: string | number }, TValue>({
   columns,
   data: initialData,
   schema,
@@ -72,17 +74,26 @@ export function DataTable<TData extends { id: UniqueIdentifier }, TValue>({
   isExcelDown = false,
   isLoading = false,
   onRowSelectionChange,
+  page,
+  pageSize,
+  totalCount,
+  onPageChange,
+  onDragEnd,
 }: DataTableProps<TData, TValue>) {
   const ref = useRef<HTMLDivElement>(null);
   const sortableId = useId();
 
   const [rowSelection, setRowSelection] = useState({});
-  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [data, setData] = useState<TData[]>([]);
 
-  const [data, setData] = useState(() =>
-    initialData.map((item) => schema.parse(item))
-  );
+  useEffect(() => {
+    const parsed = initialData.map((item) => schema.parse(item));
+    const isSame =
+      parsed.length === data.length &&
+      parsed.every((p, i) => p.id === data[i].id);
+    if (!isSame) setData(parsed);
+  }, [initialData, schema, data]);
 
   const table = useReactTable({
     data,
@@ -91,9 +102,8 @@ export function DataTable<TData extends { id: UniqueIdentifier }, TValue>({
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onPaginationChange: setPagination,
     onRowSelectionChange: setRowSelection,
-    state: { rowSelection, pagination, sorting },
+    state: { rowSelection, sorting },
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
   });
@@ -121,9 +131,26 @@ export function DataTable<TData extends { id: UniqueIdentifier }, TValue>({
     if (active && over && active.id !== over.id) {
       const oldIndex = dataIds.indexOf(active.id);
       const newIndex = dataIds.indexOf(over.id);
-      setData((prev) => arrayMove(prev, oldIndex, newIndex));
+
+      if (oldIndex !== -1 && newIndex !== -1) {
+        const newData = arrayMove(data, oldIndex, newIndex);
+        setData(newData);
+
+        if (onDragEnd) {
+          onDragEnd(oldIndex, newIndex, newData);
+        }
+      }
     }
   };
+
+  const handlePageChange = (value: number) => {
+    setRowSelection({});
+    if (onPageChange) {
+      onPageChange(value);
+    }
+  };
+
+  const totalPage = pageSize ? Math.ceil(totalCount / pageSize) : 1;
 
   const renderTableHeader = () => (
     <TableHeader className="sticky top-0 z-10 bg-white border-t border-b-0 border-gray-200">
@@ -151,7 +178,7 @@ export function DataTable<TData extends { id: UniqueIdentifier }, TValue>({
 
   const renderEmptyOrLoading = () => (
     <TableRow>
-      <TableCell colSpan={columns.length} className="h-[500px]">
+      <TableCell colSpan={columns.length} className="h-[490px]">
         {isLoading ? (
           <Spinner />
         ) : (
@@ -195,6 +222,7 @@ export function DataTable<TData extends { id: UniqueIdentifier }, TValue>({
           download={download}
           isExcelDown={isExcelDown}
           btnArea={btnArea}
+          totalCount={totalCount}
         />
       )}
 
@@ -222,7 +250,13 @@ export function DataTable<TData extends { id: UniqueIdentifier }, TValue>({
         )}
       </div>
 
-      {data.length > 10 && !isLoading && <DataTablePagination table={table} />}
+      {totalCount > 10 && !isLoading && (
+        <DataTablePagination
+          current={Number(page)}
+          totalCount={totalPage}
+          onChange={handlePageChange}
+        />
+      )}
     </div>
   );
 }

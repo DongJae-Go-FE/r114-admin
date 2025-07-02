@@ -47,7 +47,7 @@ export function DateRangePicker({
             color="white"
             disabled={disabled}
             className={cn(
-              "w-full justify-start px-4",
+              "w-full justify-start px-4 hover:bg-white",
               !date && "text-muted-foreground"
             )}
           >

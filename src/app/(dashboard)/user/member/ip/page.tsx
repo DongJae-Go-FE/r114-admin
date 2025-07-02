@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 
 import PageHeader from "@/components/PageHeader";
-import ClientUserMemberIp from "@/components/_clientComponents/user/ClientUserMemberIp";
+import ClientUserMemberIp from "@/modules/user/member/ClientUserMemberIp";
 
 export default async function Page() {
   return (

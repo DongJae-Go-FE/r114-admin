@@ -12,12 +12,14 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/Popover";
 export function DatePicker({
   initialValue,
   onChangDate,
+  disabled,
   id,
   className,
 }: {
   initialValue: Date;
   onChangDate: (value: Date) => void;
   id: string;
+  disabled?: boolean;
   className?: string;
 }) {
   const [date, setDate] = useState<Date | undefined>(initialValue);
@@ -32,14 +34,19 @@ export function DatePicker({
       <PopoverTrigger asChild>
         <Button
           color="white"
+          disabled={disabled}
           className={cn(
-            "w-full justify-start px-4 body02m",
+            "w-full justify-start px-4 body02m hover:bg-white",
             !date && "text-gray-500",
             className
           )}
         >
           <CalendarIcon className="w-5 h-5" />
-          {date ? format(date, "yyyy-MM-dd") : <span>날짜를 선택해주세요.</span>}
+          {date ? (
+            format(date, "yyyy-MM-dd")
+          ) : (
+            <span>날짜를 선택해주세요.</span>
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">

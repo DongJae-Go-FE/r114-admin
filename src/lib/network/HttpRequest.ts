@@ -1,6 +1,11 @@
 import queryString from "query-string";
 
-import { CommonResponse } from "./types";
+export type CommonResponse<T = unknown> = {
+  success: boolean;
+  code: number;
+  message: string;
+  data: T;
+};
 
 function parseCookie(cookie: string) {
   const map = new Map();
@@ -67,13 +72,9 @@ export default class HttpRequest {
   ) {
     const response = await fetch(this.baseUrl + uri, {
       method,
-      // credentials: this.credentials,
       headers: {
         ...this.defaultHeaders,
         ...headerData,
-        // Authorization: `Bearer ${parseCookie(document.cookie).get(
-        //   "accessToken"
-        // )}`,
       },
       body: JSON.stringify(bodyData),
     });
@@ -81,22 +82,16 @@ export default class HttpRequest {
     return await this.responseToJson<Res>(response);
   }
 
-  static async upload(formData: FormData, { uri }: { uri: string }) {
+  static async upload<Res = unknown>(
+    formData: FormData,
+    { uri }: { uri: string }
+  ) {
     const response = await fetch(this.baseUrl + uri, {
       method: "POST",
-      // credentials: this.credentials,
       body: formData,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      // headers: {
-      //   Authorization: `Bearer ${parseCookie(document.cookie).get(
-      //     "accessToken"
-      //   )}`,
-      // },
     });
 
-    return await this.responseToJson<{ key: string; url: string }>(response);
+    return await this.responseToJson<Res>(response);
   }
 
   static async download(key: string) {

@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 
 import PageHeader from "@/components/PageHeader";
-import ClientUserMemberAdd from "@/components/_clientComponents/user/ClientUserMemberAdd";
+import ClientUserMemberAdd from "@/modules/user/member/ClientUserMemberAdd";
 
 export default async function Page() {
   return (

@@ -8,6 +8,9 @@ import QueryProvider from "@/components/QueryProvider";
 const pretendard = localFont({
   src: "fonts/PretendardVariable.woff2",
   display: "swap",
+  preload: true,
+  variable: "--font-pretendard",
+  fallback: ["system-ui", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
 });
 
 export const metadata: Metadata = {
